@@ -1,0 +1,25 @@
+{
+  "name": "veganmeister",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.ts",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "tsc": "tsc",
+    "dev": "ts-node-dev --respawn --transpileOnly ./src/server.ts",
+    "prod": "tsc && node ./build/app.js"
+  },
+  "author": "LuTavia",
+  "license": "ISC",
+  "dependencies": {
+    "@types/geojson": "^7946.0.7",
+    "@types/lodash": "^4.14.149",
+    "apollo-server": "^2.11.0",
+    "eslint": "^6.8.0",
+    "graphql": "^14.6.0",
+    "lodash": "^4.17.15",
+    "moment": "^2.24.0",
+    "ts-node-dev": "^1.0.0-pre.44",
+    "typescript": "^3.8.3"
+  }
+}
