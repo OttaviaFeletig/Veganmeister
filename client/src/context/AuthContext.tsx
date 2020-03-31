@@ -1,7 +1,5 @@
 import React, { useState, createContext } from 'react'
 
-
-
 const initUser: User = {
     name: 'Lucas',
     surname: 'DPS',
@@ -19,7 +17,6 @@ export const AuthContext = createContext<AuthContextI>({
 })
 
 
-
 const AuthContextProvider = (props: { children: React.ReactNode; }) => {
     const [user, setUser] = useState(initUser)
     const [isAuthenticated, setIsAuthenticated] = useState(false)
@@ -28,8 +25,6 @@ const AuthContextProvider = (props: { children: React.ReactNode; }) => {
     const logIn = () => {
 
     }
-
-
 
     return (
         <AuthContext.Provider value={{ isAuthenticated, user, logIn }}>

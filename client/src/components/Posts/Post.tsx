@@ -16,6 +16,7 @@ import ShareIcon from '@material-ui/icons/Share';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
 import moment from 'moment';
+import Rating from '@material-ui/lab/Rating';
 import { PostI } from '../../@types';
 
 moment().format();
@@ -41,6 +42,13 @@ const styles = (theme: Theme) => createStyles({
     },
     avatar: {
         backgroundColor: red[500],
+    },
+    rating: {
+        display: 'flex',
+        // flexDirection: 'column',
+        // '& > * + *': {
+        //     marginTop: theme.spacing(1),
+        // },
     },
 })
 
@@ -89,6 +97,10 @@ const Post: React.FC<Props> = ({ classes, post }) => {
                 <IconButton aria-label="share">
                     <ShareIcon />
                 </IconButton>
+                <div className={classes.rating}>
+                    <Rating name="half-rating" defaultValue={2.5} precision={0.5} />
+                    {/* <Rating name="half-rating-read" defaultValue={2.5} precision={0.5} readOnly /> */}
+                </div>
                 <IconButton
                     className={clsx(classes.expand, {
                         [classes.expandOpen]: expanded,
@@ -97,6 +109,7 @@ const Post: React.FC<Props> = ({ classes, post }) => {
                     aria-expanded={expanded}
                     aria-label="show more"
                 >
+
                     <ExpandMoreIcon />
                 </IconButton>
             </CardActions>

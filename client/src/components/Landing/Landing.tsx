@@ -12,7 +12,8 @@ import Grid from '@material-ui/core/Grid';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import { WithStyles, Theme, createStyles, withStyles } from '@material-ui/core/styles';
-
+import logo from '../../assets/logo/logoNoBG.png'
+import SvgIcon from '@material-ui/icons/LockOutlined';
 
 
 const styles = (theme: Theme) => createStyles({
@@ -52,17 +53,30 @@ interface Props extends WithStyles<typeof styles> {
     classes: any,
 
 }
+{/* <svg id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 75.2 86.24"><title>noun_Deer_53375 (1)</title><path d="M76,7.75V2H73V23.17l-5.57-5.33L65,20.14,71.84,27,64.2,34.63l-4-4L57.92,33l3.83,4L55,43.56V39H52v7H39V39H36v4.56l-6.63-6.75L33.27,33,31,30.68l-3.82,3.83L19.7,27l6.89-6.88-2.28-2.3L19,23.17V2H16V7.75L10.53,2.42,8.31,4.72,16,12.34V27.63L34.09,46H22.18c0,7,8.59,7,8.59,7h5L29.05,78.59l17,9.65,17.18-9.72L56.16,52h4.58s9.36,1,9.36-6H57.39L76,27.63V12.34l7.51-7.62-2.24-2.3ZM59.5,77.27,46.06,84.75,32.5,77.27l4.63-17.86L41.42,74s.72,2.32,4.64,2.32S50.58,74,50.58,74l4.23-14.6Z" transform="translate(-8.31 -2)" /></svg> */ }
+function HomeIcon(props: JSX.IntrinsicAttributes) {
+    return (
+        <SvgIcon {...props}>
+            <path d="M76,7.75V2H73V23.17l-5.57-5.33L65,20.14,71.84,27,64.2,34.63l-4-4L57.92,33l3.83,4L55,43.56V39H52v7H39V39H36v4.56l-6.63-6.75L33.27,33,31,30.68l-3.82,3.83L19.7,27l6.89-6.88-2.28-2.3L19,23.17V2H16V7.75L10.53,2.42,8.31,4.72,16,12.34V27.63L34.09,46H22.18c0,7,8.59,7,8.59,7h5L29.05,78.59l17,9.65,17.18-9.72L56.16,52h4.58s9.36,1,9.36-6H57.39L76,27.63V12.34l7.51-7.62-2.24-2.3ZM59.5,77.27,46.06,84.75,32.5,77.27l4.63-17.86L41.42,74s.72,2.32,4.64,2.32S50.58,74,50.58,74l4.23-14.6Z" />
+        </SvgIcon>
+    );
+}
 
 const Landing: React.FC<Props> = ({ classes }) => {
+
+
     return (
         <Grid container component="main" className={classes.root}>
             <CssBaseline />
+
             <Grid item xs={false} sm={4} md={7} className={classes.image} />
             <Grid item xs={12} sm={8} md={5} component={Paper} elevation={6} square>
                 <div className={classes.paper}>
                     <Avatar className={classes.avatar}>
                         <LockOutlinedIcon />
                     </Avatar>
+                    <HomeIcon />
+                    <img src={logo} alt="" />
                     <Typography component="h1" variant="h5">
                         Sign in
           </Typography>

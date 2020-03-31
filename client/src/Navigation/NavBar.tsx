@@ -189,7 +189,7 @@ const NavBar: React.FC<Props> = ({ classes }) => {
                     </IconButton> */}
                     <img src={logo} height={50} alt="" />
                     <Typography className={classes.title} variant="h6" noWrap>
-                        Veganmeister.
+                        veganmeister.
           </Typography>
                     <div className={classes.search}>
                         <div className={classes.searchIcon}>

@@ -14,7 +14,7 @@ interface PostI {
     archived: boolean
 
 }
-type PostsI = Array<Post>
+type PostsT = Array<Post>
 
 interface RestaurantI {
     name: string,

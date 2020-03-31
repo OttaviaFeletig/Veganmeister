@@ -1,4 +1,5 @@
 import React, { useContext } from 'react';
+import { BrowserRouter as Router, Route } from "react-router-dom";
 import Container from '@material-ui/core/Container';
 import Typography from '@material-ui/core/Typography';
 import Box from '@material-ui/core/Box';
@@ -8,14 +9,14 @@ import { makeStyles } from '@material-ui/styles';
 import logoSVG from './assets/logo/noun_Deer_53375.svg'
 import logoPNG from './assets/logo/noun_Deer_53375.png'
 import SvgIcon from '@material-ui/core/SvgIcon';
-import BottomNav from './Navigation/BottomNav'
+import BottomNav from './navigation/BottomNav'
 import { Theme, createStyles, MuiThemeProvider } from '@material-ui/core/styles';
 import { ThemeContext } from './context/ThemeContext';
 import Landing from './components/Landing/Landing';
-import AuthToolbar from './Navigation/AuthToolbar';
+import AuthToolbar from './navigation/AuthToolbar';
 import PostsContextProvider from './context/PostsContext';
 import Posts from './components/Posts/Posts'
-import NavBar from './Navigation/NavBar';
+import NavBar from './navigation/NavBar';
 import './App.css'
 
 
@@ -48,14 +49,16 @@ const RenderWebsite: React.FC = () => {
 
   return (
     <MuiThemeProvider theme={theme}>
-      {/* <Logo /> */}
       <NavBar />
+      <Router>
+        <Container disableGutters maxWidth="lg">
+          <Route exact path="/" component={Landing} />
+          <PostsContextProvider>
+            <Route exact path="/posts" component={Posts} />
+          </PostsContextProvider>
+        </Container>
+      </Router>
 
-      <Container maxWidth="lg">
-        <PostsContextProvider>
-          <Posts />
-        </PostsContextProvider>
-      </Container>
       <Copyright />
     </MuiThemeProvider>)
 }
