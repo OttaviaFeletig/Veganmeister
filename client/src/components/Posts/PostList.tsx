@@ -2,9 +2,10 @@ import React, { useContext } from 'react';
 import { makeStyles, createStyles, Theme, WithStyles, withStyles } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
-import Post from './Post';
+import PostItem from './PostItem';
 import { PostsContext } from '../../context/PostsContext';
 import { PostI } from '../../@types';
+
 
 
 
@@ -40,11 +41,10 @@ const Posts: React.FC<Props> = ({ classes }) => {
         <div className={classes.root}>
             <Grid container className={classes.container} spacing={2}>
                 {posts && posts.map((post: PostI) =>
-                    <Grid key={post._id} item xs={12} sm={6}>
-                        <Post post={post} />
+                    <Grid key={post._id} item xs={12} md={6}>
+                        <PostItem post={post} loading={false} />
                     </Grid>
                 )}
-                {/* <Skeleton variant="rect" width={210} height={118} /> */}
             </Grid>
         </div>
     );

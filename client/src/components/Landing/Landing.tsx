@@ -12,8 +12,10 @@ import Grid from '@material-ui/core/Grid';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import { WithStyles, Theme, createStyles, withStyles } from '@material-ui/core/styles';
-import logo from '../../assets/logo/logoNoBG.png'
-import SvgIcon from '@material-ui/icons/LockOutlined';
+import Logo from '../GraphicElmts/Logo'
+import SvgIcon from '@material-ui/core/SvgIcon';
+import dataSite from '../../assets/data/siteData.json'
+import { ReactComponent as ReactLogo } from '../../assets/logo/noun_Deer.svg';
 
 
 const styles = (theme: Theme) => createStyles({
@@ -75,8 +77,10 @@ const Landing: React.FC<Props> = ({ classes }) => {
                     <Avatar className={classes.avatar}>
                         <LockOutlinedIcon />
                     </Avatar>
-                    <HomeIcon />
-                    <img src={logo} alt="" />
+                    {/* <HomeIcon /> */}
+
+                    <Logo height={300} />
+                    {/* <img src={logo} alt="" /> */}
                     <Typography component="h1" variant="h5">
                         Sign in
           </Typography>

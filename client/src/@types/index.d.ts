@@ -12,8 +12,16 @@ interface PostI {
     comments: Array<CommentsT>;
     published: boolean;
     archived: boolean;
+    rating: number;
 }
-type PostsT = Array<Post>
+interface CommentI {
+    user: UserN.UserI;
+    date: Date;
+    body: string;
+}
+
+type PostsT = Array<PostI>
+type CommentsT = Array<CommentI>
 
 interface RestaurantI {
     name: string;
@@ -38,7 +46,7 @@ export namespace UserN {
         password: string;
         avatar: string;
         posts: Array<PostI>;
-        rank: RankI;
+        rank?: RankI;
     }
 
     interface RankI {

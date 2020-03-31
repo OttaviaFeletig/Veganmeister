@@ -1,6 +1,6 @@
 import React, { useContext } from 'react'
 import { Toolbar, IconButton, Typography, Menu, MenuItem, Badge, AppBar, InputBase, Avatar } from '@material-ui/core'
-import { AuthContext } from '../context/AuthContext';
+import { AuthContext } from '../../context/AuthContext';
 import AccountCircle from '@material-ui/icons/AccountCircle';
 import SearchIcon from '@material-ui/icons/Search';
 import MoreIcon from '@material-ui/icons/MoreVert';

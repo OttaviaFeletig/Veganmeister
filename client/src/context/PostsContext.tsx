@@ -1,5 +1,5 @@
 import React, { useState, createContext } from 'react'
-import { PostsI, RestaurantI, LocationI } from '../@types'
+import { PostsT, RestaurantI, LocationI, UserN } from '../@types'
 
 
 
@@ -25,36 +25,48 @@ const dumbRestaurant: RestaurantI = {
     images: [],
     location: dumbLocation
 }
-const initPosts: PostsI = [
+const initUser: UserN.UserI = {
+    avatar: 'https://source.unsplash.com/user/loukass23',
+    name: 'James',
+    surname: 'Bond',
+    email: 'james.bond@mi6.uk',
+    password: 'topSecret',
+    posts: [],
+    username: 'james007',
+    // rank: 'VeganVirgin'
+}
+const initPosts: PostsT = [
     {
         _id: '1',
         date: new Date(),
         restaurant: dumbRestaurant,
         mainPicture: 'https://source.unsplash.com/user/loukass23',
         images: [],
-        author: 'UserN.UserI',
-        likes: 0,
+        author: initUser,
+        likes: 21,
         title: 'Vegan Burger',
         body: 'Lorem ipsum, dolor sit amet consectetur adipisicing elit. Repellendus animi, ipsum tempora, necessitatibus provident iusto quas quos deleniti esse inventore assumenda id. Commodi, neque similique. Optio impedit ullam dolore laborum.',
         hashtags: ['veggie', 'burger'],
         comments: [],
         published: true,
-        archived: false
+        archived: false,
+        rating: 4,
     },
     {
         _id: '2',
         date: new Date(),
-        restaurant: 'RestaurantI',
+        restaurant: dumbRestaurant,
         mainPicture: 'https://source.unsplash.com/user/loukass23',
         images: [],
-        author: 'UserN.UserI',
-        likes: 0,
-        title: 'Vegan Burger',
+        author: initUser,
+        likes: 1,
+        title: 'Vegan Whatever title not too long',
         body: 'Lorem ipsum, dolor sit amet consectetur adipisicing elit. Repellendus animi, ipsum tempora, necessitatibus provident iusto quas quos deleniti esse inventore assumenda id. Commodi, neque similique. Optio impedit ullam dolore laborum.',
         hashtags: ['veggie', 'burger'],
         comments: [],
         published: true,
-        archived: false
+        archived: false,
+        rating: 1,
     }
 ]
 
