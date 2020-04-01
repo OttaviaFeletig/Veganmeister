@@ -1,6 +1,5 @@
 import React, { useState, createContext, useContext } from 'react'
 import { createMuiTheme, responsiveFontSizes } from "@material-ui/core/styles";
-import { ThemeContextInterface } from '../@types';
 // import { contentMaster } from '../content'
 // import { ContentContext } from './ContentContext';
 

@@ -1,4 +1,23 @@
 {
     "siteName": "veganmeister.",
-    "logoSVG": "./assets/logo:noun_Deer.svg"
+    "logoSVG": "./assets/logo:noun_Deer.svg",
+    "navItems": [{
+            "title": "Posts",
+            "subtitle": "Read latest vegan reviews",
+            "to": "/posts",
+            "img": "https://source.unsplash.com/user/loukass23"
+        },
+        {
+            "title": "Restaurants",
+            "subtitle": "Discover vegan restaurants",
+            "to": "/restaurants",
+            "img": "https://source.unsplash.com/user/loukass23"
+        },
+        {
+            "title": "Map",
+            "subtitle": "Look for vegan places around you",
+            "to": "/map",
+            "img": "https://source.unsplash.com/user/loukass23"
+        }
+    ]
 }

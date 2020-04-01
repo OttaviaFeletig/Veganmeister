@@ -9,7 +9,7 @@ const initUser: User = {
 }
 
 export const AuthContext = createContext<AuthContextI>({
-    isAuthenticated: false,
+    isAuthenticated: true,
     user: initUser,
     logIn: () => {
         throw new Error('logIn() not implemented')

@@ -1,7 +1,7 @@
 import React from 'react';
 import { fade, makeStyles, Theme, createStyles, WithStyles, withStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
-import { Grid } from '@material-ui/core';
+import { Grid, Button } from '@material-ui/core';
 import Toolbar from '@material-ui/core/Toolbar';
 import IconButton from '@material-ui/core/IconButton';
 import Typography from '@material-ui/core/Typography';
@@ -48,6 +48,14 @@ const styles = (theme: Theme) => createStyles({
             display: 'block',
         },
     },
+    button: {
+        marginRight: theme.spacing(1),
+        marginLeft: theme.spacing(1),
+        display: 'none',
+        [theme.breakpoints.up('md')]: {
+            display: 'block',
+        },
+    },
     search: {
         position: 'relative',
         borderRadius: theme.shape.borderRadius,
@@ -57,7 +65,7 @@ const styles = (theme: Theme) => createStyles({
         },
         marginRight: theme.spacing(2),
         marginLeft: theme.spacing(2),
-        width: '100%',
+        // width: '100%',
         // [theme.breakpoints.up('sm')]: {
         //     marginLeft: theme.spacing(3),
         //     width: 'auto',
@@ -162,6 +170,11 @@ const NavBar: React.FC<Props> = ({ classes }) => {
             open={isMobileMenuOpen}
             onClose={handleMobileMenuClose}
         >
+            {dataSite.navItems.map(item => (
+                <MenuItem onClick={handleMenuClose} key={item.title} component={Link} to={item.to} >
+                    {item.title}
+                </MenuItem>)
+            )}
             <MenuItem>
                 <IconButton aria-label="show 4 new mails" color="inherit">
                     <Badge badgeContent={4} color="secondary">
@@ -189,6 +202,7 @@ const NavBar: React.FC<Props> = ({ classes }) => {
                 </IconButton>
                 <p>Profile</p>
             </MenuItem>
+
         </Menu>
     );
 
@@ -206,6 +220,8 @@ const NavBar: React.FC<Props> = ({ classes }) => {
                             {dataSite.siteName}
                         </Typography>
                     </div>
+                    {dataSite.navItems.map(item =>
+                        <Button key={item.title} component={Link} to={item.to} className={classes.button} color="inherit">{item.title}</Button>)}
 
                     {/* </Grid> */}
                     <div className={classes.search}>

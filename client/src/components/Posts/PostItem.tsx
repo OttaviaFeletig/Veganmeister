@@ -17,13 +17,9 @@ import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import { Link } from 'react-router-dom'
 import moment from 'moment';
 import Rating from '@material-ui/lab/Rating';
-import { PostI } from '../../@types';
+import { PostN } from '../../@types';
 import Skeleton from '@material-ui/lab/Skeleton';
 import { Grid, Divider, Box } from '@material-ui/core';
-import CommentIcon from '@material-ui/icons/Comment';
-import SendIcon from '@material-ui/icons/Send';
-
-
 moment().format();
 
 const styles = (theme: Theme) => createStyles({
@@ -138,7 +134,7 @@ const styles = (theme: Theme) => createStyles({
 
 interface Props extends WithStyles<typeof styles> {
     classes: any,
-    post: PostI,
+    post: PostN.PostI,
     loading?: boolean;
 }
 
