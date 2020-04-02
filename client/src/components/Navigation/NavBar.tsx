@@ -1,6 +1,7 @@
 import React from 'react';
 import { fade, makeStyles, Theme, createStyles, WithStyles, withStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
+import { Grid, Button } from '@material-ui/core';
 import Toolbar from '@material-ui/core/Toolbar';
 import IconButton from '@material-ui/core/IconButton';
 import Typography from '@material-ui/core/Typography';
@@ -15,6 +16,14 @@ import MailIcon from '@material-ui/icons/Mail';
 import NotificationsIcon from '@material-ui/icons/Notifications';
 import MoreIcon from '@material-ui/icons/MoreVert';
 import logo from '../assets/logo/logoNoBG.png'
+import Logo from '../GraphicElmts/Logo';
+import dataSite from '../../assets/data/siteData.json';
+import { Link } from 'react-router-dom'
+import MapIcon from '@material-ui/icons/Map';
+import RestaurantIcon from '@material-ui/icons/Restaurant';
+import ArtTrackIcon from '@material-ui/icons/ArtTrack';
+import { asyncComponent } from 'react-async-component'
+
 
 const styles = (theme: Theme) => createStyles({
     grow: {
@@ -22,9 +31,20 @@ const styles = (theme: Theme) => createStyles({
     },
     appBar: {
         backgroundColor: theme.palette.common.white,
+        position: "fixed",
+        [theme.breakpoints.up('sm')]: {
+            // position: 'absolute',
+            // bottom: 0
+        },
+        // color: theme.palette.common.black
     },
     menuButton: {
         marginRight: theme.spacing(2),
+    },
+    logo: {
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center'
     },
     title: {
         display: 'none',
@@ -32,20 +52,28 @@ const styles = (theme: Theme) => createStyles({
             display: 'block',
         },
     },
+    button: {
+        marginRight: theme.spacing(1),
+        marginLeft: theme.spacing(1),
+        display: 'none',
+        [theme.breakpoints.up('md')]: {
+            display: 'block',
+        },
+    },
     search: {
         position: 'relative',
         borderRadius: theme.shape.borderRadius,
-        backgroundColor: fade(theme.palette.common.white, 0.15),
+        // backgroundColor: fade(theme.palette.common.black, 0.1),
         '&:hover': {
-            backgroundColor: fade(theme.palette.common.white, 0.25),
+            backgroundColor: fade(theme.palette.common.black, 0.1),
         },
         marginRight: theme.spacing(2),
-        marginLeft: 0,
-        width: '100%',
-        [theme.breakpoints.up('sm')]: {
-            marginLeft: theme.spacing(3),
-            width: 'auto',
-        },
+        marginLeft: theme.spacing(2),
+        // width: '100%',
+        // [theme.breakpoints.up('sm')]: {
+        //     marginLeft: theme.spacing(3),
+        //     width: 'auto',
+        // },
     },
     searchIcon: {
         padding: theme.spacing(0, 2),
@@ -57,6 +85,7 @@ const styles = (theme: Theme) => createStyles({
         justifyContent: 'center',
     },
     inputRoot: {
+        width: '100%',
         color: 'inherit',
     },
     inputInput: {
@@ -83,9 +112,18 @@ const styles = (theme: Theme) => createStyles({
     }
 
 })
+interface PropsIcon extends WithStyles<typeof styles> {
+    icon: string;
+}
 
-
-
+const MaterialIconAsync: React.FC<PropsIcon> = ({ icon }) => {
+    let iconName = icon.replace(/Icon$/, '')
+    return React.createElement(asyncComponent({
+        resolve: () => import(
+            /* webpackMode: "eager" */
+            `@material-ui/icons/${iconName}`)
+    }))
+}
 
 interface Props extends WithStyles<typeof styles> {
     classes: any
@@ -94,6 +132,7 @@ interface Props extends WithStyles<typeof styles> {
 
 
 const NavBar: React.FC<Props> = ({ classes }) => {
+
 
     const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
     const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState<null | HTMLElement>(null);
@@ -145,6 +184,16 @@ const NavBar: React.FC<Props> = ({ classes }) => {
             open={isMobileMenuOpen}
             onClose={handleMobileMenuClose}
         >
+            {dataSite.navItems.map(item => (
+                <MenuItem onClick={handleMenuClose} key={item.title} component={Link} to={item.to} >
+                    <IconButton aria-label="show 4 new mails" color="inherit">
+                        <Badge badgeContent={4} color="secondary">
+                            <MaterialIconAsync icon="MailIcon" />
+                        </Badge>
+                    </IconButton>
+                    {item.title}
+                </MenuItem>)
+            )}
             <MenuItem>
                 <IconButton aria-label="show 4 new mails" color="inherit">
                     <Badge badgeContent={4} color="secondary">
@@ -172,6 +221,7 @@ const NavBar: React.FC<Props> = ({ classes }) => {
                 </IconButton>
                 <p>Profile</p>
             </MenuItem>
+
         </Menu>
     );
 
@@ -179,18 +229,20 @@ const NavBar: React.FC<Props> = ({ classes }) => {
         <div className={classes.grow}>
             <AppBar position="sticky" className={classes.appBar} >
                 <Toolbar>
-                    {/* <IconButton
-                        edge="start"
-                        className={classes.menuButton}
-                        color="inherit"
-                        aria-label="open drawer"
-                    >
-                        <MenuIcon />
-                    </IconButton> */}
-                    <img src={logo} height={50} alt="" />
-                    <Typography className={classes.title} variant="h6" noWrap>
-                        veganmeister.
-          </Typography>
+                    <div className={classes.logo}>
+                        <Link
+                            to='/'
+                        > <Logo height={50} />
+                        </Link>
+                        {/* <img src={logo} height={50} alt="" /> */}
+                        <Typography component={Link} to='/' style={{ textDecoration: 'none' }} color="inherit" className={classes.title} variant="h6" noWrap>
+                            {dataSite.siteName}
+                        </Typography>
+                    </div>
+                    {dataSite.navItems.map(item =>
+                        <Button key={item.title} component={Link} to={item.to} className={classes.button} color="inherit">{item.title}</Button>)}
+
+                    {/* </Grid> */}
                     <div className={classes.search}>
                         <div className={classes.searchIcon}>
                             <SearchIcon />

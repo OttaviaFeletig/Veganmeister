@@ -1,6 +1,5 @@
 import React, { useState, createContext, useContext } from 'react'
 import { createMuiTheme, responsiveFontSizes } from "@material-ui/core/styles";
-import { ThemeContextInterface } from '../@types';
 // import { contentMaster } from '../content'
 // import { ContentContext } from './ContentContext';
 
@@ -26,7 +25,7 @@ let initTheme = createMuiTheme({
     palette: {
         primary: {
             // light: will be calculated from palette.primary.main,
-            main: '#42C834',
+            main: '#FFFFFF',
             // main: color.primary,
             // dark: will be calculated from palette.primary.main,
             // contrastText: will be calculated to contrast with palette.primary.main

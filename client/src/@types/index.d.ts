@@ -1,36 +1,61 @@
-interface PostI {
-    _id: string;
-    date: Date;
-    restaurant: RestaurantI;
-    mainPicture: string;
-    images: Array<string>;
-    author: UserN.UserI;
-    likes: number;
-    title: string;
-    body: string;
-    hashtags: Array<string>;
-    comments: Array<CommentsT>;
-    published: boolean;
-    archived: boolean;
-}
-type PostsT = Array<Post>
+export namespace PostN {
+    interface PostI {
+        _id: string;
+        date: Date;
+        restaurant: RestaurantI;
+        mainPicture: string;
+        author: UserN.UserI;
+        likes: number;
+        title: string;
+        postSections: PostSectionsT;
+        hashtags: Array<string>;
+        comments: CommentsT;
+        published: boolean;
+        archived: boolean;
+        rating: number;
+    }
+    type PostSectionsT = Array<PostSectionI>
 
-interface RestaurantI {
-    name: string;
-    location: LocationI;
-    description: string;
-    images: Array<string>;
+    interface PostSectionI {
+        index: number,
+        header: string,
+        body: string,
+        img: string,
+        sideImg: boolean
+    }
+
+    interface CommentI {
+        _id: string;
+        user: UserN.UserI;
+        date: Date;
+        body: string;
+        likes: number;
+        likedBy: UserN.UsersT
+    }
+
+    type PostsT = Array<PostI>
+    type CommentsT = Array<CommentI>
 }
 
-interface LocationI {
-    coordinates: GeoJSON.Point;
-    district: string;
-    city: string;
-    country: string;
-}
+export namespace RestaurantN {
+    interface RestaurantI {
+        name: string;
+        location: LocationI;
+        description: string;
+        images: Array<string>;
+    }
 
+    interface LocationI {
+        coordinates: GeoJSON.Point;
+        district: string;
+        city: string;
+        country: string;
+    }
+
+    type RestaurantT = Array<RestaurantI>
+}
 export namespace UserN {
-    export interface UserI {
+    interface UserI {
         username: string;
         name: string;
         surname: string;
@@ -38,9 +63,11 @@ export namespace UserN {
         password: string;
         avatar: string;
         posts: Array<PostI>;
-        rank: RankI;
-    }
+        rank?: RankI;
+        isAdmin: Boolean;
 
+    }
+    type UsersT = Array<UserI>
     interface RankI {
         name: RankNames;
         points: RankPoints;
@@ -70,27 +97,3 @@ export namespace UserN {
     }
 }
 
-/**
- * USER
- */
-interface User {
-    uid: string | null;
-    name: string | null;
-    surname?: string;
-    avatar: string | null;
-    isAdmin: Boolean;
-}
-
-/**
- * CONTEXT
- */
-
-interface AuthContextInterface {
-    isAuthenticated: Boolean;
-    user: User;
-    logIn: any;
-}
-interface ThemeContextInterface {
-    theme: any;
-    setColors: any;
-}

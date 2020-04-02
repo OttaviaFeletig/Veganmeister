@@ -2,9 +2,11 @@ import React, { useContext } from 'react';
 import { makeStyles, createStyles, Theme, WithStyles, withStyles } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
-import Post from './Post';
+import PostItem from './PostItem';
 import { PostsContext } from '../../context/PostsContext';
-import { PostI } from '../../@types';
+import { PostN } from '../../@types';
+import Grow from '@material-ui/core/Grow';
+
 
 
 
@@ -39,12 +41,17 @@ const Posts: React.FC<Props> = ({ classes }) => {
     return (
         <div className={classes.root}>
             <Grid container className={classes.container} spacing={2}>
-                {posts && posts.map((post: PostI) =>
-                    <Grid key={post._id} item xs={12} sm={6}>
-                        <Post post={post} />
-                    </Grid>
+                {posts && posts.map((post: PostN.PostI, i: number) =>
+                    <Grow in
+                        style={{ transformOrigin: '0 0 0' }}
+                        timeout={1500 + (1000 * i)}
+                        key={post._id}
+                    >
+                        <Grid item xs={12} md={6}>
+                            <PostItem post={post} loading={false} />
+                        </Grid>
+                    </Grow>
                 )}
-                {/* <Skeleton variant="rect" width={210} height={118} /> */}
             </Grid>
         </div>
     );

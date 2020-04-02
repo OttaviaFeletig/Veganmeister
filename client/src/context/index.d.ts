@@ -12,12 +12,3 @@ interface PostsContextI {
     posts: any,
     getALlPosts(): void,
 }
-
-
-interface User {
-    uid: string | null,
-    name: string | null,
-    surname?: string,
-    avatar: string | null,
-    isAdmin: Boolean
-}
