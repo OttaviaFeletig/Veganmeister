@@ -19,6 +19,10 @@ import logo from '../assets/logo/logoNoBG.png'
 import Logo from '../GraphicElmts/Logo';
 import dataSite from '../../assets/data/siteData.json';
 import { Link } from 'react-router-dom'
+import MapIcon from '@material-ui/icons/Map';
+import RestaurantIcon from '@material-ui/icons/Restaurant';
+import ArtTrackIcon from '@material-ui/icons/ArtTrack';
+import { asyncComponent } from 'react-async-component'
 
 
 const styles = (theme: Theme) => createStyles({
@@ -108,9 +112,18 @@ const styles = (theme: Theme) => createStyles({
     }
 
 })
+interface PropsIcon extends WithStyles<typeof styles> {
+    icon: string;
+}
 
-
-
+const MaterialIconAsync: React.FC<PropsIcon> = ({ icon }) => {
+    let iconName = icon.replace(/Icon$/, '')
+    return React.createElement(asyncComponent({
+        resolve: () => import(
+            /* webpackMode: "eager" */
+            `@material-ui/icons/${iconName}`)
+    }))
+}
 
 interface Props extends WithStyles<typeof styles> {
     classes: any
@@ -119,6 +132,7 @@ interface Props extends WithStyles<typeof styles> {
 
 
 const NavBar: React.FC<Props> = ({ classes }) => {
+
 
     const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
     const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState<null | HTMLElement>(null);
@@ -172,6 +186,11 @@ const NavBar: React.FC<Props> = ({ classes }) => {
         >
             {dataSite.navItems.map(item => (
                 <MenuItem onClick={handleMenuClose} key={item.title} component={Link} to={item.to} >
+                    <IconButton aria-label="show 4 new mails" color="inherit">
+                        <Badge badgeContent={4} color="secondary">
+                            <MaterialIconAsync icon="MailIcon" />
+                        </Badge>
+                    </IconButton>
                     {item.title}
                 </MenuItem>)
             )}

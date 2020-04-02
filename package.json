@@ -1,3 +1,5 @@
 {
-  "dependencies": {}
+  "dependencies": {
+    "react-async-component": "^2.0.0"
+  }
 }
