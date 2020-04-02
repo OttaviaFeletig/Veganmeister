@@ -1,9 +1,9 @@
 import { find, filter } from "lodash";
 import { restaurants } from "../restaurant/resolvers";
-
-const posts: PostsT = [
+import { PostN } from "../../@types";
+const posts: PostN.PostsT = [
   {
-    id: "1",
+    _id: "1",
     date: new Date(),
     images: ["img1", "img1", "img1"],
     restaurant: restaurants[0],
@@ -11,20 +11,32 @@ const posts: PostsT = [
     author: "user1",
     likes: 0,
     title: "title1",
-    body: "body1",
+    postSections: [
+      {
+        index: 1,
+        header: "header1",
+        body: "body1",
+        img: "img1",
+        sideImg: true
+      }
+    ],
     hashtags: ["hashtags1", "hashtags1", "hashtags1"],
     comments: [
-      {id: "1",
+      {
+        _id: "1",
         date: new Date(),
-        author: "user4", //User definition
-        body: "body"
+        user: "user4", //User definition
+        body: "body",
+        likes: 2,
+        likedBy: ["user1"]
       }
     ],
     published: true,
-    archived: false
+    archived: false,
+    rating: 2
   },
   {
-    id: "2",
+    _id: "2",
     date: new Date(),
     images: ["img2", "img2", "img2"],
     restaurant: restaurants[1],
@@ -32,21 +44,32 @@ const posts: PostsT = [
     author: "user1",
     likes: 1,
     title: "title2",
-    body: "body2",
+    postSections: [
+      {
+        index: 1,
+        header: "header1",
+        body: "body1",
+        img: "img1",
+        sideImg: true
+      }
+    ],
     hashtags: ["hashtags2", "hashtags2", "hashtags2"],
     comments: [
       {
-          id: "2",
+        _id: "2",
         date: new Date(),
-        author: "user4", //User definition
-        body: "body"
+        user: "user4", //User definition
+        body: "body",
+        likes: 2,
+        likedBy: ["user1"]
       }
     ],
     published: true,
-    archived: false
+    archived: false,
+    rating: 1
   },
   {
-    id: "3",
+    _id: "3",
     date: new Date(),
     images: ["img3", "img3", "img3"],
     restaurant: restaurants[2],
@@ -54,24 +77,35 @@ const posts: PostsT = [
     author: "user2",
     likes: 0,
     title: "title3",
-    body: "body3",
+    postSections: [
+      {
+        index: 1,
+        header: "header1",
+        body: "body1",
+        img: "img1",
+        sideImg: true
+      }
+    ],
     hashtags: ["hashtags3", "hashtags3", "hashtags3"],
     comments: [
       {
-          id: "3",
+        _id: "3",
         date: new Date(),
-        author: "user4", //User definition
-        body: "body"
+        user: "user4", //User definition
+        body: "body",
+        likes: 2,
+        likedBy: ["user1"]
       }
     ],
     published: false,
-    archived: true
+    archived: true,
+    rating: 5
   }
 ];
 
 export const resolvers = {
   Query: {
-    posts: (): Array<PostI> => posts,
-    post: (_: any, id: string): PostI | undefined => find(posts, id)
+    posts: (): PostN.PostsT => posts,
+    post: (_: any, _id: string): PostN.PostI | undefined => find(posts, _id)
   }
 };

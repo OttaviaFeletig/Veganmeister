@@ -4,6 +4,7 @@ import Post from "./post/typeDefs";
 import { resolvers as restaurantResolvers } from "./restaurant/resolvers";
 import { resolvers as postResolvers } from "./post/resolvers";
 import { scalarTypesResolverMap } from "./scalarTypes/resolvers";
+import { enumTypesResolverMap } from "./enumTypes/resolvers";
 import { merge } from "lodash";
 import { makeExecutableSchema } from "graphql-tools";
 
@@ -23,6 +24,7 @@ const typeDefs = [Restaurant, Post, Query];
 const resolvers = merge(
   restaurantResolvers,
   postResolvers,
-  scalarTypesResolverMap
+  scalarTypesResolverMap,
+  enumTypesResolverMap
 );
 export const schema = makeExecutableSchema({ typeDefs, resolvers });
