@@ -30,6 +30,7 @@ import DoneIcon from '@material-ui/icons/Done'
 import { EditorState } from 'draft-js'
 import Grow from '@material-ui/core/Grow';
 import PostSections from './PostSections';
+import PostComments from './PostComments';
 
 
 moment().format();
@@ -156,11 +157,8 @@ const PostDetails: React.FC<Props> = ({ classes, match }) => {
     };
 
     return (
-        <Grow in
-            style={{ transformOrigin: '0 0 0' }}
-            timeout={1000}
+        <React.Fragment>
 
-        >
             <Card className={classes.card}>
                 <CardHeader
                     avatar={
@@ -169,7 +167,7 @@ const PostDetails: React.FC<Props> = ({ classes, match }) => {
                         ) : (
                                 <Avatar
                                     // component={classes.avatar}
-                                    classes={classes.avatarIMG}
+                                    classes={{ img: classes.avatarIMG }}
                                     className={classes.avatar}
                                     alt={"user avatar"}
                                     src={post.author.avatar}
@@ -237,7 +235,14 @@ const PostDetails: React.FC<Props> = ({ classes, match }) => {
 
                 </CardActions>
             </Card>
-        </Grow >
+            <Grow in
+                style={{ transformOrigin: '0 0 0' }}
+                timeout={1000}
+
+            >
+                <PostComments post={post} />
+            </Grow>
+        </React.Fragment >
     );
 }
 

@@ -16,13 +16,11 @@ import MailIcon from '@material-ui/icons/Mail';
 import NotificationsIcon from '@material-ui/icons/Notifications';
 import MoreIcon from '@material-ui/icons/MoreVert';
 import logo from '../assets/logo/logoNoBG.png'
-import Logo from '../GraphicElmts/Logo';
+import Logo from '../Elements/GraphicElmts/Logo';
 import dataSite from '../../assets/data/siteData.json';
 import { Link } from 'react-router-dom'
-import MapIcon from '@material-ui/icons/Map';
-import RestaurantIcon from '@material-ui/icons/Restaurant';
-import ArtTrackIcon from '@material-ui/icons/ArtTrack';
-import { asyncComponent } from 'react-async-component'
+import MaterialIconAsync from '../Elements/GraphicElmts/MaterialIconAsync';
+import AsyncSearch from '../Elements/Search/AsyncSearch'
 
 
 const styles = (theme: Theme) => createStyles({
@@ -102,6 +100,7 @@ const styles = (theme: Theme) => createStyles({
         display: 'none',
         [theme.breakpoints.up('md')]: {
             display: 'flex',
+            justifySelf: 'flex-end',
         },
     },
     sectionMobile: {
@@ -112,18 +111,18 @@ const styles = (theme: Theme) => createStyles({
     }
 
 })
-interface PropsIcon extends WithStyles<typeof styles> {
-    icon: string;
-}
+// interface PropsIcon {
+//     icon: string;
+// }
 
-const MaterialIconAsync: React.FC<PropsIcon> = ({ icon }) => {
-    let iconName = icon.replace(/Icon$/, '')
-    return React.createElement(asyncComponent({
-        resolve: () => import(
-            /* webpackMode: "eager" */
-            `@material-ui/icons/${iconName}`)
-    }))
-}
+// const MaterialIconAsync: React.FC<PropsIcon> = ({ icon }) => {
+//     let iconName = icon.replace(/Icon$/, '')
+//     return React.createElement(asyncComponent({
+//         resolve: () => import(
+//             /* webpackMode: "eager" */
+//             `@material-ui/icons/${iconName}`)
+//     }))
+// }
 
 interface Props extends WithStyles<typeof styles> {
     classes: any
@@ -187,8 +186,8 @@ const NavBar: React.FC<Props> = ({ classes }) => {
             {dataSite.navItems.map(item => (
                 <MenuItem onClick={handleMenuClose} key={item.title} component={Link} to={item.to} >
                     <IconButton aria-label="show 4 new mails" color="inherit">
-                        <Badge badgeContent={4} color="secondary">
-                            <MaterialIconAsync icon="MailIcon" />
+                        <Badge color="secondary">
+                            <MaterialIconAsync icon={item.icon} />
                         </Badge>
                     </IconButton>
                     {item.title}
@@ -197,7 +196,7 @@ const NavBar: React.FC<Props> = ({ classes }) => {
             <MenuItem>
                 <IconButton aria-label="show 4 new mails" color="inherit">
                     <Badge badgeContent={4} color="secondary">
-                        <MailIcon />
+                        <MaterialIconAsync icon="MailIcon" />
                     </Badge>
                 </IconButton>
                 <p>Messages</p>
@@ -205,7 +204,7 @@ const NavBar: React.FC<Props> = ({ classes }) => {
             <MenuItem>
                 <IconButton aria-label="show 11 new notifications" color="inherit">
                     <Badge badgeContent={11} color="secondary">
-                        <NotificationsIcon />
+                        <MaterialIconAsync icon="NotificationsIcon" />
                     </Badge>
                 </IconButton>
                 <p>Notifications</p>
@@ -217,7 +216,7 @@ const NavBar: React.FC<Props> = ({ classes }) => {
                     aria-haspopup="true"
                     color="inherit"
                 >
-                    <AccountCircle />
+                    <MaterialIconAsync icon="AccountCircle" />
                 </IconButton>
                 <p>Profile</p>
             </MenuItem>
@@ -242,21 +241,8 @@ const NavBar: React.FC<Props> = ({ classes }) => {
                     {dataSite.navItems.map(item =>
                         <Button key={item.title} component={Link} to={item.to} className={classes.button} color="inherit">{item.title}</Button>)}
 
-                    {/* </Grid> */}
-                    <div className={classes.search}>
-                        <div className={classes.searchIcon}>
-                            <SearchIcon />
-                        </div>
-                        <InputBase
-                            placeholder="Search…"
-                            classes={{
-                                root: classes.inputRoot,
-                                input: classes.inputInput,
-                            }}
-                            inputProps={{ 'aria-label': 'search' }}
-                        />
-                    </div>
-                    <div className={classes.grow} />
+                    <AsyncSearch />
+                    {/* <div className={classes.grow} /> */}
                     <div className={classes.sectionDesktop}>
                         <IconButton aria-label="show 4 new mails" color="inherit">
                             <Badge badgeContent={4} color="secondary">

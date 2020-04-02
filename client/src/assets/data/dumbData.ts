@@ -37,9 +37,9 @@ const initComments: PostN.CommentsT = [{
 {
     _id: '2',
     user: initUser,
-    date: new Date(2020, 11, 24, 10),
-    body: 'amazing',
-    likes: 0,
+    date: new Date(2019, 11, 24, 10),
+    body: 'woooooowwwwwwwwwwwwwww i love dumb restaurant',
+    likes: 12,
     likedBy: []
 }]
 

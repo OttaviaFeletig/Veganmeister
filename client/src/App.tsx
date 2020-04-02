@@ -30,7 +30,6 @@ const RenderWebsite: React.FC = (props) => {
     theme,
   } = useContext(ThemeContext)
 
-  const path = window.location.pathname
 
   return (
     <MuiThemeProvider theme={theme}>

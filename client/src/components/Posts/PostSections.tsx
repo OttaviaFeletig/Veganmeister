@@ -152,8 +152,7 @@ interface Props extends WithStyles<typeof styles> {
 
 const PostSections: React.FC<Props> = ({ classes, post }) => {
     const [addMode, toggleAddMode] = React.useState(false);
-    const [editMode, toggleEditMode] = React.useState(true);
-    const [open, setOpen] = React.useState(false);
+    const [editMode, toggleEditMode] = React.useState(false);
 
     // const { addEditDeleteArticle,
     //     article,
@@ -176,22 +175,13 @@ const PostSections: React.FC<Props> = ({ classes, post }) => {
     const { isAuthenticated } = useContext(AuthContext)
     const [postSection, setPostSection] = useState(emptySection)
 
-    const handleClickOpen = () => {
-        setOpen(true);
-    };
-
-    const handleClose = () => {
-        setOpen(false);
-    };
 
     const onEditClick = (postSection: PostN.PostSectionI) => {
         setPostSection(postSection)
-        setOpen(true)
         toggleAddMode(true)
     }
     const onAddClick = () => {
         setPostSection(emptySection)
-        setOpen(true)
         toggleAddMode(true)
     }
     const onEditCancel = () => {

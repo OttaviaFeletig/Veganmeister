@@ -6,21 +6,24 @@
             "subtitle": "Read latest vegan reviews",
             "to": "/posts",
             "img": "https://source.unsplash.com/user/loukass23",
-            "icon": "<MailIcon / >"
+            "icon": "ArtTrack"
         },
         {
             "title": "Restaurants",
             "subtitle": "Discover vegan restaurants",
             "to": "/restaurants",
             "img": "https://source.unsplash.com/user/loukass23",
-            "icon": "<MailIcon / >"
+            "icon": "Restaurant"
         },
         {
             "title": "Map",
-            "subtitle": "Look for vegan places around you",
+            "subtitle": "Look for vegan places near you",
             "to": "/map",
             "img": "https://source.unsplash.com/user/loukass23",
-            "icon": "<MailIcon / >"
+            "icon": "Map"
         }
-    ]
+    ],
+    "comments": {
+        "topComments": 1
+    }
 }

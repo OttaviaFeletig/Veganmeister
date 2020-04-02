@@ -6,7 +6,7 @@ import PostItem from './PostItem';
 import { PostsContext } from '../../context/PostsContext';
 import { PostN } from '../../@types';
 import Grow from '@material-ui/core/Grow';
-
+import SelectGMap from '../Elements/Search/SelectGMap'
 
 
 
@@ -41,6 +41,7 @@ const Posts: React.FC<Props> = ({ classes }) => {
     return (
         <div className={classes.root}>
             <Grid container className={classes.container} spacing={2}>
+
                 {posts && posts.map((post: PostN.PostI, i: number) =>
                     <Grow in
                         style={{ transformOrigin: '0 0 0' }}
