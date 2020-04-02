@@ -3,6 +3,7 @@ import Restaurant from "./restaurant/typeDefs";
 import Post from "./post/typeDefs";
 import { resolvers as restaurantResolvers } from "./restaurant/resolvers";
 import { resolvers as postResolvers } from "./post/resolvers";
+import { scalarTypesResolverMap } from "./scalarTypes/resolvers";
 import { merge } from "lodash";
 import { makeExecutableSchema } from "graphql-tools";
 
@@ -19,5 +20,9 @@ const Query = gql`
 `;
 
 const typeDefs = [Restaurant, Post, Query];
-const resolvers = merge(restaurantResolvers, postResolvers);
+const resolvers = merge(
+  restaurantResolvers,
+  postResolvers,
+  scalarTypesResolverMap
+);
 export const schema = makeExecutableSchema({ typeDefs, resolvers });

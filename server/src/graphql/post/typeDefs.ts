@@ -14,9 +14,13 @@ export default gql`
     title: String!
     body: String!
     hashtags: [String!]!
-    comments: [String!] #Comment definition
+    comments: [Comment!] #Comment definition
     published: Boolean!
     archived: Boolean!
+  }
+
+  type Comment {
+      
   }
   extend type Query {
     posts: [Post!]!

@@ -1,5 +1,6 @@
+import { ObjectID } from "bson";
 interface RestaurantI {
-  id: String;
+  id: string | number | ObjectID;
   name: string;
   location: any; // create LocationI
   description: string;
@@ -17,8 +18,15 @@ interface PostI {
   title: string;
   body: string;
   hashtags: Array<string>;
-  comments: Array<string>; // Comment type
+  comments: CommentsT; // Comment type
   published: boolean;
   archived: boolean;
 }
 type PostsT = Array<PostI>;
+interface CommentI {
+  id: string;
+  date: Date;
+  author: string; //User definition
+  body: string;
+}
+type CommentsT = Array<CommentI>;

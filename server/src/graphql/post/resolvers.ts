@@ -1,5 +1,6 @@
 import { find, filter } from "lodash";
 import { restaurants } from "../restaurant/resolvers";
+
 const posts: PostsT = [
   {
     id: "1",
@@ -12,7 +13,13 @@ const posts: PostsT = [
     title: "title1",
     body: "body1",
     hashtags: ["hashtags1", "hashtags1", "hashtags1"],
-    comments: ["comment1", "comment1", "comment1"],
+    comments: [
+      {id: "1",
+        date: new Date(),
+        author: "user4", //User definition
+        body: "body"
+      }
+    ],
     published: true,
     archived: false
   },
@@ -27,7 +34,14 @@ const posts: PostsT = [
     title: "title2",
     body: "body2",
     hashtags: ["hashtags2", "hashtags2", "hashtags2"],
-    comments: ["comment2", "comment2", "comment2"],
+    comments: [
+      {
+          id: "2",
+        date: new Date(),
+        author: "user4", //User definition
+        body: "body"
+      }
+    ],
     published: true,
     archived: false
   },
@@ -42,7 +56,14 @@ const posts: PostsT = [
     title: "title3",
     body: "body3",
     hashtags: ["hashtags3", "hashtags3", "hashtags3"],
-    comments: ["comment3", "comment3", "comment3"],
+    comments: [
+      {
+          id: "3",
+        date: new Date(),
+        author: "user4", //User definition
+        body: "body"
+      }
+    ],
     published: false,
     archived: true
   }
