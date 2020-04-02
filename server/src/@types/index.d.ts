@@ -3,7 +3,7 @@ export namespace RestaurantN {
   interface RestaurantI {
     _id: string | number | ObjectID;
     name: string;
-    location: LocationI; // create LocationI
+    location: LocationI;
     description: string;
     images: Array<string>;
   }
@@ -22,7 +22,7 @@ export namespace PostN {
     restaurant: RestaurantN.RestaurantI;
     mainPicture: string;
     images: Array<string>;
-    author: any; //create UserI or UserN
+    author: UserN.UserI;
     likes: number;
     title: string;
     postSections: PostSectionsT;
@@ -43,11 +43,11 @@ export namespace PostN {
   type PostsT = Array<PostI>;
   interface CommentI {
     _id: string | number | ObjectID;
-    user: string; //User definition
+    user: UserN.UserI;
     date: Date;
     body: string;
     likes: number;
-    likedBy: Array<string>; //users
+    likedBy: UserN.UsersT;
   }
   type CommentsT = Array<CommentI>;
 }
@@ -60,7 +60,7 @@ export namespace UserN {
     email: string;
     password: string;
     avatar: string;
-    posts: PostN.PostsT;
+    posts?: PostN.PostsT;
     rank?: RankI;
     isAdmin: Boolean;
   }
@@ -70,7 +70,6 @@ export namespace UserN {
     points: RankPoints;
     logo: RankLogo;
   }
-
   enum RankNames {
     VeganMeister = "Vegan Meister",
     VeganApprentice = "Vegan Apprentice",
@@ -92,4 +91,10 @@ export namespace UserN {
     VeganCurious = "",
     VeganVirgin = ""
   }
+  type RankNamesT =
+    | "Vegan Meister"
+    | "Vegan Apprentice"
+    | "Vegan Student"
+    | "Vegan Curious"
+    | "VeganVirgin";
 }

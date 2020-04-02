@@ -9,7 +9,7 @@ export default gql`
     restaurant: Restaurant!
     mainPicture: String!
     images: [String!]!
-    author: String! #Author definition
+    author: User!
     likes: Int!
     title: String!
     postSections: [PostSection!]!
