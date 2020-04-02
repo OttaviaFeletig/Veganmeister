@@ -26,3 +26,4 @@ yarn-debug.log*
 yarn-error.log*
 /client/yarn.lock
 client/src/assets/data/config.ts
+/server/yarn.lock
