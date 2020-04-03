@@ -6,10 +6,11 @@ import { resolvers as restaurantResolvers } from "./restaurant/resolvers";
 import { resolvers as postResolvers } from "./post/resolvers";
 import { resolvers as userResolvers } from "./user/resolvers";
 import { scalarTypesResolverMap } from "./scalarTypes/resolvers";
-// import { enumTypesResolverMap } from "./enumTypes/resolvers";
+import { enumTypesResolverMap } from "./enumTypes/resolvers";
 import { merge } from "lodash";
 import { makeExecutableSchema } from "graphql-tools";
-
+// const { GeoJSONPointType } = require("./enumTypes/resolvers");
+// const { RankNamesType } = require("./enumTypes/resolvers");
 const Query = gql`
   type Query {
     _empty: String
@@ -33,10 +34,9 @@ const resolvers = merge(
   restaurantResolvers,
   postResolvers,
   userResolvers,
-  scalarTypesResolverMap
+  scalarTypesResolverMap,
+  enumTypesResolverMap
   // GeoJSONPointType,
-  // RankNamesType,
-  // RankPointsType,
-  // RankLogosType
+  // RankNamesType
 );
 export const schema = makeExecutableSchema({ typeDefs, resolvers });

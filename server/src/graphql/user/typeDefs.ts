@@ -15,9 +15,9 @@ export default gql`
   }
 
   type Rank {
-    name: RankNamesType!
-    points: RankPointsType!
-    logo: RankLogosType!
+    name: RankNamesType
+    points: RankPointsType
+    logo: RankLogosType
   }
 
   enum RankNamesType {
