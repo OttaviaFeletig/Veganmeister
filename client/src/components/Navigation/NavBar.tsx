@@ -1,7 +1,7 @@
 import React from 'react';
 import { fade, makeStyles, Theme, createStyles, WithStyles, withStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
-import { Grid, Button } from '@material-ui/core';
+import { Grid, Button, useScrollTrigger, Zoom, Fab } from '@material-ui/core';
 import Toolbar from '@material-ui/core/Toolbar';
 import IconButton from '@material-ui/core/IconButton';
 import Typography from '@material-ui/core/Typography';
@@ -22,6 +22,54 @@ import { Link } from 'react-router-dom'
 import MaterialIconAsync from '../Elements/GraphicElmts/MaterialIconAsync';
 import AsyncSearch from '../Elements/Search/AsyncSearch'
 
+
+const mainWindow = window;
+interface ScrollTopProps {
+    /**
+     * Injected by the documentation to work in an iframe.
+     * You won't need it on your project.
+     */
+    window?: () => Window;
+    children: React.ReactElement;
+}
+
+const useStyles = makeStyles((theme: Theme) =>
+    createStyles({
+        root: {
+            position: 'fixed',
+            bottom: theme.spacing(2),
+            right: theme.spacing(2),
+        },
+    }),
+);
+function ScrollTop(props: ScrollTopProps) {
+    const { children, window } = props;
+    const classes = useStyles();
+    // Note that you normally won't need to set the window ref as useScrollTrigger
+    // will default to window.
+    // This is only being set here because the demo is in an iframe.
+    const trigger = useScrollTrigger({
+        target: window ? window() : undefined,
+        disableHysteresis: true,
+        threshold: 100,
+    });
+
+    const handleClick = () => {
+        mainWindow.scrollTo({
+            top: 0,
+            behavior: 'smooth',
+        });
+
+    };
+
+    return (
+        <Zoom in={trigger}>
+            <div onClick={handleClick} role="presentation" className={classes.root}>
+                {children}
+            </div>
+        </Zoom>
+    );
+}
 
 const styles = (theme: Theme) => createStyles({
     grow: {
@@ -111,18 +159,6 @@ const styles = (theme: Theme) => createStyles({
     }
 
 })
-// interface PropsIcon {
-//     icon: string;
-// }
-
-// const MaterialIconAsync: React.FC<PropsIcon> = ({ icon }) => {
-//     let iconName = icon.replace(/Icon$/, '')
-//     return React.createElement(asyncComponent({
-//         resolve: () => import(
-//             /* webpackMode: "eager" */
-//             `@material-ui/icons/${iconName}`)
-//     }))
-// }
 
 interface Props extends WithStyles<typeof styles> {
     classes: any
@@ -130,9 +166,9 @@ interface Props extends WithStyles<typeof styles> {
 
 
 
-const NavBar: React.FC<Props> = ({ classes }) => {
+const NavBar: React.FC<Props> = (props) => {
 
-
+    const { classes } = props
     const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
     const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState<null | HTMLElement>(null);
 
@@ -227,7 +263,7 @@ const NavBar: React.FC<Props> = ({ classes }) => {
     return (
         <div className={classes.grow}>
             <AppBar position="sticky" className={classes.appBar} >
-                <Toolbar>
+                <Toolbar id="back-to-top-anchor">
                     <div className={classes.logo}>
                         <Link
                             to='/'
@@ -277,6 +313,11 @@ const NavBar: React.FC<Props> = ({ classes }) => {
                         </IconButton>
                     </div>
                 </Toolbar>
+                <ScrollTop {...props}>
+                    <Fab color="secondary" size="small" aria-label="scroll back to top">
+                        <MaterialIconAsync icon="KeyboardArrowUpIcon" />
+                    </Fab>
+                </ScrollTop>
             </AppBar>
             {renderMobileMenu}
             {renderMenu}

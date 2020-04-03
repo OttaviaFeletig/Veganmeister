@@ -1,5 +1,6 @@
 import React, { useState, createContext, useContext } from 'react'
 import { createMuiTheme, responsiveFontSizes } from "@material-ui/core/styles";
+import { ThemeContextI } from '.';
 // import { contentMaster } from '../content'
 // import { ContentContext } from './ContentContext';
 
@@ -102,16 +103,16 @@ const ThemeContextProvider = (props: { children: React.ReactNode; }) => {
     const [theme, setTheme] = useState(initTheme)
     // const { setColorsContent } = useContext(ContentContext)
 
-    const setColors = (hex: string, type: string) => {
-        console.log('theme', theme)
-        console.log('hex', hex)
-        if (type === 'primary') theme.palette.primary.main = hex
-        if (type === 'secondary') theme.palette.secondary.main = hex
+    const setColors = () => {
+        // console.log('theme', theme)
+        // console.log('hex', hex)
+        // if (type === 'primary') theme.palette.primary.main = hex
+        // if (type === 'secondary') theme.palette.secondary.main = hex
 
-        // setColorsContent(hex, type)
-        setTheme({
-            ...theme
-        })
+        // // setColorsContent(hex, type)
+        // setTheme({
+        //     ...theme
+        // })
 
     }
 

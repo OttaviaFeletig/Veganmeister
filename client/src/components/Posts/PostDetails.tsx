@@ -31,6 +31,7 @@ import { EditorState } from 'draft-js'
 import Grow from '@material-ui/core/Grow';
 import PostSections from './PostSections';
 import PostComments from './PostComments';
+import BackButton from '../Elements/GraphicElmts/BackButton';
 
 
 moment().format();
@@ -158,7 +159,7 @@ const PostDetails: React.FC<Props> = ({ classes, match }) => {
 
     return (
         <React.Fragment>
-
+            <BackButton to="/posts" text="Back to Posts" />
             <Card className={classes.card}>
                 <CardHeader
                     avatar={

@@ -1,12 +1,6 @@
 import React, { useState, createContext } from 'react'
-
-const initUser: User = {
-    name: 'Lucas',
-    surname: 'DPS',
-    avatar: 'https://res.cloudinary.com/ds3w3iwbk/image/upload/v1560349630/MERN/20170409_193026.jpg',
-    isAdmin: false,
-    uid: ''
-}
+import { initUser } from '../assets/data/dumbData'
+import { AuthContextI } from '.'
 
 export const AuthContext = createContext<AuthContextI>({
     isAuthenticated: true,

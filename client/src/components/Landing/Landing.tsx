@@ -13,7 +13,7 @@ import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import { WithStyles, Theme, createStyles, withStyles } from '@material-ui/core/styles';
 import Logo from '../Elements/GraphicElmts/Logo'
-import SvgIcon from '@material-ui/core/SvgIcon';
+// import SvgIcon from '@material-ui/core/SvgIcon';
 import dataSite from '../../assets/data/siteData.json'
 import { ReactComponent as ReactLogo } from '../../assets/logo/noun_Deer.svg';
 import { Card, CardContent, CardMedia, Slide } from '@material-ui/core';
