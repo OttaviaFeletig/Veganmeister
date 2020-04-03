@@ -6,6 +6,7 @@ export namespace PostN {
         mainPicture: string;
         author: UserN.UserI;
         likes: number;
+        likedBy: UserN.UsersT;
         title: string;
         postSections: PostSectionsT;
         hashtags: Array<string>;
@@ -39,14 +40,19 @@ export namespace PostN {
 
 export namespace RestaurantN {
     interface RestaurantI {
+        _id: string;
         name: string;
         location: LocationI;
         description: string;
+        mainPicture: string;
         images: Array<string>;
+        likes: number;
+        likedBy: UserN.UsersT;
+        rating: number;
     }
 
     interface LocationI {
-        coordinates: GeoJSON.Point;
+        geometry: GeoJSON.Point;
         district: string;
         city: string;
         country: string;
@@ -60,7 +66,7 @@ export namespace UserN {
         name: string;
         surname: string;
         email: string;
-        password: string;
+        // password: string;
         avatar: string;
         posts: Array<PostI>;
         rank?: RankI;

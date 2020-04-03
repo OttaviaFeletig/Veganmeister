@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect } from 'react';
 import { BrowserRouter as Router, Route } from "react-router-dom";
 import Container from '@material-ui/core/Container';
 import Typography from '@material-ui/core/Typography';
@@ -8,7 +8,7 @@ import Icon from '@material-ui/core/Icon';
 import { makeStyles } from '@material-ui/styles';
 import logoSVG from './assets/logo/noun_Deer_53375.svg'
 import logoPNG from './assets/logo/noun_Deer_53375.png'
-import SvgIcon from '@material-ui/core/SvgIcon';
+// import SvgIcon from '@material-ui/core/SvgIcon';
 import BottomNav from './components/Navigation/BottomNav'
 import { Theme, createStyles, MuiThemeProvider } from '@material-ui/core/styles';
 import { ThemeContext } from './context/ThemeContext';
@@ -20,6 +20,8 @@ import NavBar from './components/Navigation/NavBar';
 import Footer from './components/Navigation/Footer';
 import './App.css'
 import PostDetails from './components/Posts/PostDetails';
+import RestaurantsContextProvider from './context/RestaurantsContext';
+import RestaurantList from './components/Restaurants/RestaurantList';
 
 
 
@@ -30,7 +32,6 @@ const RenderWebsite: React.FC = (props) => {
     theme,
   } = useContext(ThemeContext)
 
-  const path = window.location.pathname
 
   return (
     <MuiThemeProvider theme={theme}>
@@ -42,6 +43,10 @@ const RenderWebsite: React.FC = (props) => {
             <Route exact path="/posts" component={PostList} />
             <Route exact path="/posts/:postId" component={PostDetails} />
           </PostsContextProvider>
+          <RestaurantsContextProvider>
+            <Route exact path="/restaurants" component={RestaurantList} />
+            {/* <Route exact path="/restaurants/:restaurantsId" component={RestaurantDetails} /> */}
+          </RestaurantsContextProvider>
           <Footer />
         </Container>
       </Router>
@@ -49,7 +54,13 @@ const RenderWebsite: React.FC = (props) => {
 }
 
 const App: React.FC = () => {
+  useEffect(() => {
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth',
+    });
 
+  }, [])
   return (
 
     <RenderWebsite />

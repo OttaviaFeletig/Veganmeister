@@ -106,7 +106,7 @@ const PostSectionAddEdit: React.FC<Props> = ({ classes, postSection }) => {
     const toggleLayout = () => (event: React.ChangeEvent<HTMLInputElement>) => {
         // setArticle({ ...article, sideImg: event.target.checked });
     };
-    const { sideImg, text, img } = postSection
+    const { sideImg, body, img } = postSection
 
     // firebaseUpload = async () => {
     const firebaseStorageUpload = (file: File) => {
@@ -254,7 +254,7 @@ const PostSectionAddEdit: React.FC<Props> = ({ classes, postSection }) => {
                         <MUIRichTextEditor
                             label="Type something here..."
                             onSave={(data: string) => console.log('data :', data)}
-                            value={postSection.text}
+                            value={postSection.body}
                             // controls={[""]}
                             // value={section.text}
                             inlineToolbar={false}
@@ -266,7 +266,7 @@ const PostSectionAddEdit: React.FC<Props> = ({ classes, postSection }) => {
                         <MUIRichTextEditor
                             label="Type something here..."
                             onSave={(data: string) => console.log('data :', data)}
-                            value={postSection.text}
+                            value={postSection.body}
                             // controls={[""]}
                             // value={section.text}
                             inlineToolbar={false}
@@ -313,7 +313,7 @@ const PostSectionAddEdit: React.FC<Props> = ({ classes, postSection }) => {
                             <MUIRichTextEditor
                                 label="Type something here..."
                                 onSave={(data: string) => console.log('data :', data)}
-                                value={postSection.text}
+                                value={postSection.body}
                                 // controls={[""]}
                                 // value={section.text}
                                 inlineToolbar={false}

@@ -30,6 +30,8 @@ import MUIRichTextEditor from 'mui-rte'
 import DoneIcon from '@material-ui/icons/Done'
 import { EditorState } from 'draft-js'
 import Grow from '@material-ui/core/Grow';
+import dataSite from '../../assets/data/siteData.json'
+import Comments from '../Elements/Comments/Comments';
 
 
 moment().format();
@@ -65,9 +67,7 @@ const styles = (theme: Theme) => createStyles({
             duration: theme.transitions.duration.shortest,
         }),
     },
-    expandOpen: {
-        // transform: 'rotate(180deg)',
-    },
+
     rating: {
         display: 'flex',
         // flexDirection: 'column',
@@ -103,20 +103,8 @@ const styles = (theme: Theme) => createStyles({
         alignItems: 'center',
         justifyContent: 'center',
     },
-    commentsContainer: {
-        display: 'flex',
-        alignItems: 'center',
-        // marginTop: theme.spacing(1)
-
-    },
-    commentBody: {
-        width: '100%',
-        padding: theme.spacing(2),
-        backgroundColor: fade(theme.palette.common.black, 0.05),
-        borderRadius: theme.shape.borderRadius,
 
 
-    },
     inputRoot: {
         color: 'inherit',
         width: '100%',
@@ -132,14 +120,10 @@ const styles = (theme: Theme) => createStyles({
         //     width: '20ch',
         // },
     },
-    iconButton: {
-        // padding: 10,
-    },
-    divider: {
-        // height: 28,
-        // margin: 4,
-    },
+
 })
+
+
 
 interface PropsComments extends WithStyles<typeof styles> {
     classes: any,
@@ -166,22 +150,6 @@ const PostComments: React.FC<PropsComments> = ({ post, classes }) => {
                 />
                 <CardContent>
 
-                    {/* <MUIRichTextEditor
-                            controls={["my-callback"]}
-                            inlineToolbar={true}
-                            controls={["title", "italic", "media"]}
-                            customControls={[
-                                {
-                                    name: "my-callback",
-                                    icon: <DoneIcon />,
-                                    type: "callback",
-                                    onClick: (editorState, name, anchor) => {
-                                        console.log(editorState)
-                                        return EditorState.createEmpty()
-                                    }
-                                }
-                            ]}
-                        /> */}
 
                     <div className={classes.comments}>
                         <CommentIcon className={classes.commentIcon} />
@@ -199,37 +167,9 @@ const PostComments: React.FC<PropsComments> = ({ post, classes }) => {
                         </IconButton>
                     </div>
 
-                    {post.comments.map((comment: PostN.CommentI) => (
-                        <div key={comment._id} className={classes.commentsContainer}>
 
-                            <CardHeader
-                                avatar={
-                                    <Avatar
-                                        // component={classes.avatar}
-                                        classes={classes.avatarIMG}
-                                        className={classes.avatar}
-                                        alt={"user avatar"}
-                                        src={comment.user.avatar}
-                                    />
-                                }
+                    <Comments comments={post.comments.sort((a, b) => b.likes - a.likes).filter((el, i) => i < dataSite.comments.topComments)} classes={classes} />
 
-                                title={<React.Fragment > {post.author.username}</React.Fragment>}
-                                subheader={moment(post.date).fromNow()}
-                            />
-                            <div className={classes.commentBody}>
-                                <Typography variant="body2">
-                                    {comment.body}
-                                </Typography>
-                            </div>
-                            <IconButton aria-label="add to favorites">
-                                <ThumbUpIcon />
-                                <Typography variant="body2"> {post.likes} likes</Typography>
-                            </IconButton>
-
-                            {/* <Divider variant="middle" /> */}
-                        </div>
-                    )
-                    )}
 
                 </CardContent>
                 <CardActions disableSpacing>
@@ -256,37 +196,7 @@ const PostComments: React.FC<PropsComments> = ({ post, classes }) => {
                 </CardActions>
                 <Collapse in={expanded} timeout="auto" unmountOnExit>
                     <CardContent>
-                        {post.comments.map((comment: PostN.CommentI) => (
-                            <div key={comment._id} className={classes.commentsContainer}>
-
-                                <CardHeader
-                                    avatar={
-                                        <Avatar
-                                            // component={classes.avatar}
-                                            classes={classes.avatarIMG}
-                                            className={classes.avatar}
-                                            alt={"user avatar"}
-                                            src={comment.user.avatar}
-                                        />
-                                    }
-
-                                    title={<React.Fragment > {post.author.username}</React.Fragment>}
-                                    subheader={moment(post.date).fromNow()}
-                                />
-                                <div className={classes.commentBody}>
-                                    <Typography variant="body2">
-                                        {comment.body}
-                                    </Typography>
-                                </div>
-                                <IconButton aria-label="add to favorites">
-                                    <ThumbUpIcon />
-                                    <Typography variant="body2"> {post.likes} likes</Typography>
-                                </IconButton>
-
-                                {/* <Divider variant="middle" /> */}
-                            </div>
-                        )
-                        )}
+                        <Comments comments={post.comments.sort((a, b) => b.likes - a.likes).filter((el, i) => i >= dataSite.comments.topComments)} classes={classes} />
 
                     </CardContent>
                 </Collapse>

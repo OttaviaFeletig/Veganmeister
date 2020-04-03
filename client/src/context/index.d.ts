@@ -1,14 +1,22 @@
+import { Theme } from "@material-ui/core";
+
 interface AuthContextI {
     isAuthenticated: Boolean,
-    user: User,
+    user: UserI,
     logIn(): void,
 
 }
 interface ThemeContextI {
-    theme: any,
-    setColors: any
+    theme: Theme,
+    setColors(): void;
 }
 interface PostsContextI {
-    posts: any,
-    getALlPosts(): void,
+    posts: PostsT;
+    getAllPosts(): void;
+    handleSort(sort: string): void;
+    sort: string;
+}
+interface RestaurantsContextI {
+    restaurants: RestaurantN.RestaurantsT;
+    getAllRestaurants(): void;
 }
