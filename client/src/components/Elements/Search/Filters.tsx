@@ -32,13 +32,6 @@ const styles = (theme: Theme) => createStyles({
 })
 
 
-interface Props extends WithStyles<typeof styles> {
-    classes: any,
-    sort: string,
-    handleSort(sort: string): void;
-    toggleDisplay(): void;
-}
-
 
 
 const StyledToggleButtonGroup = withStyles((theme) => ({
@@ -54,6 +47,15 @@ const StyledToggleButtonGroup = withStyles((theme) => ({
         },
     },
 }))(ToggleButtonGroup);
+
+
+interface Props extends WithStyles<typeof styles> {
+    classes: any,
+    sort: string,
+    handleSort(sort: string): void;
+    toggleDisplay(): void;
+}
+
 
 const Filters: React.FC<Props> = ({ classes, sort, handleSort, toggleDisplay }) => {
 

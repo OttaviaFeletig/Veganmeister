@@ -19,13 +19,24 @@ import { useDropzone } from 'react-dropzone'
 import RootRef from '@material-ui/core/RootRef'
 import MaterialIconAsync from '../Elements/GraphicElmts/MaterialIconAsync';
 import { PostsContext } from '../../context/PostsContext';
+import ToggleButton from '@material-ui/lab/ToggleButton';
+import ToggleButtonGroup from '@material-ui/lab/ToggleButtonGroup';
 
 
 
-
-
-// import { Post } from '../context/ContentContext';
-
+const StyledToggleButtonGroup = withStyles((theme) => ({
+    grouped: {
+        margin: theme.spacing(0.5),
+        border: 'none',
+        padding: theme.spacing(0, 1),
+        '&:not(:first-child)': {
+            borderRadius: theme.shape.borderRadius,
+        },
+        '&:first-child': {
+            borderRadius: theme.shape.borderRadius,
+        },
+    },
+}))(ToggleButtonGroup);
 
 const styles = (theme: Theme) => createStyles({
     article: {
@@ -72,6 +83,13 @@ const styles = (theme: Theme) => createStyles({
         position: 'absolute',
         top: theme.spacing(2),
         right: theme.spacing(2),
+    },
+    absoluteTop: {
+        position: 'absolute',
+        top: theme.spacing(2),
+        right: '50%',
+        marginRight: - theme.spacing(6),
+        zIndex: 999
     },
     absoluteRTitle: {
         color: 'white',
@@ -126,14 +144,18 @@ const styles = (theme: Theme) => createStyles({
         height: '100%',
         width: '100%',
         margin: 0,
-
+        textAlign: 'center',
         // [theme.breakpoints.down('xs')]: {
         //     width: '100%',
         //     marginLeft: 0,
         //     marginRight: 0
         // }
     },
+    input: {
+        textAlign: 'center',
+    },
     responsiveFieldSide: {
+        textAlign: 'center',
         width: '100%',
         marginTop: 0,
         marginBottom: 0,
@@ -144,6 +166,7 @@ const styles = (theme: Theme) => createStyles({
         }
     },
     imgInput: {
+        minHeight: '400px',
         height: '100%',
         width: '100%',
         padding: theme.spacing(2),
@@ -202,7 +225,7 @@ interface Props extends WithStyles<typeof styles> {
 const PostSections: React.FC<Props> = ({ classes, post }) => {
     const [addMode, toggleAddMode] = React.useState(false);
     const [editMode, toggleEditMode] = React.useState(false);
-
+    console.log('post.postSections', post.postSections)
     // const { addEditDeleteArticle,
     //     article,
     //     setArticle,
@@ -222,7 +245,7 @@ const PostSections: React.FC<Props> = ({ classes, post }) => {
     const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
 
     const { isAuthenticated } = useContext(AuthContext)
-    const { changeSectionOrder } = useContext(PostsContext)
+    const { changeSectionOrder, changeSplit, textChange } = useContext(PostsContext)
 
     const [postSection, setPostSection] = useState(emptySection)
     const [openDialog, setOpenDialog] = React.useState(false);
@@ -257,9 +280,9 @@ const PostSections: React.FC<Props> = ({ classes, post }) => {
 
         toggleAddMode(false)
     }
-    const onClickSave = (post: PostN.PostI, postSection: PostN.PostSectionI) => {
+    const handleTextChange = (postSection: PostN.PostSectionI, action: string) => {
         // addEditDeleteArticle(tab, article, 'edit')
-        onEditCancel()
+
     }
 
     const handleMoveUp = (post: PostN.PostI, postSection: PostN.PostSectionI) => {
@@ -272,8 +295,8 @@ const PostSections: React.FC<Props> = ({ classes, post }) => {
         setAnchorEl(null);
         changeSectionOrder(post, postSection, 'moveDown')
     };
-    const handleMenuClose = () => {
-        setAnchorEl(null);
+    const handleSplitToggle = (post: PostN.PostI, postSection: PostN.PostSectionI) => {
+        changeSplit(postSection);
     };
     const renderEditMenu = (post: PostN.PostI, postSection: PostN.PostSectionI, i: number, length: number) => (<React.Fragment>
         <div className={classes.absoluteL} >
@@ -285,6 +308,7 @@ const PostSections: React.FC<Props> = ({ classes, post }) => {
                     <KeyboardArrowUpIcon />
                 </Fab>
             </Tooltip>}
+
             {i < length - 1 && <Tooltip
                 onClick={() => handleMoveDown(post, postSection)} title="moveDown" aria-label="move down">
                 <Fab size="small" color="primary"
@@ -294,14 +318,23 @@ const PostSections: React.FC<Props> = ({ classes, post }) => {
                 </Fab>
             </Tooltip>}
         </div>
+        <div className={classes.absoluteTop} >
+            <StyledToggleButtonGroup
+                size="small"
+                value={postSection.sideImg ? 'splitV' : 'splitH'}
+                exclusive
+                onChange={() => handleSplitToggle(post, postSection)}
+                aria-label="sort"
+            >
+                <ToggleButton style={{ transform: 'rotate(180deg)' }} value="splitV" aria-label="centered">
+                    <MaterialIconAsync icon="VerticalSplit" />
+                </ToggleButton>
+                <ToggleButton value="splitH" aria-label="centered">
+                    <MaterialIconAsync icon="HorizontalSplit" />
+                </ToggleButton>
+            </StyledToggleButtonGroup>
+        </div>
         <div className={classes.absoluteR} >
-            {/* <Tooltip
-                onClick={() => onEditClick(postSection)}
-                title="edit" aria-label="edit">
-                <Fab size="small" color="primary" >
-                    <MaterialIconAsync icon='DeleteIcon' />
-                </Fab>
-            </Tooltip> */}
             <Tooltip
                 onClick={() => onClickDelete(post, postSection)}
                 title="delete" aria-label="delete">
@@ -346,59 +379,6 @@ const PostSections: React.FC<Props> = ({ classes, post }) => {
             </DialogActions>
         </Dialog>
     )
-    // const renderMenu = (post: PostN.PostI, postSection: PostN.PostSectionI) => {
-    //     let menuId = 'moveMenu' + postSection.index;
-    //     return (
-    //         <Menu
-    //             anchorEl={anchorEl}
-    //             anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
-    //             id={menuId}
-    //             transformOrigin={{ vertical: 'top', horizontal: 'right' }}
-    //             open={isMenuOpen}
-    //             onClose={handleMenuClose}
-    //         >
-    //             <MenuItem onClick={() => handleMoveUp(post, postSection)}>Move up</MenuItem>
-    //             <MenuItem onClick={() => handleMoveDown(post, postSection)}>Move down</MenuItem>
-    //         </Menu>
-    //     );
-    // }
-    // if (addMode) return (
-    //     <React.Fragment>
-    //         {/* <Dialog
-    //             fullScreen={true}
-    //             open={open}
-    //             onClose={handleClose}
-    //             aria-labelledby="responsive-dialog-title"
-    //         > */}
-    //         <PostSectionAddEdit postSection={postSection} />
-    //         <Grid container>
-    //             <Grid item xs={6}>
-    //                 <Button
-    //                     onClick={() => onEditCancel()}
-    //                     variant="contained"
-    //                     color="secondary"
-    //                     size="small"
-    //                     className={classes.button}
-    //                     startIcon={<CancelIcon />}
-    //                 >Cancel</Button>
-    //             </Grid>
-
-    //             <Grid item xs={6}>
-    //                 <Button
-    //                     // onClick={() =>
-    //                     //     onClickSave(post, postSection)}
-    //                     variant="contained"
-    //                     color="primary"
-    //                     size="small"
-    //                     className={classes.button}
-    //                     startIcon={<SaveIcon />}
-    //                 >Save</Button>
-    //             </Grid>
-    //         </Grid>
-    //         {/* </Dialog> */}
-    //     </React.Fragment>)
-
-    // else
 
     return (
         <Grid container spacing={2}
@@ -445,10 +425,10 @@ const PostSections: React.FC<Props> = ({ classes, post }) => {
                                             {editMode ?
                                                 <React.Fragment>
                                                     <TextField
-                                                        // InputLabelProps={
-                                                        //     classes.formLabelFocused
-                                                        // }
-                                                        // onChange={handleChange('title')}
+
+                                                        inputProps={{ style: { textAlign: 'center' } }}
+                                                        InputLabelProps={{ style: { marginLeft: '50px' } }}
+                                                        onChange={(e) => textChange(post, section, e.target.value, true)}
                                                         color="secondary"
                                                         id="filled-required"
                                                         label={`Section ${section.index} Header`}
@@ -459,8 +439,10 @@ const PostSections: React.FC<Props> = ({ classes, post }) => {
                                                         variant="filled"
                                                     />
                                                     <TextField
+                                                        inputProps={{ style: { textAlign: 'center' } }}
+                                                        InputLabelProps={{ style: { marginLeft: '50px' } }}
                                                         color="secondary"
-                                                        // onChange={handleChange('text')}
+                                                        onChange={(e) => textChange(post, section, e.target.value, false)}
                                                         id="filled-multiline-static"
                                                         label={`Section ${section.index} Text`}
                                                         multiline
@@ -494,32 +476,38 @@ const PostSections: React.FC<Props> = ({ classes, post }) => {
                                             renderEditMenu(post, section, i, post.postSections.length)
                                         }
                                         <Grid item xs={12}>
-                                            {section.img && <CardMedia
-                                                component="img"
-                                                alt="img"
-                                                height="500"
+                                            {editMode && !section.img ?
+                                                <ImgDropzone styleClass={classes.imgInput} /> :
+                                                <CardMedia
+                                                    component="img"
+                                                    alt="img"
+                                                    height="500"
 
-                                                image={section.img}
-                                                title="img"
-                                            />}
+                                                    image={section.img}
+                                                    title="img"
+                                                />}
 
                                         </Grid>
                                         <Grid item xs={12}>
                                             {editMode ?
                                                 <React.Fragment>
                                                     <TextField
+                                                        inputProps={{ style: { textAlign: 'center' } }}
+                                                        InputLabelProps={{ style: { marginLeft: '50px' } }}
                                                         color="secondary"
                                                         id="filled-required"
                                                         label={`Section ${section.index} Header`}
                                                         defaultValue={section.header}
                                                         className={classes.responsiveFieldSide}
-
+                                                        onChange={(e) => textChange(post, section, e.target.value, true)}
                                                         margin="normal"
                                                         variant="filled"
                                                     />
                                                     <TextField
+                                                        inputProps={{ style: { textAlign: 'center' } }}
+                                                        InputLabelProps={{ style: { marginLeft: '50px' } }}
                                                         color="secondary"
-                                                        // onChange={handleChange('text')}
+                                                        onChange={(e) => textChange(post, section, e.target.value, false)}
                                                         id="filled-multiline-static"
                                                         label={`Section ${section.index} Text`}
                                                         multiline

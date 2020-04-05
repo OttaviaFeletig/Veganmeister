@@ -1,33 +1,38 @@
 import { PostN } from "../@types"
 
-export const addEditDeleteSection = (post: PostN.PostI, section: PostN.PostSectionI, action: string) => {
+// export const addEditDeleteSection = (post: PostN.PostI, section: PostN.PostSectionI, action: string) => {
+//     const { postSections } = post
+//     let index: number
+//     if (postSections) index = postSections.findIndex(e => e.index === section.index)
+//     else {
+//         index = -1
+//         console.log('index :', index);
+//     }
+//     switch (action) {
+//         case 'edit': if (index !== -1) {
+//             postSections.slice(0, index)
+//             postSections[index] = section
+//             postSections.slice(index + 1)
+//         }
+//         else {
+//             const lastIndex = postSections.length + 1
+//             const updateArticle = { ...section, index: lastIndex }
+//             postSections.push(updateArticle)
+//         }
+//             break
+//         case 'delete':
+//             postSections.splice(index, 1)
+//             break
+//     }
+
+//     reIndexSections(postSections)
+// }
+export const sectionsTextEdit = (post: PostN.PostI, section: PostN.PostSectionI, value: string, header: boolean) => {
     const { postSections } = post
-    let index: number
-    if (postSections) index = postSections.findIndex(e => e.index === section.index)
-    else {
-        index = -1
-        console.log('index :', index);
-    }
-    switch (action) {
-        case 'edit': if (index !== -1) {
-            postSections.slice(0, index)
-            postSections[index] = section
-            postSections.slice(index + 1)
-        }
-        else {
-            const lastIndex = postSections.length + 1
-            const updateArticle = { ...section, index: lastIndex }
-            postSections.push(updateArticle)
-        }
-            break
-        case 'delete':
-            postSections.splice(index, 1)
-            break
-    }
-
-    reIndexArticles(postSections)
+    const postSection = postSections.find(e => e === section);
+    if (postSection && header) postSection.header = value
+    if (postSection && !header) postSection.body = value
 }
-
 export const sectionsReOrder = (post: PostN.PostI, section: PostN.PostSectionI, action: string) => {
     const { postSections } = post
     console.log('section :', section);

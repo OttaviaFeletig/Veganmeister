@@ -13,7 +13,9 @@ interface ThemeContextI {
 interface PostsContextI {
     posts: PostsT;
     getAllPosts(): void;
+    changeSplit(section: PostN.PostSectionI): void;
     handleSort(sort: string): void;
+    textChange(post: PostN.PostI, postSection: PostN.PostSectionI, value: string, header: boolean): void;
     changeSectionOrder(post: PostN.PostI, section: PostN.PostSectionI, action: string): void;
     sort: string;
 }

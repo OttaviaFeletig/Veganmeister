@@ -149,11 +149,9 @@ interface Props extends WithStyles<typeof styles> {
     match: any,
 }
 const PostDetails: React.FC<Props> = ({ classes, match }) => {
-    const [expanded, setExpanded] = React.useState(false);
     const loading = false;
     const { postId } = match.params;
     const { posts } = useContext(PostsContext)
-    console.log('posts :', posts);
     const post = posts.find((post: PostN.PostI) => post._id === postId)
 
 
