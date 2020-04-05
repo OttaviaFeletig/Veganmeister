@@ -61,7 +61,7 @@ export namespace UserN {
     password: string;
     avatar: string;
     posts?: PostN.PostsT;
-    rank?: RankI;
+    rank: RankI;
     isAdmin: Boolean;
   }
   type UsersT = Array<UserI>;
@@ -70,6 +70,7 @@ export namespace UserN {
     points: RankPoints;
     logo: RankLogo;
   }
+  type RanksT = Array<RankI>;
   enum RankNames {
     VeganMeister = "Vegan Meister",
     VeganApprentice = "Vegan Apprentice",
@@ -91,10 +92,4 @@ export namespace UserN {
     VeganCurious = "",
     VeganVirgin = ""
   }
-  type RankNamesT =
-    | "Vegan Meister"
-    | "Vegan Apprentice"
-    | "Vegan Student"
-    | "Vegan Curious"
-    | "VeganVirgin";
 }

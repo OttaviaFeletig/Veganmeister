@@ -31,6 +31,66 @@ export const scalarTypesResolverMap = {
       return isCoordinate(ast.value);
     }
   })
+  // RankNamesType: new GraphQLScalarType({
+  //   name: "RankNamesType",
+  //   description: "Rank names types",
+  //   serialize(value) {
+  //     switch (value) {
+  //       case "Vegan Meister":
+  //         return "Vegan Meister";
+  //       case "Vegan Apprentice":
+  //         return "Vegan Apprentice";
+  //       case "Vegan Student":
+  //         return "Vegan Student";
+  //       case "Vegan Curious":
+  //         return "Vegan Curious";
+  //       case "Vegan Virgin":
+  //         return "Vegan Virgin";
+  //       default:
+  //         return "Value not possible";
+  //     }
+  //   }
+  // }),
+  // RankPointsType: new GraphQLScalarType({
+  //   name: "RankPointsType",
+  //   description: "Rank points types",
+  //   serialize(value) {
+  //     switch (value) {
+  //       case 100:
+  //         return 100;
+  //       case 70:
+  //         return 70;
+  //       case 40:
+  //         return 40;
+  //       case 10:
+  //         return 10;
+  //       case 0:
+  //         return 0;
+  //       default:
+  //         return "Value not possible";
+  //     }
+  //   }
+  // }),
+  // RankLogosType: new GraphQLScalarType({
+  //   name: "RankLogosType",
+  //   description: "Rank logos types",
+  //   serialize(value) {
+  //     switch (value) {
+  //       case "":
+  //         return "";
+  //       case "":
+  //         return "";
+  //       case "":
+  //         return "";
+  //       case "":
+  //         return "";
+  //       case "":
+  //         return "";
+  //       default:
+  //         return "Value not possible";
+  //     }
+  //   }
+  // })
 };
 // helper function for coordinates scalar
 const isCoordinate = (value: Array<number>) => {
