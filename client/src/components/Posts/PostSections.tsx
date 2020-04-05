@@ -1,5 +1,5 @@
-import React, { useContext, useState } from 'react'
-import { Theme, createStyles, Typography, CardMedia, Grid, Tooltip, Fab, Button, Menu, MenuItem, FormControlLabel, Switch, TextField, Divider, Slide } from '@material-ui/core';
+import React, { useContext, useState, useCallback } from 'react'
+import { Theme, createStyles, Typography, CardMedia, Grid, Tooltip, Fab, Button, Menu, MenuItem, FormControlLabel, Switch, TextField, Divider, Slide, Paper, fade, Box } from '@material-ui/core';
 import { WithStyles, withStyles } from '@material-ui/styles';
 import EditIcon from '@material-ui/icons/Edit';
 import AddCircleOutlineIcon from '@material-ui/icons/AddCircleSharp';
@@ -15,6 +15,11 @@ import { PostN } from '../../@types';
 import MUIRichTextEditor from 'mui-rte'
 import Dialog from '@material-ui/core/Dialog';
 import clsx from 'clsx';
+import { useDropzone } from 'react-dropzone'
+import RootRef from '@material-ui/core/RootRef'
+import MaterialIconAsync from '../Elements/GraphicElmts/MaterialIconAsync';
+
+
 
 
 
@@ -30,12 +35,19 @@ const styles = (theme: Theme) => createStyles({
         },
     },
     text: {
+        justifyContent: 'center',
         paddingRight: theme.spacing(2),
         paddingLeft: theme.spacing(2),
         paddingTop: theme.spacing(2),
         [theme.breakpoints.down('xs')]: {
             paddingTop: 0,
         }
+    },
+    textBox: {
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'center',
+        alignItems: 'center'
     },
     title: {
         paddingRight: theme.spacing(2),
@@ -49,7 +61,7 @@ const styles = (theme: Theme) => createStyles({
         maxBlockSize: '50vh',
     },
     gridImg: {
-        marginBottom: theme.spacing(2),
+        // marginBottom: theme.spacing(2),
         [theme.breakpoints.down('xs')]: {
             paddingBottom: 0,
             marginBottom: 0
@@ -105,6 +117,7 @@ const styles = (theme: Theme) => createStyles({
     textField: {
         marginLeft: theme.spacing(2),
         marginRight: theme.spacing(2),
+        textAlign: 'center',
     },
 
     responsiveField: {
@@ -128,9 +141,43 @@ const styles = (theme: Theme) => createStyles({
             marginRight: 0
         }
     },
+    imgInput: {
+        height: '100%',
+        width: '100%',
+        padding: theme.spacing(2),
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        flexDirection: 'column',
+        backgroundColor: fade(theme.palette.common.black, 0.1),
+        '&:hover': {
+            backgroundColor: fade(theme.palette.common.black, 0.5),
+        },
+    }
 
 });
-
+const ImgDropzone = ({ styleClass }) => {
+    const onDrop = useCallback(acceptedFiles => {
+        // Do something with the files
+        console.log('acceptedFiles :', acceptedFiles);
+    }, [])
+    const { getRootProps, getInputProps } = useDropzone({ onDrop })
+    const { ref, ...rootProps } = getRootProps()
+    return (
+        <RootRef rootRef={ref} >
+            <Paper
+                className={styleClass}
+                {...rootProps}>
+                <Fab color="primary" size="large" aria-label="image input">
+                    <MaterialIconAsync icon="AddPhotoAlternate" />
+                </Fab>
+                <React.Fragment>
+                    <input {...getInputProps()} />
+                    <p>Drag 'n' drop some files here, or click to select files</p>
+                </React.Fragment>
+            </Paper>
+        </RootRef >)
+}
 interface Props extends WithStyles<typeof styles> {
     classes: any,
     // {
@@ -303,6 +350,7 @@ const PostSections: React.FC<Props> = ({ classes, post }) => {
     //     </React.Fragment>)
 
     // else
+
     return (
         <Grid container spacing={2}
             className={classes.article}
@@ -331,13 +379,16 @@ const PostSections: React.FC<Props> = ({ classes, post }) => {
                                     className={classes.article} >
                                     <Grid className={classes.gridImg} item xs={12} md={6}>
                                         {editMode && renderEditMenu(post, section)}
-                                        <CardMedia
-                                            component="img"
-                                            alt="img"
-                                            className={classes.sideImg}
-                                            image={section.img}
-                                            title="img"
-                                        />
+                                        {editMode && !section.img ?
+                                            <ImgDropzone styleClass={classes.imgInput} /> :
+                                            <CardMedia
+                                                component="img"
+                                                alt="img"
+                                                className={classes.sideImg}
+                                                image={section.img}
+                                                title="img"
+                                            />
+                                        }
                                     </Grid>
                                     <Grid item xs={12} md={6}>
                                         {editMode ?
@@ -369,14 +420,14 @@ const PostSections: React.FC<Props> = ({ classes, post }) => {
                                                     variant="filled"
                                                 />
                                             </React.Fragment> :
-                                            <React.Fragment>
+                                            <Box className={classes.textBox}>
                                                 <Typography className={classes.text} component="h3" variant="h5">
                                                     {section.header}
                                                 </Typography>
                                                 <Typography className={classes.text} variant="body1" color="textSecondary">
                                                     {section.body}
                                                 </Typography>
-                                            </React.Fragment>}
+                                            </Box>}
                                     </Grid>
                                 </Grid>
                                 :
@@ -428,14 +479,14 @@ const PostSections: React.FC<Props> = ({ classes, post }) => {
                                                     variant="filled"
                                                 />
                                             </React.Fragment> :
-                                            <React.Fragment>
+                                            <Box className={classes.textBox}>
                                                 <Typography className={classes.text} component="h3" variant="h5">
                                                     {section.header}
                                                 </Typography>
                                                 <Typography className={classes.text} variant="body1" color="textSecondary">
                                                     {section.body}
                                                 </Typography>
-                                            </React.Fragment>}
+                                            </Box>}
                                     </Grid>
                                 </Grid>}
                             {/* {renderMenu(tab, article)} */}

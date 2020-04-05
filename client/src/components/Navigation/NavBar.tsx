@@ -103,7 +103,7 @@ const styles = (theme: Theme) => createStyles({
         marginLeft: theme.spacing(1),
         display: 'none',
         [theme.breakpoints.up('md')]: {
-            display: 'block',
+            display: 'flex',
         },
     },
     search: {
