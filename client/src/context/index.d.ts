@@ -14,6 +14,7 @@ interface PostsContextI {
     posts: PostsT;
     getAllPosts(): void;
     handleSort(sort: string): void;
+    changeSectionOrder(post: PostN.PostI, section: PostN.PostSectionI, action: string): void;
     sort: string;
 }
 interface RestaurantsContextI {

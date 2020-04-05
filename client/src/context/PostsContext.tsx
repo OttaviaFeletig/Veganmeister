@@ -1,6 +1,8 @@
 import React, { useState, createContext } from 'react'
 import { initPosts } from '../assets/data/dumbData'
 import { PostsContextI } from '.'
+import { PostN } from '../@types'
+import { sectionsReOrder } from './PostsFunctions'
 
 
 export const PostsContext = createContext<PostsContextI>({
@@ -10,6 +12,9 @@ export const PostsContext = createContext<PostsContextI>({
     },
     handleSort: (sort: string) => {
         throw new Error('handleSort() not implemented')
+    },
+    changeSectionOrder: (post: PostN.PostI, section: PostN.PostSectionI, action: string) => {
+        throw new Error('changeSectionOrder() not implemented')
     },
     sort: 'alphaDown'
 })
@@ -42,11 +47,23 @@ const PostsContextProvider = (props: { children: React.ReactNode; }) => {
     const getAllPosts = () => {
 
     }
+    const changeSectionOrder = (post: PostN.PostI, section: PostN.PostSectionI, action: string) => {
+        const postSections = sectionsReOrder(post, section, action)
 
+
+        console.log('postSections', postSections)
+        setPosts([...posts])
+    }
 
 
     return (
-        <PostsContext.Provider value={{ posts, getAllPosts, sort, handleSort }}>
+        <PostsContext.Provider value={{
+            posts,
+            getAllPosts,
+            sort,
+            handleSort,
+            changeSectionOrder
+        }}>
             {props.children}
         </PostsContext.Provider>
     )

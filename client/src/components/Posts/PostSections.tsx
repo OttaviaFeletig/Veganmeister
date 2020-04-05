@@ -1,5 +1,5 @@
 import React, { useContext, useState, useCallback } from 'react'
-import { Theme, createStyles, Typography, CardMedia, Grid, Tooltip, Fab, Button, Menu, MenuItem, FormControlLabel, Switch, TextField, Divider, Slide, Paper, fade, Box } from '@material-ui/core';
+import { Theme, createStyles, Typography, CardMedia, Grid, Tooltip, Fab, Button, Menu, MenuItem, FormControlLabel, Switch, TextField, Divider, Slide, Paper, fade, Box, DialogTitle, DialogContent, DialogContentText, DialogActions } from '@material-ui/core';
 import { WithStyles, withStyles } from '@material-ui/styles';
 import EditIcon from '@material-ui/icons/Edit';
 import AddCircleOutlineIcon from '@material-ui/icons/AddCircleSharp';
@@ -18,6 +18,7 @@ import clsx from 'clsx';
 import { useDropzone } from 'react-dropzone'
 import RootRef from '@material-ui/core/RootRef'
 import MaterialIconAsync from '../Elements/GraphicElmts/MaterialIconAsync';
+import { PostsContext } from '../../context/PostsContext';
 
 
 
@@ -113,6 +114,7 @@ const styles = (theme: Theme) => createStyles({
     buttonDel: {
         color: "white",
         backgroundColor: red[500],
+        zIndex: 9999
     },
     textField: {
         marginLeft: theme.spacing(2),
@@ -151,7 +153,7 @@ const styles = (theme: Theme) => createStyles({
         flexDirection: 'column',
         backgroundColor: fade(theme.palette.common.black, 0.1),
         '&:hover': {
-            backgroundColor: fade(theme.palette.common.black, 0.5),
+            backgroundColor: fade(theme.palette.common.black, 0.3),
         },
     }
 
@@ -218,10 +220,20 @@ const PostSections: React.FC<Props> = ({ classes, post }) => {
         sideImg: false
     }
     const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
-    const isMenuOpen = Boolean(anchorEl);
-    const { isAuthenticated } = useContext(AuthContext)
-    const [postSection, setPostSection] = useState(emptySection)
 
+    const { isAuthenticated } = useContext(AuthContext)
+    const { changeSectionOrder } = useContext(PostsContext)
+
+    const [postSection, setPostSection] = useState(emptySection)
+    const [openDialog, setOpenDialog] = React.useState(false);
+
+    const handleClickOpen = () => {
+        setOpenDialog(true);
+    };
+
+    const handleClose = () => {
+        setOpenDialog(false);
+    };
 
     const onEditClick = (postSection: PostN.PostSectionI) => {
         setPostSection(postSection)
@@ -237,6 +249,10 @@ const PostSections: React.FC<Props> = ({ classes, post }) => {
     }
     const onClickDelete = (post: PostN.PostI, postSection: PostN.PostSectionI) => {
         // addEditDeleteArticle(tab, article, 'delete')
+        console.log('post :', post);
+        // setPostSection()
+        setOpenDialog(true);
+
         setPostSection(emptySection)
 
         toggleAddMode(false)
@@ -248,42 +264,42 @@ const PostSections: React.FC<Props> = ({ classes, post }) => {
 
     const handleMoveUp = (post: PostN.PostI, postSection: PostN.PostSectionI) => {
         setAnchorEl(null);
-        // console.log('article', art.index)
-        // changeArticleOrder(tb, art, 'moveUp')
+
+        changeSectionOrder(post, postSection, 'moveUp')
     };
     const handleMoveDown = (post: PostN.PostI, postSection: PostN.PostSectionI) => {
-        // console.log('article', art.index)
+        console.log('postSection', postSection)
         setAnchorEl(null);
-        // changeArticleOrder(tb, art, 'moveDown')
+        changeSectionOrder(post, postSection, 'moveDown')
     };
     const handleMenuClose = () => {
         setAnchorEl(null);
     };
-    const renderEditMenu = (post: PostN.PostI, postSection: PostN.PostSectionI) => (<React.Fragment>
+    const renderEditMenu = (post: PostN.PostI, postSection: PostN.PostSectionI, i: number, length: number) => (<React.Fragment>
         <div className={classes.absoluteL} >
-            <Tooltip
+            {i > 0 && <Tooltip
                 onClick={() => handleMoveUp(post, postSection)} title="moveUp" aria-label="moveDown">
                 <Fab size="small" color="primary"
                 // className={classes.absoluteL} 
                 >
                     <KeyboardArrowUpIcon />
                 </Fab>
-            </Tooltip>
-            <Tooltip
+            </Tooltip>}
+            {i < length - 1 && <Tooltip
                 onClick={() => handleMoveDown(post, postSection)} title="moveDown" aria-label="move down">
                 <Fab size="small" color="primary"
                 // className={classes.absoluteL}
                 >
                     <KeyboardArrowDownIcon />
                 </Fab>
-            </Tooltip>
+            </Tooltip>}
         </div>
         <div className={classes.absoluteR} >
             {/* <Tooltip
                 onClick={() => onEditClick(postSection)}
                 title="edit" aria-label="edit">
                 <Fab size="small" color="primary" >
-                    <EditIcon />
+                    <MaterialIconAsync icon='DeleteIcon' />
                 </Fab>
             </Tooltip> */}
             <Tooltip
@@ -292,11 +308,44 @@ const PostSections: React.FC<Props> = ({ classes, post }) => {
                 <Fab size="small" color="primary"
                     className={classes.buttonDel}
                 >
-                    <DeleteIcon />
+                    <MaterialIconAsync icon='DeleteIcon' />
+
                 </Fab>
             </Tooltip>
         </div>
     </React.Fragment>)
+
+    const RenderDialog = () => (
+        <Dialog
+            open={openDialog}
+            // TransitionComponent={Transition}
+            keepMounted
+            onClose={handleClose}
+            aria-labelledby="alert-dialog-slide-title"
+            aria-describedby="alert-dialog-slide-description"
+        >
+            <DialogTitle id="alert-dialog-slide-title">{"Danger Zone"}</DialogTitle>
+            <DialogContent>
+                <DialogContentText id="alert-dialog-slide-description">
+                    Are you sure you want to delete this section?
+          </DialogContentText>
+            </DialogContent>
+            <DialogActions>
+                <Button onClick={() => setOpenDialog(false)} color="secondary">
+                    Cancel
+          </Button>
+                <Button
+                    onClick={handleClose}
+                    variant="contained"
+                    color="secondary"
+                    className={classes.button}
+                    startIcon={<MaterialIconAsync icon='DeleteIcon' />}
+                >
+                    Delete
+      </Button>
+            </DialogActions>
+        </Dialog>
+    )
     // const renderMenu = (post: PostN.PostI, postSection: PostN.PostSectionI) => {
     //     let menuId = 'moveMenu' + postSection.index;
     //     return (
@@ -355,6 +404,7 @@ const PostSections: React.FC<Props> = ({ classes, post }) => {
         <Grid container spacing={2}
             className={classes.article}
         >
+            <RenderDialog />
             <Grid container className={classes.tabTitle} spacing={2} >
                 {isAuthenticated && <FormControlLabel
                     control={
@@ -366,134 +416,134 @@ const PostSections: React.FC<Props> = ({ classes, post }) => {
             </Grid>
             {post.postSections
                 .map((section: PostN.PostSectionI, i: number) =>
-                    (
-                        <Slide in
-                            direction="left"
-                            // style={{ transformOrigin: '8 0 0' }}
-                            timeout={1000 + (500 * i)}
-                            key={section.index}>
-                            {section.sideImg ?
-                                <Grid
-                                    container
-                                    spacing={2}
-                                    className={classes.article} >
-                                    <Grid className={classes.gridImg} item xs={12} md={6}>
-                                        {editMode && renderEditMenu(post, section)}
-                                        {editMode && !section.img ?
-                                            <ImgDropzone styleClass={classes.imgInput} /> :
-                                            <CardMedia
+                    (<React.Fragment>
+                        {
+                            section.sideImg ?
+                                <Slide in
+                                    direction="left"
+                                    // style={{ transformOrigin: '8 0 0' }}
+                                    timeout={1000 + (500 * i)}
+                                    key={section.index}>
+                                    <Grid
+                                        container
+                                        spacing={2}
+                                        className={classes.article} >
+                                        <Grid className={classes.gridImg} item xs={12} md={6}>
+                                            {editMode && renderEditMenu(post, section, i, post.postSections.length)}
+                                            {editMode && !section.img ?
+                                                <ImgDropzone styleClass={classes.imgInput} /> :
+                                                <CardMedia
+                                                    component="img"
+                                                    alt="img"
+                                                    className={classes.sideImg}
+                                                    image={section.img}
+                                                    title="img"
+                                                />
+                                            }
+                                        </Grid>
+                                        <Grid item xs={12} md={6}>
+                                            {editMode ?
+                                                <React.Fragment>
+                                                    <TextField
+                                                        // InputLabelProps={
+                                                        //     classes.formLabelFocused
+                                                        // }
+                                                        // onChange={handleChange('title')}
+                                                        color="secondary"
+                                                        id="filled-required"
+                                                        label={`Section ${section.index} Header`}
+                                                        defaultValue={section.header}
+                                                        className={classes.responsiveFieldSide}
+
+                                                        margin="normal"
+                                                        variant="filled"
+                                                    />
+                                                    <TextField
+                                                        color="secondary"
+                                                        // onChange={handleChange('text')}
+                                                        id="filled-multiline-static"
+                                                        label={`Section ${section.index} Text`}
+                                                        multiline
+                                                        rows="20"
+                                                        defaultValue={section.body}
+                                                        className={clsx(classes.responsiveField, classes.textField)}
+                                                        margin="normal"
+                                                        variant="filled"
+                                                    />
+                                                </React.Fragment> :
+                                                <Box className={classes.textBox}>
+                                                    <Typography className={classes.text} component="h3" variant="h5">
+                                                        {section.header}
+                                                    </Typography>
+                                                    <Typography className={classes.text} variant="body1" color="textSecondary">
+                                                        {section.body}
+                                                    </Typography>
+                                                </Box>}
+                                        </Grid>
+                                    </Grid>
+                                </Slide>
+                                :
+                                <Slide
+                                    in
+                                    direction="left"
+                                    // style={{ transformOrigin: '8 0 0' }}
+                                    timeout={1000 + (500 * i)}
+                                    key={section.index}>
+                                    <Grid container spacing={2} className={classes.article}>
+                                        {editMode &&
+                                            renderEditMenu(post, section, i, post.postSections.length)
+                                        }
+                                        <Grid item xs={12}>
+                                            {section.img && <CardMedia
                                                 component="img"
                                                 alt="img"
-                                                className={classes.sideImg}
+                                                height="500"
+
                                                 image={section.img}
                                                 title="img"
-                                            />
-                                        }
+                                            />}
+
+                                        </Grid>
+                                        <Grid item xs={12}>
+                                            {editMode ?
+                                                <React.Fragment>
+                                                    <TextField
+                                                        color="secondary"
+                                                        id="filled-required"
+                                                        label={`Section ${section.index} Header`}
+                                                        defaultValue={section.header}
+                                                        className={classes.responsiveFieldSide}
+
+                                                        margin="normal"
+                                                        variant="filled"
+                                                    />
+                                                    <TextField
+                                                        color="secondary"
+                                                        // onChange={handleChange('text')}
+                                                        id="filled-multiline-static"
+                                                        label={`Section ${section.index} Text`}
+                                                        multiline
+                                                        rows="20"
+                                                        defaultValue={section.body}
+                                                        className={clsx(classes.responsiveField, classes.textField)}
+                                                        margin="normal"
+                                                        variant="filled"
+                                                    />
+                                                </React.Fragment> :
+                                                <Box className={classes.textBox}>
+                                                    <Typography className={classes.text} component="h3" variant="h5">
+                                                        {section.header}
+                                                    </Typography>
+                                                    <Typography className={classes.text} variant="body1" color="textSecondary">
+                                                        {section.body}
+                                                    </Typography>
+                                                </Box>}
+                                        </Grid>
                                     </Grid>
-                                    <Grid item xs={12} md={6}>
-                                        {editMode ?
-                                            <React.Fragment>
-                                                <TextField
-                                                    // InputLabelProps={
-                                                    //     classes.formLabelFocused
-                                                    // }
-                                                    // onChange={handleChange('title')}
-                                                    color="secondary"
-                                                    id="filled-required"
-                                                    label={`Section ${section.index} Header`}
-                                                    defaultValue={section.header}
-                                                    className={classes.responsiveFieldSide}
-
-                                                    margin="normal"
-                                                    variant="filled"
-                                                />
-                                                <TextField
-                                                    color="secondary"
-                                                    // onChange={handleChange('text')}
-                                                    id="filled-multiline-static"
-                                                    label={`Section ${section.index} Text`}
-                                                    multiline
-                                                    rows="20"
-                                                    defaultValue={section.body}
-                                                    className={clsx(classes.responsiveField, classes.textField)}
-                                                    margin="normal"
-                                                    variant="filled"
-                                                />
-                                            </React.Fragment> :
-                                            <Box className={classes.textBox}>
-                                                <Typography className={classes.text} component="h3" variant="h5">
-                                                    {section.header}
-                                                </Typography>
-                                                <Typography className={classes.text} variant="body1" color="textSecondary">
-                                                    {section.body}
-                                                </Typography>
-                                            </Box>}
-                                    </Grid>
-                                </Grid>
-                                :
-                                <Grid container spacing={2} className={classes.article}>
-                                    {editMode &&
-                                        renderEditMenu(post, section)
-                                    }
-                                    <Grid item xs={12}>
-                                        {/* <Typography className={classes.title} component="h3" variant="h5">
-                                            {section.}
-                                        </Typography> */}
-                                        {section.img && <CardMedia
-                                            component="img"
-                                            alt="img"
-                                            height="500"
-
-                                            image={section.img}
-                                            title="img"
-                                        />}
-
-                                    </Grid>
-                                    <Grid item xs={12}>
-                                        {editMode ?
-                                            <React.Fragment>
-                                                <TextField
-                                                    // InputLabelProps={
-                                                    //     classes.formLabelFocused
-                                                    // }
-                                                    // onChange={handleChange('title')}
-                                                    color="secondary"
-                                                    id="filled-required"
-                                                    label={`Section ${section.index} Header`}
-                                                    defaultValue={section.header}
-                                                    className={classes.responsiveFieldSide}
-
-                                                    margin="normal"
-                                                    variant="filled"
-                                                />
-                                                <TextField
-                                                    color="secondary"
-                                                    // onChange={handleChange('text')}
-                                                    id="filled-multiline-static"
-                                                    label={`Section ${section.index} Text`}
-                                                    multiline
-                                                    rows="20"
-                                                    defaultValue={section.body}
-                                                    className={clsx(classes.responsiveField, classes.textField)}
-                                                    margin="normal"
-                                                    variant="filled"
-                                                />
-                                            </React.Fragment> :
-                                            <Box className={classes.textBox}>
-                                                <Typography className={classes.text} component="h3" variant="h5">
-                                                    {section.header}
-                                                </Typography>
-                                                <Typography className={classes.text} variant="body1" color="textSecondary">
-                                                    {section.body}
-                                                </Typography>
-                                            </Box>}
-                                    </Grid>
-                                </Grid>}
-                            {/* {renderMenu(tab, article)} */}
-
-                        </Slide>
-                    ))
-            }
+                                </Slide>
+                        }
+                    </React.Fragment>)
+                )}
             <Grid container spacing={2} >
                 {editMode &&
                     <Grid style={{ justifyItems: 'flex-start' }} item xs={2}>

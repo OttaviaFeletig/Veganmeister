@@ -64,21 +64,21 @@ const initPostSections: PostN.PostSectionsT = [
         img: 'https://source.unsplash.com/user/loukass23',
         index: 1,
         sideImg: true,
-        header: 'my header',
+        header: '1 my header',
         body: 'lorqsqsxqsem',
     },
     {
         img: 'https://source.unsplash.com/user/loukass23',
         index: 2,
         sideImg: false,
-        header: 'my header',
+        header: '2 my header',
         body: 'lorqsqsxqsem',
     },
     {
         img: '',
         index: 3,
         sideImg: true,
-        header: 'my header',
+        header: '3 my header',
         body: 'lorqsqsxqsem',
     }
 ]
