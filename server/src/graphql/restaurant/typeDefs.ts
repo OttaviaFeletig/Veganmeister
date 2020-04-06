@@ -2,7 +2,7 @@ import { gql } from "apollo-server";
 
 export default gql`
   type Restaurant {
-    _id: ID!
+    id: ID!
     name: String!
     description: String!
     location: Location
@@ -21,8 +21,18 @@ export default gql`
     coordinates: Coordinates!
   }
 
-  enum GeoJSONPointType {
-    Point
+  input RestaurantInput {
+    name: String!
+    description: String!
+    location: LocationInput!
+    images: [String]!
+  }
+
+  input LocationInput {
+    geometry: GeoJSONPointInput!
+    district: String!
+    city: String!
+    country: String!
   }
 
   input GeoJSONPointInput {
@@ -30,14 +40,21 @@ export default gql`
     coordinates: Coordinates!
   }
 
+  enum GeoJSONPointType {
+    Point
+  }
+
   scalar Coordinates
 
   extend type Query {
     restaurants: [Restaurant!]!
-    restaurant(_id: ID!): Restaurant!
+    restaurant(id: ID!): Restaurant!
     restaurantInRadius(
       radius: Int!
       location: GeoJSONPointInput!
     ): [Restaurant!]!
+  }
+  extend type Mutation {
+    addRestaurant(input: RestaurantInput): Restaurant
   }
 `;
