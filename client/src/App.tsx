@@ -22,6 +22,7 @@ import './App.css'
 import PostDetails from './components/Posts/PostDetails';
 import RestaurantsContextProvider from './context/RestaurantsContext';
 import RestaurantList from './components/Restaurants/RestaurantList';
+import RestaurantDetails from './components/Restaurants/RestaurantDetails';
 
 
 
@@ -45,7 +46,7 @@ const RenderWebsite: React.FC = (props) => {
           </PostsContextProvider>
           <RestaurantsContextProvider>
             <Route exact path="/restaurants" component={RestaurantList} />
-            {/* <Route exact path="/restaurants/:restaurantsId" component={RestaurantDetails} /> */}
+            <Route exact path="/restaurants/:restaurantId" component={RestaurantDetails} />
           </RestaurantsContextProvider>
           <Footer />
         </Container>

@@ -70,9 +70,15 @@ const Posts: React.FC<Props> = ({ classes }) => {
                         {cardDisplay ? <Grid item xs={12} md={6}>
                             <PostItemCard post={post} loading={false} />
                         </Grid> :
-                            <Grid item xs={12} >
-                                <PostItemLine post={post} loading={false} />
-                            </Grid>}
+                            <React.Fragment>
+                                <Grid item xs={12} >
+                                    <PostItemLine post={post} loading={false} />
+                                </Grid>
+                                {/* <Grid item xs={12} >
+                                    <PostItemLine post={post} loading={false} />
+                                </Grid> */}
+                            </React.Fragment>
+                        }
                     </Grow>
                 )}
             </Grid>

@@ -31,10 +31,10 @@ const dumbRestaurant: RestaurantN.RestaurantI = {
     rating: 1.5,
 }
 const dumbRestaurant2: RestaurantN.RestaurantI = {
-    _id: '1',
+    _id: '2',
     name: 'Bird Food',
     description: 'lorem ipsum dolor sit amet, consectetur adip',
-    images: [],
+    images: ['https://source.unsplash.com/user/loukass23', 'https://source.unsplash.com/user/loukass23', 'https://source.unsplash.com/user/loukass23', 'https://source.unsplash.com/user/loukass23', 'https://source.unsplash.com/user/loukass23', 'https://source.unsplash.com/user/loukass23'],
     location: dumbLocation,
     mainPicture: "https://source.unsplash.com/user/loukass23",
     likes: 35,

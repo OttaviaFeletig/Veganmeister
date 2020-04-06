@@ -236,7 +236,7 @@ const PostSectionAddEdit: React.FC<Props> = ({ classes, postSection }) => {
                         }
                     </Grid>
                     <Grid item xs={12} md={6}>
-                        {/* <TextField
+                        <TextField
                             InputLabelProps={
                                 classes.formLabelFocused
                             }
@@ -244,21 +244,21 @@ const PostSectionAddEdit: React.FC<Props> = ({ classes, postSection }) => {
                             required
                             id="filled-required"
                             label="Title"
-                            defaultValue={title}
+                            // defaultValue={title}
                             className={classes.responsiveFieldSide}
-
+                            multiline
                             margin="normal"
                             variant="filled"
-                        /> */}
+                        />
 
-                        <MUIRichTextEditor
+                        {/* <MUIRichTextEditor
                             label="Type something here..."
                             onSave={(data: string) => console.log('data :', data)}
                             value={postSection.body}
                             // controls={[""]}
                             // value={section.text}
                             inlineToolbar={false}
-                        />
+                        /> */}
                     </Grid>
                 </Grid> :
                 <Grid container spacing={3} className={classes.article}>
