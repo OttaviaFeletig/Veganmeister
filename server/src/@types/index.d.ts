@@ -1,7 +1,8 @@
 import { ObjectID } from "bson";
+import { Document } from "mongoose";
 export namespace RestaurantN {
   interface RestaurantI {
-    _id: string | number | ObjectID;
+    id: string | number | ObjectID;
     name: string;
     location: LocationI;
     description: string;
@@ -13,6 +14,13 @@ export namespace RestaurantN {
     district: string;
     city: string;
     country: string;
+  }
+  interface RestaurantSchemaData extends Document {
+    id: string | number | ObjectID;
+    name: string;
+    location: LocationI;
+    description: string;
+    images: Array<string>;
   }
 }
 export namespace PostN {
