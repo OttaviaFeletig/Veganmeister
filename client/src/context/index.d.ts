@@ -23,6 +23,7 @@ interface PostsContextI {
 }
 interface RestaurantsContextI {
     restaurants: RestaurantN.RestaurantsT;
+    newRestaurant: RestaurantN.RestaurantI;
     getAllRestaurants(): void;
-    restaurantsSearch(city: string, search: string): void;
+    handleSetNewRestaurant(city: string, name: string): void;
 }

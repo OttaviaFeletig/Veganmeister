@@ -23,6 +23,7 @@ import PostDetails from './components/Posts/PostDetails';
 import RestaurantsContextProvider from './context/RestaurantsContext';
 import RestaurantList from './components/Restaurants/RestaurantList';
 import RestaurantDetails from './components/Restaurants/RestaurantDetails';
+import AddRestaurant from './components/Restaurants/AddRestaurant';
 
 
 
@@ -47,6 +48,7 @@ const RenderWebsite: React.FC = (props) => {
           <RestaurantsContextProvider>
             <Route exact path="/restaurants" component={RestaurantList} />
             <Route exact path="/restaurants/:restaurantId" component={RestaurantDetails} />
+            <Route exact path="/addRestaurant" component={AddRestaurant} />
           </RestaurantsContextProvider>
           <Footer />
         </Container>

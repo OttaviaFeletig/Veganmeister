@@ -50,6 +50,7 @@ const styles = (theme: Theme) => createStyles({
     text: {
         justifyContent: 'center',
         width: '100%',
+        height: '100%',
         textAlign: 'center',
         paddingRight: theme.spacing(2),
         paddingLeft: theme.spacing(2),
@@ -92,6 +93,12 @@ const styles = (theme: Theme) => createStyles({
         top: theme.spacing(2),
         right: '50%',
         marginRight: - theme.spacing(6),
+        zIndex: 999
+    },
+    absoluteBL: {
+        position: 'absolute',
+        top: theme.spacing(30),
+        left: theme.spacing(2),
         zIndex: 999
     },
     absoluteRTitle: {
@@ -349,6 +356,18 @@ const PostSections: React.FC<Props> = ({ classes, post }) => {
                 </Fab>
             </Tooltip>
         </div>
+        {postSection.img && <div className={classes.absoluteBL} >
+            <Tooltip
+                onClick={() => onClickDelete(post, postSection)}
+                title="delete" aria-label="delete">
+                <Fab size="medium" color="primary"
+                    className={classes.buttonDel}
+                >
+                    <MaterialIconAsync icon='Photo' />
+
+                </Fab>
+            </Tooltip>
+        </div>}
     </React.Fragment>)
 
     const RenderDialog = () => (

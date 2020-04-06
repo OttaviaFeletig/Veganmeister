@@ -1,14 +1,20 @@
 // *https://www.registers.service.gov.uk/registers/country/use-the-api*
 import fetch from 'cross-fetch';
-import React from 'react';
+import React, { useState, useContext } from 'react';
 import TextField from '@material-ui/core/TextField';
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import CircularProgress from '@material-ui/core/CircularProgress';
-import { Theme, createStyles, fade, WithStyles, withStyles } from '@material-ui/core';
+import { Theme, createStyles, fade, WithStyles, withStyles, Grid, Typography } from '@material-ui/core';
 import MaterialIconAsync from '../GraphicElmts/MaterialIconAsync';
+import { RestaurantsContext } from '../../../context/RestaurantsContext';
 
-interface CountryType {
+interface VenueType {
+    id: string;
     name: string;
+    location: any;
+    categories: any;
+    referralId: string;
+    hasPerk: boolean;
 }
 
 function sleep(delay = 0) {
@@ -28,7 +34,7 @@ const styles = (theme: Theme) => createStyles({
         },
         marginRight: theme.spacing(2),
         marginLeft: theme.spacing(2),
-        width: '80%',
+        width: '100%',
         // [theme.breakpoints.up('sm')]: {
         //     marginLeft: theme.spacing(3),
         //     width: 'auto',
@@ -49,9 +55,9 @@ const styles = (theme: Theme) => createStyles({
         width: '100%',
     },
     inputInput: {
-        padding: theme.spacing(1, 1, 1, 0),
+        // padding: theme.spacing(1, 1, 1, 0),
         // vertical padding + font size from searchIcon
-        paddingLeft: `calc(1em + ${theme.spacing(4)}px)`,
+        // paddingLeft: `calc(1em + ${theme.spacing(4)}px)`,
         transition: theme.transitions.create('width'),
         width: '100%',
         [theme.breakpoints.up('md')]: {
@@ -62,41 +68,68 @@ const styles = (theme: Theme) => createStyles({
 })
 
 interface Props extends WithStyles<typeof styles> {
-    classes: any
+    classes: any,
+    city: string,
 }
-const AsyncSearch: React.FC<Props> = ({ classes }) => {
-    const [open, setOpen] = React.useState(false);
-    const [options, setOptions] = React.useState<CountryType[]>([]);
+const AsyncSearch: React.FC<Props> = ({ classes, city }) => {
+    const [open, setOpen] = useState(false);
+    const [options, setOptions] = useState<VenueType[]>([]);
+    const [selectedVenue, setSelectedVenue] = useState<VenueType>();
+    const [query, setQuery] = useState<string>('');
     const loading = open && options.length === 0;
+    const { handleSetNewRestaurant } = useContext(RestaurantsContext)
+
 
     React.useEffect(() => {
         let active = true;
 
-        if (!loading) {
+        if (!query) {
             return undefined;
         }
 
         (async () => {
-            const response = await fetch('https://country.register.gov.uk/records.json?page-size=5000');
-            await sleep(1e3); // For demo purposes.
-            const countries = await response.json();
-            console.log('countries', countries)
+            const { REACT_APP_foursquare_client_secret, REACT_APP_foursquare_client_id } = process.env
+            var myHeaders = new Headers();
+            myHeaders.append("Accept-Language", "English");
+
+            var requestOptions = {
+                method: 'GET',
+                headers: myHeaders,
+            };
+
+            // fetch("https://api.foursquare.com/v2/venues/search?client_id=ZEWDZSLE4RGSMDB2ZFY1JZVYCYCU3DEEDFIBWWNCZAUZJFT1&client_secret=5M4UO4S14G2TEDQLF0JYZU3PSLUYYMRA4QVTZPDWJ321WSO4&v=20200406&near=berlin&intent=browse&radius=10000&query=Akkawy&limit=10", requestOptions)
+            //     .then(response => response.text())
+            //     .then(result => console.log(result))
+            //     .catch(error => console.log('error', error));
+            const response = await fetch(`https://api.foursquare.com/v2/venues/search?client_id=${REACT_APP_foursquare_client_id}&client_secret=${REACT_APP_foursquare_client_secret}&v=20200406&near=${city}&intent=browse&radius=10000&query=${query}&limit=10`, requestOptions);
+            // await sleep(1e3); // For demo purposes.
+            const result = await response.json();
+            const venues = result.response.venues
+            console.log('places :', venues);
 
             if (active) {
-                setOptions(Object.keys(countries).map((key) => countries[key].item[0]) as CountryType[]);
+                setOptions(venues)
+                // setOptions(venues.map((venue: VenueType) => venue.name) as VenueType[]);
             }
         })();
 
         return () => {
             active = false;
         };
-    }, [loading]);
+    }, [query]);
 
     React.useEffect(() => {
         if (!open) {
             setOptions([]);
         }
     }, [open]);
+
+    const handleSelectedOption = (option: VenueType, value: VenueType) => {
+        setSelectedVenue(value);
+        handleSetNewRestaurant(city, option.name)
+        return option.name === value.name
+
+    }
 
     return (
         <Autocomplete
@@ -110,7 +143,7 @@ const AsyncSearch: React.FC<Props> = ({ classes }) => {
             onClose={() => {
                 setOpen(false);
             }}
-            getOptionSelected={(option, value) => option.name === value.name}
+            getOptionSelected={(option, value) => handleSelectedOption(option, value)}
             getOptionLabel={(option) => option.name}
             options={options}
             loading={loading}
@@ -124,8 +157,9 @@ const AsyncSearch: React.FC<Props> = ({ classes }) => {
                         {...params}
                         // label="Asynchronous"
                         color="secondary"
-                        placeholder="Search…"
+                        placeholder="Search for restaurants…"
                         className={classes.inputRoot}
+                        onChange={(e) => setQuery(e.target.value)}
                         // classes={{
                         //     root: classes.inputRoot,
                         //     // input: classes.inputInput,
@@ -140,6 +174,7 @@ const AsyncSearch: React.FC<Props> = ({ classes }) => {
                             ),
                         }}
                     />
+
                     {/* <InputBase
                             placeholder="Search…"
                             classes={{
@@ -151,6 +186,32 @@ const AsyncSearch: React.FC<Props> = ({ classes }) => {
                 </div>
 
             )}
+            renderOption={(option) => {
+                // const matches = option.structured_formatting.main_text_matched_substrings;
+                // const parts = parse(
+                //     option.structured_formatting.main_text,
+                //     matches.map((match: any) => [match.offset, match.offset + match.length]),
+                // );
+
+                return (
+                    <Grid container alignItems="center">
+                        <Grid item>
+                            <MaterialIconAsync icon="LocationOnIcon" />
+                            {/* <LocationOnIcon className={classes.icon} /> */}
+                        </Grid>
+                        <Grid item xs>
+                            {/* {option.map((part, index) => ( */}
+                            <span key={option.id} style={{ fontWeight: 400 }}>
+                                {option.name}
+                            </span>
+                            {/* ))} */}
+                            <Typography variant="body2" color="textSecondary">
+                                {option.location.formattedAddress[0]}
+                            </Typography>
+                        </Grid>
+                    </Grid>
+                );
+            }}
         />
     );
 }
