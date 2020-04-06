@@ -25,5 +25,5 @@ interface RestaurantsContextI {
     restaurants: RestaurantN.RestaurantsT;
     newRestaurant: RestaurantN.RestaurantI;
     getAllRestaurants(): void;
-    handleSetNewRestaurant(city: string, name: string): void;
+    handleSetNewRestaurant(name: string, hashtags: string[], location: RestaurantN.LocationI): void;
 }

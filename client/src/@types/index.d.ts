@@ -44,6 +44,7 @@ export namespace RestaurantN {
         name: string;
         location: LocationI;
         description: string;
+        hashtags?: Array<string>;
         mainPicture: string;
         images: Array<string>;
         likes: number;
@@ -56,6 +57,7 @@ export namespace RestaurantN {
         district: string;
         city: string;
         country: string;
+        address: string;
     }
 
     type RestaurantT = Array<RestaurantI>

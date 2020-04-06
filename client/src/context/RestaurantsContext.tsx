@@ -10,7 +10,7 @@ export const RestaurantsContext = createContext<RestaurantsContextI>({
     getAllRestaurants: () => {
         throw new Error('getAllRestaurants() not implemented')
     },
-    handleSetNewRestaurant: (city: string, name: string) => {
+    handleSetNewRestaurant: (name: string, hashtags: string[], location: RestaurantN.LocationI) => {
         throw new Error('handleSetNewRestaurant() not implemented')
     }
 })
@@ -20,33 +20,41 @@ export const RestaurantsContext = createContext<RestaurantsContextI>({
 
 const RestaurantsContextProvider = (props: { children: React.ReactNode; }) => {
     const [restaurants, setRestaurants] = useState(initRestaurants)
-    const [newRestaurant, setNewRestaurant] = useState<RestaurantN.RestaurantI>()
+    const location: RestaurantN.LocationI = {
+        geometry: {
+            type: 'Point',
+            coordinates: [0, 0]
+        },
+        district: '',
+        city: '',
+        country: '',
+        address: ''
+    }
+    const [newRestaurant, setNewRestaurant] = useState<RestaurantN.RestaurantI>({
+        _id: '',
+        name: '',
+        location,
+        description: '',
+        images: [],
+        mainPicture: '',
+        likes: 0,
+        likedBy: [],
+        rating: 2.5,
+        hashtags: [],
+    })
 
     const getAllRestaurants = async () => {
 
 
     }
 
-    const handleSetNewRestaurant = (city: string, name: string) => {
-        const location: RestaurantN.LocationI = {
-            geometry: {
-                type: "Point",
-                coordinates: [-121.2, 37.421]
-            },
-            district: 'Kreuzberg',
-            city,
-            country: 'Germany'
-        }
+    const handleSetNewRestaurant = (name: string, hashtags: string[], location: RestaurantN.LocationI) => {
+
         setNewRestaurant({
-            _id: '1',
+            ...newRestaurant,
             name,
             location,
-            description: 'lorem ipsum dolor sit amet, consectetur adip',
-            images: [],
-            mainPicture: "https://source.unsplash.com/user/loukass23",
-            likes: 2,
-            likedBy: [],
-            rating: 1.5,
+            hashtags
         })
     }
     // const restaurantsSearch = async (city: string, search: string) => {

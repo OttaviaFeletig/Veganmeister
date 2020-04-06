@@ -7,6 +7,7 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 import { Theme, createStyles, fade, WithStyles, withStyles, Grid, Typography } from '@material-ui/core';
 import MaterialIconAsync from '../GraphicElmts/MaterialIconAsync';
 import { RestaurantsContext } from '../../../context/RestaurantsContext';
+import { RestaurantN } from '../../../@types';
 
 interface VenueType {
     id: string;
@@ -83,7 +84,7 @@ const AsyncSearch: React.FC<Props> = ({ classes, city }) => {
     React.useEffect(() => {
         let active = true;
 
-        if (!query) {
+        if (!query || selectedVenue) {
             return undefined;
         }
 
@@ -121,12 +122,29 @@ const AsyncSearch: React.FC<Props> = ({ classes, city }) => {
     React.useEffect(() => {
         if (!open) {
             setOptions([]);
+            setQuery('')
+            setSelectedVenue(undefined)
+
         }
     }, [open]);
 
     const handleSelectedOption = (option: VenueType, value: VenueType) => {
         setSelectedVenue(value);
-        handleSetNewRestaurant(city, option.name)
+        console.log('option :', option);
+        const hashtags = option.categories.map((category: { name: string; }) => category.name.split(" / "))
+        console.log('hashtags :', hashtags);
+
+        const locationObj: RestaurantN.LocationI = {
+            geometry: {
+                type: 'Point',
+                coordinates: [option.location.lat, option.location.lng]
+            },
+            district: '',
+            city: option.location.city,
+            country: option.location.country,
+            address: option.location.address
+        }
+        handleSetNewRestaurant(option.name, hashtags, locationObj)
         return option.name === value.name
 
     }
@@ -142,6 +160,8 @@ const AsyncSearch: React.FC<Props> = ({ classes, city }) => {
             }}
             onClose={() => {
                 setOpen(false);
+                setQuery('')
+                setSelectedVenue('')
             }}
             getOptionSelected={(option, value) => handleSelectedOption(option, value)}
             getOptionLabel={(option) => option.name}

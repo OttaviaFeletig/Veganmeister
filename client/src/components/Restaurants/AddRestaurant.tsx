@@ -20,7 +20,7 @@ import moment from 'moment';
 import Rating from '@material-ui/lab/Rating';
 import { PostN } from '../../@types';
 import Skeleton from '@material-ui/lab/Skeleton';
-import { InputBase, Divider, Grid, FormControlLabel, Switch, Box, TextField } from '@material-ui/core';
+import { InputBase, Divider, Grid, FormControlLabel, Switch, Box, TextField, Chip } from '@material-ui/core';
 import CommentIcon from '@material-ui/icons/Comment';
 import SendIcon from '@material-ui/icons/Send';
 import ThumbUpIcon from '@material-ui/icons/ThumbUp';
@@ -36,6 +36,8 @@ import { Link } from 'react-router-dom';
 import { AuthContext } from '../../context/AuthContext';
 import ImgDropzone from '../Elements/GraphicElmts/ImgDropzone'
 import AsyncRestaurantSearch from '../Elements/Search/AsyncRestaurantSearch';
+import Hashtags from '../Elements/GraphicElmts/Hashtags';
+import MaterialIconAsync from '../Elements/GraphicElmts/MaterialIconAsync';
 
 moment().format();
 
@@ -136,28 +138,17 @@ const styles = (theme: Theme) => createStyles({
         //     marginRight: 0
         // }
     },
-    inputRoot: {
+    input: {
         color: 'inherit',
         width: '100%',
-
-    },
-    inputInput: {
-        padding: theme.spacing(1, 1, 1, 0),
-        // vertical padding + font size from searchIcon
-        paddingLeft: `calc(1em + ${theme.spacing(5)}px)`,
-        transition: theme.transitions.create('width'),
-        width: '100%',
-        // [theme.breakpoints.up('md')]: {
-        //     width: '20ch',
-        // },
+        padding: theme.spacing(2),
+        backgroundColor: fade(theme.palette.common.black, 0.05),
     },
     iconButton: {
-        // padding: 10,
-    },
-    divider: {
-        // height: 28,
-        // margin: 4,
-    },
+
+    }
+
+
 })
 
 interface Props extends WithStyles<typeof styles> {
@@ -165,20 +156,29 @@ interface Props extends WithStyles<typeof styles> {
     match: any,
 }
 const AddRestaurant: React.FC<Props> = ({ classes, match }) => {
-    const loading = false;
-    const { postId } = match.params;
     const { newRestaurant } = useContext(RestaurantsContext)
     const [restaurant, setRestaurant] = useState(newRestaurant)
+    const [newHashtags, setNewHashtags] = useState('')
 
     useEffect(() => {
         setRestaurant(newRestaurant)
     }, [newRestaurant])
     // const post = posts.find((post: PostN.PostI) => post._id === postId)
     const { isAuthenticated } = useContext(AuthContext)
-    console.log('newRestaurant :', newRestaurant);
+    console.log('restaurant :', restaurant);
+    const handleAddNewHashtags = () => {
+        if (newHashtags) {
+            setRestaurant(
+                {
+                    ...restaurant,
+                    hashtags: [...restaurant.hashtags, ...newHashtags.split(",")]
+                })
+            setNewHashtags('')
+        }
+    }
     return (
         <React.Fragment>
-            <BackButton to="/posts" text="Back to Posts" />
+            <BackButton to="/restaurants" text="Back to Restaurants" />
             <Card className={classes.card}>
 
                 <React.Fragment>
@@ -193,11 +193,11 @@ const AddRestaurant: React.FC<Props> = ({ classes, match }) => {
                         <Grid item xs={12}>
                             <AsyncRestaurantSearch city='berlin' />
                         </Grid>
-                        <Grid item xs={12}>
+                        <Grid item xs={12} sm={10}>
 
                             <TextField
                                 inputProps={{ style: { textAlign: 'center' } }}
-                                InputLabelProps={{ style: { marginLeft: '50px' } }}
+                                // InputLabelProps={{ style: { marginLeft: '50px' } }}
                                 color="secondary"
                                 id="filled-required"
                                 label={`restaurant name`}
@@ -209,10 +209,109 @@ const AddRestaurant: React.FC<Props> = ({ classes, match }) => {
                                 variant="filled"
                             />
                         </Grid>
+                        <Grid item xs={12} sm={2} >
+
+                            <TextField
+                                inputProps={{ style: { textAlign: 'center' } }}
+                                // InputLabelProps={{ style: { marginLeft: '50px' } }}
+                                color="secondary"
+                                id="filled-required"
+                                label={`city`}
+                                value={restaurant ? restaurant.location.city : ''}
+                                // defaultValue={newRestaurant ? newRestaurant.name : ''}
+                                className={classes.responsiveField}
+                                onChange={(e) => setRestaurant({ ...restaurant, location: { ...restaurant.location, city: e.target.value } })}
+                                margin="normal"
+                                variant="filled"
+                            />
+                        </Grid>
+
+                        <Grid item xs={12} sm={8}>
+
+                            <TextField
+                                inputProps={{ style: { textAlign: 'center' } }}
+                                // InputLabelProps={{ style: { marginLeft: '50px' } }}
+                                color="secondary"
+                                id="filled-required"
+                                label={`address`}
+                                value={restaurant ? restaurant.location.address : ''}
+                                // defaultValue={newRestaurant ? newRestaurant.name : ''}
+                                className={classes.responsiveField}
+                                onChange={(e) => setRestaurant({ ...restaurant, location: { ...restaurant.location, address: e.target.value } })}
+                                margin="normal"
+                                variant="filled"
+                            />
+                        </Grid>
+                        <Grid item xs={12} sm={2}>
+
+                            <TextField
+                                inputProps={{ style: { textAlign: 'center' } }}
+                                // InputLabelProps={{ style: { marginLeft: '50px' } }}
+                                color="secondary"
+                                id="filled-required"
+                                label={`district`}
+                                value={restaurant ? restaurant.location.district : ''}
+                                // defaultValue={newRestaurant ? newRestaurant.name : ''}
+                                className={classes.responsiveField}
+                                onChange={(e) => setRestaurant({ ...restaurant, location: { ...restaurant.location, district: e.target.value } })}
+                                margin="normal"
+                                variant="filled"
+                            />
+                        </Grid>
+                        <Grid item xs={12} sm={2}>
+
+                            <TextField
+                                inputProps={{ style: { textAlign: 'center' } }}
+                                // InputLabelProps={{ style: { marginLeft: '50px' } }}
+                                color="secondary"
+                                id="filled-required"
+                                label={`country`}
+                                value={restaurant ? restaurant.location.country : ''}
+                                // defaultValue={newRestaurant ? newRestaurant.name : ''}
+                                className={classes.responsiveField}
+                                onChange={(e) => setRestaurant({ ...restaurant, location: { ...restaurant.location, country: e.target.value } })}
+                                margin="normal"
+                                variant="filled"
+                            />
+                        </Grid>
                     </Grid>
                 </CardContent>
 
                 <CardActions className={classes.action} disableSpacing>
+                    {/* <TextField
+                        inputProps={{ style: { textAlign: 'center' } }}
+                        // InputLabelProps={{ style: { marginLeft: '50px' } }}
+                        color="secondary"
+                        id="filled-required"
+                        label={`add hashtag`}
+                        // value={restaurant ? restaurant.location.country : ''}
+                        // defaultValue={newRestaurant ? newRestaurant.name : ''}
+                        className={classes.responsiveField}
+                        onChange={(e) => setRestaurant({ ...restaurant, hashtags: [...e.target.value] })}
+                        margin="normal"
+                        variant="filled"
+                    /> */}
+                    <Grid container spacing={2} className={classes.article}>
+
+                        <Grid item xs={6}>
+                            <InputBase
+                                className={classes.input}
+                                placeholder='Add Hashtags separated by ","'
+                                inputProps={{ 'aria-label': 'search google maps' }}
+                                value={newHashtags}
+                                onChange={(e) => setNewHashtags(e.target.value)}
+                            />
+                            <IconButton onClick={handleAddNewHashtags}
+                                className={classes.iconButton} aria-label="hashtags">
+                                <MaterialIconAsync icon="Add" />
+                            </IconButton>
+                        </Grid>
+                        <Grid item xs={6}>
+
+                            {restaurant.hashtags &&
+                                < Hashtags hashtags={restaurant.hashtags} />}
+                        </Grid>
+                    </Grid>
                     {/* <div className={classes.rating}>
                         <Rating name="half-rating" readOnly defaultValue={post.rating} precision={0.5} />
                     </div>
