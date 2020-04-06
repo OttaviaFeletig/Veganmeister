@@ -32,6 +32,7 @@ import Grow from '@material-ui/core/Grow';
 import PostSections from './PostSections';
 import PostComments from './PostComments';
 import BackButton from '../Elements/GraphicElmts/BackButton';
+import { Link } from 'react-router-dom';
 
 
 moment().format();
@@ -148,14 +149,11 @@ interface Props extends WithStyles<typeof styles> {
     match: any,
 }
 const PostDetails: React.FC<Props> = ({ classes, match }) => {
-    const [expanded, setExpanded] = React.useState(false);
     const loading = false;
     const { postId } = match.params;
     const { posts } = useContext(PostsContext)
     const post = posts.find((post: PostN.PostI) => post._id === postId)
-    const handleExpandClick = () => {
-        setExpanded(!expanded);
-    };
+
 
     return (
         <React.Fragment>
@@ -206,9 +204,11 @@ const PostDetails: React.FC<Props> = ({ classes, match }) => {
                         </React.Fragment>
                     ) : (
                             <React.Fragment>
-                                <Typography variant="h4" color="secondary" component="p">
-                                    {post.restaurant.name}
-                                </Typography>
+                                <Link to={`/restaurants/${post.restaurant._id}`} style={{ textDecoration: 'none' }}>
+                                    <Typography variant="h4" color="secondary" component="p">
+                                        {post.restaurant.name}
+                                    </Typography>
+                                </Link>
                                 <Typography variant="body1" color="textSecondary" component="p">
                                     {post.title}
                                 </Typography>

@@ -2,7 +2,8 @@ import React, { useContext, useEffect, useState } from 'react';
 import { makeStyles, createStyles, Theme, WithStyles, withStyles } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
-import PostItem from './PostItem';
+import PostItemCard from './PostItemCard';
+import PostItemLine from './PostItemLine';
 import { PostsContext } from '../../context/PostsContext';
 import { PostN } from '../../@types';
 import Grow from '@material-ui/core/Grow';
@@ -45,12 +46,19 @@ interface Props extends WithStyles<typeof styles> {
 const Posts: React.FC<Props> = ({ classes }) => {
     const { posts, sort, handleSort } = useContext(PostsContext)
     const [grow, setGrow] = useState(true)
+    const [cardDisplay, setCardDisplay] = useState(true)
+
+    const toggleDisplay = () => {
+        setCardDisplay((prev) => !prev)
+    }
+
     useEffect(() => {
         setGrow((prev) => !prev)
-    }, [posts])
+        console.log('foo :');
+    }, [sort])
     return (
         <div className={classes.root}>
-            <Filters sort={sort} handleSort={handleSort} />
+            <Filters sort={sort} handleSort={handleSort} toggleDisplay={toggleDisplay} />
             <Grid container className={classes.container} spacing={2}>
                 {posts && posts.map((post: PostN.PostI, i: number) =>
                     <Grow in={true}
@@ -59,9 +67,12 @@ const Posts: React.FC<Props> = ({ classes }) => {
                         timeout={1500 + (1000 * i)}
                         key={post._id}
                     >
-                        <Grid item xs={12} md={6}>
-                            <PostItem post={post} loading={false} />
-                        </Grid>
+                        {cardDisplay ? <Grid item xs={12} md={6}>
+                            <PostItemCard post={post} loading={false} />
+                        </Grid> :
+                            <Grid item xs={12} >
+                                <PostItemLine post={post} loading={false} />
+                            </Grid>}
                     </Grow>
                 )}
             </Grid>

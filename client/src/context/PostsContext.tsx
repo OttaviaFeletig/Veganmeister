@@ -1,6 +1,8 @@
 import React, { useState, createContext } from 'react'
 import { initPosts } from '../assets/data/dumbData'
 import { PostsContextI } from '.'
+import { PostN } from '../@types'
+import { sectionsReOrder, sectionsTextEdit } from './PostsFunctions'
 
 
 export const PostsContext = createContext<PostsContextI>({
@@ -10,6 +12,15 @@ export const PostsContext = createContext<PostsContextI>({
     },
     handleSort: (sort: string) => {
         throw new Error('handleSort() not implemented')
+    },
+    changeSectionOrder: (post: PostN.PostI, section: PostN.PostSectionI, action: string) => {
+        throw new Error('changeSectionOrder() not implemented')
+    },
+    changeSplit: (section: PostN.PostSectionI) => {
+        throw new Error('changeSplit() not implemented')
+    },
+    textChange: (post: PostN.PostI, postSection: PostN.PostSectionI, value: string, header: boolean) => {
+        throw new Error('changeSplit() not implemented')
     },
     sort: 'alphaDown'
 })
@@ -42,11 +53,32 @@ const PostsContextProvider = (props: { children: React.ReactNode; }) => {
     const getAllPosts = () => {
 
     }
-
+    const changeSectionOrder = (post: PostN.PostI, section: PostN.PostSectionI, action: string) => {
+        const postSections = sectionsReOrder(post, section, action)
+        console.log('postSections', postSections)
+        setPosts([...posts])
+    }
+    const changeSplit = (postSection: PostN.PostSectionI) => {
+        postSection.sideImg = !postSection.sideImg
+        setPosts([...posts])
+    }
+    const textChange = (post: PostN.PostI, section: PostN.PostSectionI, value: string, header: boolean) => {
+        const postSection = sectionsTextEdit(post, section, value, header)
+        console.log('postSection', postSection)
+        setPosts([...posts])
+    }
 
 
     return (
-        <PostsContext.Provider value={{ posts, getAllPosts, sort, handleSort }}>
+        <PostsContext.Provider value={{
+            posts,
+            getAllPosts,
+            sort,
+            handleSort,
+            changeSectionOrder,
+            changeSplit,
+            textChange
+        }}>
             {props.children}
         </PostsContext.Provider>
     )
