@@ -22,7 +22,11 @@ export const PostsContext = createContext<PostsContextI>({
     textChange: (post: PostN.PostI, postSection: PostN.PostSectionI, value: string, header: boolean) => {
         throw new Error('changeSplit() not implemented')
     },
-    sort: 'alphaDown'
+    sort: 'alphaDown',
+    editMode: false,
+    toggleEditMode: (editMode: boolean) => {
+        throw new Error('toggleEditMode() not implemented')
+    },
 })
 
 
@@ -31,6 +35,7 @@ export const PostsContext = createContext<PostsContextI>({
 const PostsContextProvider = (props: { children: React.ReactNode; }) => {
     const [posts, setPosts] = useState(initPosts)
     const [sort, setSort] = useState('alphaDown')
+    const [editMode, toggleEditMode] = useState(false)
 
 
     const handleSort = (sort: string) => {
@@ -77,7 +82,9 @@ const PostsContextProvider = (props: { children: React.ReactNode; }) => {
             handleSort,
             changeSectionOrder,
             changeSplit,
-            textChange
+            textChange,
+            editMode,
+            toggleEditMode
         }}>
             {props.children}
         </PostsContext.Provider>

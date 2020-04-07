@@ -21,7 +21,7 @@ import MaterialIconAsync from '../Elements/GraphicElmts/MaterialIconAsync';
 import { PostsContext } from '../../context/PostsContext';
 import ToggleButton from '@material-ui/lab/ToggleButton';
 import ToggleButtonGroup from '@material-ui/lab/ToggleButtonGroup';
-
+import ImgDropzone from '../Elements/GraphicElmts/ImgDropzone'
 
 
 const StyledToggleButtonGroup = withStyles((theme) => ({
@@ -41,6 +41,7 @@ const StyledToggleButtonGroup = withStyles((theme) => ({
 const styles = (theme: Theme) => createStyles({
     article: {
         position: 'relative',
+        marginTop: theme.spacing(2),
         paddingBottom: theme.spacing(2),
         [theme.breakpoints.down('xs')]: {
             paddingBottom: 0
@@ -48,6 +49,9 @@ const styles = (theme: Theme) => createStyles({
     },
     text: {
         justifyContent: 'center',
+        width: '100%',
+        height: '100%',
+        textAlign: 'center',
         paddingRight: theme.spacing(2),
         paddingLeft: theme.spacing(2),
         paddingTop: theme.spacing(2),
@@ -89,6 +93,12 @@ const styles = (theme: Theme) => createStyles({
         top: theme.spacing(2),
         right: '50%',
         marginRight: - theme.spacing(6),
+        zIndex: 999
+    },
+    absoluteBL: {
+        position: 'absolute',
+        top: theme.spacing(30),
+        left: theme.spacing(2),
         zIndex: 999
     },
     absoluteRTitle: {
@@ -181,28 +191,28 @@ const styles = (theme: Theme) => createStyles({
     }
 
 });
-const ImgDropzone = ({ styleClass }) => {
-    const onDrop = useCallback(acceptedFiles => {
-        // Do something with the files
-        console.log('acceptedFiles :', acceptedFiles);
-    }, [])
-    const { getRootProps, getInputProps } = useDropzone({ onDrop })
-    const { ref, ...rootProps } = getRootProps()
-    return (
-        <RootRef rootRef={ref} >
-            <Paper
-                className={styleClass}
-                {...rootProps}>
-                <Fab color="primary" size="large" aria-label="image input">
-                    <MaterialIconAsync icon="AddPhotoAlternate" />
-                </Fab>
-                <React.Fragment>
-                    <input {...getInputProps()} />
-                    <p>Drag 'n' drop some files here, or click to select files</p>
-                </React.Fragment>
-            </Paper>
-        </RootRef >)
-}
+// const ImgDropzone = ({ styleClass }) => {
+//     const onDrop = useCallback(acceptedFiles => {
+//         // Do something with the files
+//         console.log('acceptedFiles :', acceptedFiles);
+//     }, [])
+//     const { getRootProps, getInputProps } = useDropzone({ onDrop })
+//     const { ref, ...rootProps } = getRootProps()
+//     return (
+//         <RootRef rootRef={ref} >
+//             <Paper
+//                 className={styleClass}
+//                 {...rootProps}>
+//                 <Fab color="primary" size="large" aria-label="image input">
+//                     <MaterialIconAsync icon="AddPhotoAlternate" />
+//                 </Fab>
+//                 <React.Fragment>
+//                     <input {...getInputProps()} />
+//                     <p>Drag 'n' drop some files here, or click to select files</p>
+//                 </React.Fragment>
+//             </Paper>
+//         </RootRef >)
+// }
 interface Props extends WithStyles<typeof styles> {
     classes: any,
     // {
@@ -224,7 +234,7 @@ interface Props extends WithStyles<typeof styles> {
 
 const PostSections: React.FC<Props> = ({ classes, post }) => {
     const [addMode, toggleAddMode] = React.useState(false);
-    const [editMode, toggleEditMode] = React.useState(false);
+    // const [editMode, toggleEditMode] = React.useState(false);
     console.log('post.postSections', post.postSections)
     // const { addEditDeleteArticle,
     //     article,
@@ -245,7 +255,7 @@ const PostSections: React.FC<Props> = ({ classes, post }) => {
     const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
 
     const { isAuthenticated } = useContext(AuthContext)
-    const { changeSectionOrder, changeSplit, textChange } = useContext(PostsContext)
+    const { changeSectionOrder, changeSplit, textChange, editMode, toggleEditMode } = useContext(PostsContext)
 
     const [postSection, setPostSection] = useState(emptySection)
     const [openDialog, setOpenDialog] = React.useState(false);
@@ -329,7 +339,7 @@ const PostSections: React.FC<Props> = ({ classes, post }) => {
                 <ToggleButton style={{ transform: 'rotate(180deg)' }} value="splitV" aria-label="centered">
                     <MaterialIconAsync icon="VerticalSplit" />
                 </ToggleButton>
-                <ToggleButton value="splitH" aria-label="centered">
+                <ToggleButton style={{ transform: 'rotate(180deg)' }} value="splitH" aria-label="centered">
                     <MaterialIconAsync icon="HorizontalSplit" />
                 </ToggleButton>
             </StyledToggleButtonGroup>
@@ -346,6 +356,18 @@ const PostSections: React.FC<Props> = ({ classes, post }) => {
                 </Fab>
             </Tooltip>
         </div>
+        {postSection.img && <div className={classes.absoluteBL} >
+            <Tooltip
+                onClick={() => onClickDelete(post, postSection)}
+                title="delete" aria-label="delete">
+                <Fab size="medium" color="primary"
+                    className={classes.buttonDel}
+                >
+                    <MaterialIconAsync icon='Photo' />
+
+                </Fab>
+            </Tooltip>
+        </div>}
     </React.Fragment>)
 
     const RenderDialog = () => (
@@ -385,7 +407,7 @@ const PostSections: React.FC<Props> = ({ classes, post }) => {
             className={classes.article}
         >
             <RenderDialog />
-            <Grid container className={classes.tabTitle} spacing={2} >
+            {/* <Grid container className={classes.tabTitle} spacing={2} >
                 {isAuthenticated && <FormControlLabel
                     control={
                         <Switch checked={editMode} value={editMode} onChange={() => toggleEditMode(!editMode)} />
@@ -393,7 +415,7 @@ const PostSections: React.FC<Props> = ({ classes, post }) => {
                     label="Edit Mode"
                 />}
                 <EditIcon />
-            </Grid>
+            </Grid> */}
             {post.postSections
                 .map((section: PostN.PostSectionI, i: number) =>
                     (<React.Fragment>
@@ -411,15 +433,18 @@ const PostSections: React.FC<Props> = ({ classes, post }) => {
                                         <Grid className={classes.gridImg} item xs={12} md={6}>
                                             {editMode && renderEditMenu(post, section, i, post.postSections.length)}
                                             {editMode && !section.img ?
-                                                <ImgDropzone styleClass={classes.imgInput} /> :
-                                                <CardMedia
-                                                    component="img"
-                                                    alt="img"
-                                                    className={classes.sideImg}
-                                                    image={section.img}
-                                                    title="img"
-                                                />
-                                            }
+                                                <ImgDropzone /> :
+
+                                                < React.Fragment >{
+                                                    section.img && <CardMedia
+                                                        component="img"
+                                                        alt="img"
+                                                        height="500"
+                                                        image={section.img}
+                                                        title="img"
+                                                    />}
+                                                </React.Fragment>}
+
                                         </Grid>
                                         <Grid item xs={12} md={6}>
                                             {editMode ?
@@ -442,7 +467,10 @@ const PostSections: React.FC<Props> = ({ classes, post }) => {
                                                         inputProps={{ style: { textAlign: 'center' } }}
                                                         InputLabelProps={{ style: { marginLeft: '50px' } }}
                                                         color="secondary"
-                                                        onChange={(e) => textChange(post, section, e.target.value, false)}
+                                                        onChange={(e) => {
+                                                            console.log('e.target :', e.target.value);
+                                                            textChange(post, section, e.target.value, false)
+                                                        }}
                                                         id="filled-multiline-static"
                                                         label={`Section ${section.index} Text`}
                                                         multiline
@@ -457,9 +485,22 @@ const PostSections: React.FC<Props> = ({ classes, post }) => {
                                                     <Typography className={classes.text} component="h3" variant="h5">
                                                         {section.header}
                                                     </Typography>
-                                                    <Typography className={classes.text} variant="body1" color="textSecondary">
+                                                    <TextField
+                                                        inputProps={{ style: { textAlign: 'center' } }}
+                                                        disabled
+                                                        id="filled-multiline-static"
+                                                        // label={`Section ${section.index} Text`}
+                                                        multiline
+                                                        rows="20"
+                                                        defaultValue={section.body}
+                                                        className={classes.text}
+
+                                                    // margin="normal"
+                                                    // variant="filled"
+                                                    />
+                                                    {/* <Typography className={classes.text} variant="body1" color="textSecondary">
                                                         {section.body}
-                                                    </Typography>
+                                                    </Typography> */}
                                                 </Box>}
                                         </Grid>
                                     </Grid>
@@ -477,15 +518,18 @@ const PostSections: React.FC<Props> = ({ classes, post }) => {
                                         }
                                         <Grid item xs={12}>
                                             {editMode && !section.img ?
-                                                <ImgDropzone styleClass={classes.imgInput} /> :
-                                                <CardMedia
-                                                    component="img"
-                                                    alt="img"
-                                                    height="500"
+                                                <ImgDropzone /> :
 
-                                                    image={section.img}
-                                                    title="img"
-                                                />}
+                                                < React.Fragment >{
+                                                    section.img && <CardMedia
+                                                        component="img"
+                                                        alt="img"
+                                                        height="500"
+                                                        image={section.img}
+                                                        title="img"
+                                                    />}
+                                                </React.Fragment>}
+
 
                                         </Grid>
                                         <Grid item xs={12}>
@@ -522,9 +566,22 @@ const PostSections: React.FC<Props> = ({ classes, post }) => {
                                                     <Typography className={classes.text} component="h3" variant="h5">
                                                         {section.header}
                                                     </Typography>
-                                                    <Typography className={classes.text} variant="body1" color="textSecondary">
+                                                    <TextField
+                                                        inputProps={{ style: { textAlign: 'center' } }}
+                                                        disabled
+                                                        id="filled-multiline-static"
+                                                        // label={`Section ${section.index} Text`}
+                                                        multiline
+                                                        rows="20"
+                                                        defaultValue={section.body}
+                                                        className={classes.text}
+
+                                                    // margin="normal"
+                                                    // variant="filled"
+                                                    />
+                                                    {/* <Typography className={classes.text} variant="body1" color="textSecondary">
                                                         {section.body}
-                                                    </Typography>
+                                                    </Typography> */}
                                                 </Box>}
                                         </Grid>
                                     </Grid>
@@ -542,7 +599,7 @@ const PostSections: React.FC<Props> = ({ classes, post }) => {
                             color="secondary" />
                     </Grid>}
             </Grid>
-        </Grid>
+        </Grid >
     )
 
 }

@@ -22,6 +22,8 @@ import './App.css'
 import PostDetails from './components/Posts/PostDetails';
 import RestaurantsContextProvider from './context/RestaurantsContext';
 import RestaurantList from './components/Restaurants/RestaurantList';
+import RestaurantDetails from './components/Restaurants/RestaurantDetails';
+import AddRestaurant from './components/Restaurants/AddRestaurant';
 
 
 
@@ -37,7 +39,7 @@ const RenderWebsite: React.FC = (props) => {
     <MuiThemeProvider theme={theme}>
       <Router>
         <NavBar />
-        <Container disableGutters maxWidth="lg" style={{ marginTop: theme.spacing(10), height: '80vh' }}>
+        <Container disableGutters maxWidth="lg" style={{ marginTop: theme.spacing(10), height: '100%' }}>
           <Route exact path="/" component={Landing} />
           <PostsContextProvider>
             <Route exact path="/posts" component={PostList} />
@@ -45,7 +47,8 @@ const RenderWebsite: React.FC = (props) => {
           </PostsContextProvider>
           <RestaurantsContextProvider>
             <Route exact path="/restaurants" component={RestaurantList} />
-            {/* <Route exact path="/restaurants/:restaurantsId" component={RestaurantDetails} /> */}
+            <Route exact path="/restaurants/:restaurantId" component={RestaurantDetails} />
+            <Route exact path="/addRestaurant" component={AddRestaurant} />
           </RestaurantsContextProvider>
           <Footer />
         </Container>

@@ -37,8 +37,7 @@ const styles = (theme: Theme) => createStyles({
 
     },
     media: {
-        width: 300
-        // height: 0,
+        width: 300,
         // paddingTop: '56.25%', // 16:9
         // [theme.breakpoints.down('md')]: {
         //     paddingTop: '20', // 16:9
@@ -146,12 +145,7 @@ interface Props extends WithStyles<typeof styles> {
 }
 
 const PostItem: React.FC<Props> = ({ classes, post, loading }) => {
-    const [expanded, setExpanded] = React.useState(false);
 
-    const handleExpandClick = () => {
-        setExpanded(!expanded);
-    };
-    console.log('post', post)
     return (
         <Card className={classes.card}>
             {loading ? (
@@ -172,8 +166,8 @@ const PostItem: React.FC<Props> = ({ classes, post, loading }) => {
 
                 {loading ? (
                     <React.Fragment>
-                        <Skeleton animation="wave" height={40} style={{ marginBottom: 6 }} />
-                        <Skeleton animation="wave" height={15} width="80%" />
+                        <Skeleton animation="wave" height="100%" style={{ marginBottom: 6 }} />
+                        <Skeleton animation="wave" height="100%" width="80%" />
                     </React.Fragment>
                 ) : (
                         <Grid component={Link} to={`/posts/${post._id}`} style={{ textDecoration: 'none' }}>

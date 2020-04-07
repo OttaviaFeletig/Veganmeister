@@ -8,7 +8,7 @@ import { PostsContext } from '../../context/PostsContext';
 import { PostN } from '../../@types';
 import Grow from '@material-ui/core/Grow';
 import SelectGMap from '../Elements/Search/SelectGMap'
-import { Toolbar, IconButton, Badge } from '@material-ui/core';
+import { Toolbar, IconButton, Badge, Fab, Typography } from '@material-ui/core';
 import MaterialIconAsync from '../Elements/GraphicElmts/MaterialIconAsync';
 import Filters from '../Elements/Search/Filters';
 
@@ -32,6 +32,20 @@ const styles = (theme: Theme) => createStyles({
         textAlign: 'center',
         color: theme.palette.text.secondary,
     },
+    addIcon: {
+        fontSize: 80,
+        color: theme.palette.common.white,
+        '&:hover': {
+            color: theme.palette.primary.main
+        }
+    },
+    bottomAdd: {
+        marginTop: theme.spacing(5),
+        display: 'flex',
+        justifyItems: 'flex-start',
+        flexDirection: 'row',
+        alignItems: 'center'
+    }
 });
 
 interface Props extends WithStyles<typeof styles> {
@@ -40,6 +54,8 @@ interface Props extends WithStyles<typeof styles> {
         paper: string,
         container: string,
         toolbar: string,
+        addIcon: string,
+        bottomAdd: string,
     },
 }
 
@@ -70,11 +86,34 @@ const Posts: React.FC<Props> = ({ classes }) => {
                         {cardDisplay ? <Grid item xs={12} md={6}>
                             <PostItemCard post={post} loading={false} />
                         </Grid> :
-                            <Grid item xs={12} >
-                                <PostItemLine post={post} loading={false} />
-                            </Grid>}
+                            <React.Fragment>
+                                <Grid item xs={12} >
+                                    <PostItemLine post={post} loading={false} />
+                                </Grid>
+                                {/* <Grid item xs={12} >
+                                    <PostItemLine post={post} loading={false} />
+                                </Grid> */}
+                            </React.Fragment>
+                        }
                     </Grow>
                 )}
+                <Grid container spacing={2} >
+
+                    <Grid className={classes.bottomAdd} item xs={12}>
+                        <Fab
+                            size="large"
+                            aria-label="image input"
+                            // onClick={() => onAddClick()}
+                            className={classes.addIcon}
+                            color="secondary"
+                        >
+                            <MaterialIconAsync icon='AddCircleOutlineIcon' />
+                        </Fab>
+                        <Typography variant="body1">Create new post</Typography>
+
+
+                    </Grid>
+                </Grid>
             </Grid>
         </div>
     );

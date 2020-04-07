@@ -80,6 +80,7 @@ const AsyncSearch: React.FC<Props> = ({ classes }) => {
             const response = await fetch('https://country.register.gov.uk/records.json?page-size=5000');
             await sleep(1e3); // For demo purposes.
             const countries = await response.json();
+            console.log('countries', countries)
 
             if (active) {
                 setOptions(Object.keys(countries).map((key) => countries[key].item[0]) as CountryType[]);

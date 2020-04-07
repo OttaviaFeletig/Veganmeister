@@ -152,7 +152,7 @@ interface Props extends WithStyles<typeof styles> {
     classes: any,
     match: any,
 }
-const PostDetails: React.FC<Props> = ({ classes, match }) => {
+const AddPost: React.FC<Props> = ({ classes, match }) => {
     const loading = false;
     const { postId } = match.params;
     const { posts, editMode, toggleEditMode } = useContext(PostsContext)
@@ -269,4 +269,4 @@ const PostDetails: React.FC<Props> = ({ classes, match }) => {
 
 
 
-export default withStyles(styles)(PostDetails)
+export default withStyles(styles)(AddPost)

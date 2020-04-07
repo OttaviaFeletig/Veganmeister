@@ -18,23 +18,23 @@ import ExpandLessIcon from '@material-ui/icons/ExpandLess';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
 import moment from 'moment';
 import Rating from '@material-ui/lab/Rating';
-import { PostN } from '../../@types';
+import { RestaurantN } from '../../@types';
 import Skeleton from '@material-ui/lab/Skeleton';
-import { InputBase, Divider, Grid, FormControlLabel, Switch, Box } from '@material-ui/core';
+import { InputBase, Divider, GridList, GridListTile } from '@material-ui/core';
 import CommentIcon from '@material-ui/icons/Comment';
 import SendIcon from '@material-ui/icons/Send';
 import ThumbUpIcon from '@material-ui/icons/ThumbUp';
-import { PostsContext } from '../../context/PostsContext';
+import { RestaurantsContext } from '../../context/RestaurantsContext';
 import JoditEditor from "jodit-react";
 import DoneIcon from '@material-ui/icons/Done'
 import { EditorState } from 'draft-js'
 import Grow from '@material-ui/core/Grow';
-import PostSections from './PostSections';
-import PostComments from './PostComments';
+// import PostSections from './PostSections';
+// import PostComments from './PostComments';
 import BackButton from '../Elements/GraphicElmts/BackButton';
 import { Link } from 'react-router-dom';
-import { AuthContext } from '../../context/AuthContext';
-import ImgDropzone from '../Elements/GraphicElmts/ImgDropzone'
+import ImgDialog from '../Elements/GraphicElmts/ImgDialog';
+
 
 moment().format();
 
@@ -78,9 +78,6 @@ const styles = (theme: Theme) => createStyles({
         // '& > * + *': {
         //     marginTop: theme.spacing(1),
         // },
-    },
-    content: {
-        // marginBottom: theme.spacing(4)
     },
     comments: {
         position: 'relative',
@@ -142,6 +139,11 @@ const styles = (theme: Theme) => createStyles({
     iconButton: {
         // padding: 10,
     },
+    gridList: {
+        width: '100%',
+        justifyContent: 'center',
+        // height: 450,
+    },
     divider: {
         // height: 28,
         // margin: 4,
@@ -154,16 +156,20 @@ interface Props extends WithStyles<typeof styles> {
 }
 const PostDetails: React.FC<Props> = ({ classes, match }) => {
     const loading = false;
-    const { postId } = match.params;
-    const { posts, editMode, toggleEditMode } = useContext(PostsContext)
-    const post = posts.find((post: PostN.PostI) => post._id === postId)
-    const { isAuthenticated } = useContext(AuthContext)
+    const { restaurantId } = match.params;
+    const { restaurants } = useContext(RestaurantsContext)
+    const restaurant = restaurants.find((restaurant: RestaurantN.RestaurantI) => restaurant._id === restaurantId)
+    console.log('restaurant', restaurant)
 
+    const handleImgClick = (img: string) => {
+        console.log('img', img)
+        return (<ImgDialog img={img} />)
+    }
     return (
         <React.Fragment>
-            <BackButton to="/posts" text="Back to Posts" />
+            <BackButton to="/restaurants" text="Back to Restaurants" />
             <Card className={classes.card}>
-                <CardHeader
+                {/* <CardHeader
                     avatar={
                         loading ? (
                             <Skeleton animation="wave" variant="circle" width={40} height={40} />
@@ -179,17 +185,9 @@ const PostDetails: React.FC<Props> = ({ classes, match }) => {
                     }
                     action={
                         loading ? null : (
-                            <React.Fragment>
-                                {isAuthenticated && <FormControlLabel
-                                    control={
-                                        <Switch checked={editMode} value={editMode} onChange={() => toggleEditMode(!editMode)} />
-                                    }
-                                    label="Edit Mode"
-                                />}
-                                <IconButton aria-label="settings">
-                                    <MoreVertIcon />
-                                </IconButton>
-                            </React.Fragment>
+                            <IconButton aria-label="settings">
+                                <MoreVertIcon />
+                            </IconButton>
                         )
                     }
                     title={
@@ -198,20 +196,16 @@ const PostDetails: React.FC<Props> = ({ classes, match }) => {
                         ) : (<React.Fragment > {post.author.username}</React.Fragment>)
                     }
                     subheader={loading ? <Skeleton animation="wave" height={10} width="40%" /> : '5 hours ago'}
-                />
+                /> */}
                 {loading ? (
                     <Skeleton animation="wave" variant="rect" className={classes.media} />
                 ) : (
-                        <React.Fragment>
-                            {editMode ?
-                                <ImgDropzone />
-                                :
-                                <CardMedia
-                                    className={classes.media}
-                                    image={post.mainPicture}
-                                    title={post.title}
-                                />}
-                        </React.Fragment>)}
+                        <CardMedia
+                            className={classes.media}
+                            image={restaurant.mainPicture}
+                            title={restaurant.name}
+                        />
+                    )}
                 <CardContent>
                     {loading ? (
                         <React.Fragment>
@@ -220,27 +214,32 @@ const PostDetails: React.FC<Props> = ({ classes, match }) => {
                         </React.Fragment>
                     ) : (
                             <React.Fragment>
-                                <React.Fragment>
-                                    <Link to={`/restaurants/${post.restaurant._id}`} style={{ textDecoration: 'none' }}>
-                                        <Typography variant="h4" color="secondary" component="p">
-                                            {post.restaurant.name}
-                                        </Typography>
-                                    </Link>
-                                    <Typography variant="body1" color="textSecondary" component="p">
-                                        {post.title}
+                                <Link to={`/restaurants/${restaurant._id}`} style={{ textDecoration: 'none' }}>
+                                    <Typography variant="h4" color="secondary" component="p">
+                                        {restaurant.name}
                                     </Typography>
-                                </React.Fragment>
-                                <PostSections post={post} />
-                                {/* <Typography variant="body2" color="textSecondary" component="p">
+                                </Link>
+                                <Typography variant="body1" color="textSecondary" component="p">
+                                    {restaurant.description}
+                                </Typography>
+                                {/* <PostSections post={post} />
+                                <Typography variant="body2" color="textSecondary" component="p">
                                     {post.body}
                                 </Typography> */}
+                                <GridList cellHeight={160} className={classes.gridList} cols={3}>
+                                    {restaurant.images.map((img: string, i: number) => (
+                                        <GridListTile key={img} cols={Math.round(Math.sin(i * 2))}>
+                                            <img onClick={() => handleImgClick(img)} src={img} alt={img} />
+                                            {/* <ImgDialog img={img} /> */}
+                                        </GridListTile>
+                                    ))}
+                                </GridList>
                             </React.Fragment>
                         )}
                 </CardContent>
-
                 <CardActions className={classes.action} disableSpacing>
                     <div className={classes.rating}>
-                        <Rating name="half-rating" readOnly defaultValue={post.rating} precision={0.5} />
+                        <Rating name="half-rating" readOnly defaultValue={restaurant.rating} precision={0.5} />
                     </div>
                     <div>
                         <IconButton aria-label="share">
@@ -248,20 +247,20 @@ const PostDetails: React.FC<Props> = ({ classes, match }) => {
                         </IconButton>
                         <IconButton aria-label="add to favorites">
                             <FavoriteIcon />
-                            <Typography variant="body2"> {post.likes} likes</Typography>
+                            <Typography variant="body2"> {restaurant.likes} likes</Typography>
                         </IconButton>
                     </div>
 
 
                 </CardActions>
             </Card>
-            <Grow in
+            {/* <Grow in
                 style={{ transformOrigin: '0 0 0' }}
                 timeout={1000}
 
             >
-                <PostComments post={post} />
-            </Grow>
+                 <PostComments post={post} /> 
+            </Grow> */}
         </React.Fragment >
     );
 }
