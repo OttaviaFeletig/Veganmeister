@@ -39,7 +39,7 @@ const RenderWebsite: React.FC = (props) => {
     <MuiThemeProvider theme={theme}>
       <Router>
         <NavBar />
-        <Container disableGutters maxWidth="lg" style={{ marginTop: theme.spacing(10), height: '80vh' }}>
+        <Container disableGutters maxWidth="lg" style={{ marginTop: theme.spacing(10), height: '100%' }}>
           <Route exact path="/" component={Landing} />
           <PostsContextProvider>
             <Route exact path="/posts" component={PostList} />

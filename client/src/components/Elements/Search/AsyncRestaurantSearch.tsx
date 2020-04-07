@@ -4,7 +4,7 @@ import React, { useState, useContext } from 'react';
 import TextField from '@material-ui/core/TextField';
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import CircularProgress from '@material-ui/core/CircularProgress';
-import { Theme, createStyles, fade, WithStyles, withStyles, Grid, Typography } from '@material-ui/core';
+import { Theme, createStyles, fade, WithStyles, withStyles, Grid, Typography, FormControl, InputLabel, Select } from '@material-ui/core';
 import MaterialIconAsync from '../GraphicElmts/MaterialIconAsync';
 import { RestaurantsContext } from '../../../context/RestaurantsContext';
 import { RestaurantN } from '../../../@types';
@@ -51,9 +51,13 @@ const styles = (theme: Theme) => createStyles({
         // justifyContent: 'center',
     },
     root: {
-        paddingLeft: theme.spacing(3),
-        paddingRight: theme.spacing(3),
-        width: '100%',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        backgroundColor: fade(theme.palette.secondary.main, 0.1),
+        // paddingLeft: theme.spacing(3),
+        // paddingRight: theme.spacing(3),
+        // width: '100%',
     },
     inputInput: {
         // padding: theme.spacing(1, 1, 1, 0),
@@ -72,12 +76,14 @@ interface Props extends WithStyles<typeof styles> {
     classes: any,
     city: string,
 }
-const AsyncSearch: React.FC<Props> = ({ classes, city }) => {
+const AsyncSearch: React.FC<Props> = ({ classes }) => {
     const [open, setOpen] = useState(false);
+    const [city, setCity] = useState<string | unknown>('');
     const [options, setOptions] = useState<VenueType[]>([]);
-    const [selectedVenue, setSelectedVenue] = useState<VenueType>();
+    const [selectedVenue, setSelectedVenue] = useState<VenueType | null>();
     const [query, setQuery] = useState<string>('');
-    const loading = open && options.length === 0;
+    const [loading, setLoading] = useState<boolean>(false);
+    // const loading = open && options.length === 0;
     const { handleSetNewRestaurant } = useContext(RestaurantsContext)
 
 
@@ -102,12 +108,14 @@ const AsyncSearch: React.FC<Props> = ({ classes, city }) => {
             //     .then(response => response.text())
             //     .then(result => console.log(result))
             //     .catch(error => console.log('error', error));
+            setLoading(true);
             const response = await fetch(`https://api.foursquare.com/v2/venues/search?client_id=${REACT_APP_foursquare_client_id}&client_secret=${REACT_APP_foursquare_client_secret}&v=20200406&near=${city}&intent=browse&radius=10000&query=${query}&limit=10`, requestOptions);
-            // await sleep(1e3); // For demo purposes.
+
+
             const result = await response.json();
             const venues = result.response.venues
             console.log('places :', venues);
-
+            setLoading(false);
             if (active) {
                 setOptions(venues)
                 // setOptions(venues.map((venue: VenueType) => venue.name) as VenueType[]);
@@ -130,9 +138,8 @@ const AsyncSearch: React.FC<Props> = ({ classes, city }) => {
 
     const handleSelectedOption = (option: VenueType, value: VenueType) => {
         setSelectedVenue(value);
-        console.log('option :', option);
+
         const hashtags = option.categories.map((category: { name: string; }) => category.name.split(" / "))
-        console.log('hashtags :', hashtags);
 
         const locationObj: RestaurantN.LocationI = {
             geometry: {
@@ -145,57 +152,80 @@ const AsyncSearch: React.FC<Props> = ({ classes, city }) => {
             address: option.location.address
         }
         handleSetNewRestaurant(option.name, hashtags, locationObj)
+        setOpen(false);
+        setOptions([]);
         return option.name === value.name
 
     }
-
+    // if (city) {
     return (
-        <Autocomplete
-            id="global-search"
-            className={classes.root}
+        <Grid container spacing={2} className={classes.root}>
 
-            open={open}
-            onOpen={() => {
-                setOpen(true);
-            }}
-            onClose={() => {
-                setOpen(false);
-                setQuery('')
-                setSelectedVenue('')
-            }}
-            getOptionSelected={(option, value) => handleSelectedOption(option, value)}
-            getOptionLabel={(option) => option.name}
-            options={options}
-            loading={loading}
-            renderInput={(params) => (
-                <div className={classes.search}>
-                    <div className={classes.searchIcon}>
-                        <MaterialIconAsync icon="SearchIcon" />
-                    </div>
+            <Grid item xs={12} md={1}>
+                <FormControl className={classes.formControl}>
+                    <InputLabel htmlFor="age-native-simple">City</InputLabel>
+                    <Select
+                        native
+                        value={city}
+                        onChange={(e) => setCity(e.target.value)}
+                    // inputProps={{
+                    //     name: 'age',
+                    // }}
+                    >
+                        <option aria-label="None" value="" />
+                        <option value='berlin'>Berlin</option>
+                        <option value='paris'>Paris</option>
+                        <option value='toulouse'>Toulouse</option>
+                    </Select>
+                </FormControl>
+            </Grid>
+            <Grid item xs={12} md={11}>
+                {city ? <Autocomplete
+                    id="global-search"
+                    className={classes.root}
 
-                    <TextField
-                        {...params}
-                        // label="Asynchronous"
-                        color="secondary"
-                        placeholder="Search for restaurants…"
-                        className={classes.inputRoot}
-                        onChange={(e) => setQuery(e.target.value)}
-                        // classes={{
-                        //     root: classes.inputRoot,
-                        //     // input: classes.inputInput,
-                        // }}
-                        InputProps={{
-                            ...params.InputProps,
-                            endAdornment: (
-                                <React.Fragment>
-                                    {loading ? <CircularProgress color="inherit" size={20} /> : null}
-                                    {/* {params.InputProps.endAdornment} */}
-                                </React.Fragment>
-                            ),
-                        }}
-                    />
+                    open={open}
+                    onOpen={() => {
+                        setOpen(true);
+                    }}
+                    onClose={() => {
+                        setOpen(false);
+                        setQuery('')
+                        setSelectedVenue(null)
+                    }}
+                    getOptionSelected={(option, value) => handleSelectedOption(option, value)}
+                    getOptionLabel={(option) => option.name}
+                    options={options}
+                    loading={loading}
+                    renderInput={(params) => (
+                        <div className={classes.search}>
+                            <div className={classes.searchIcon}>
+                                <MaterialIconAsync icon="SearchIcon" />
+                            </div>
 
-                    {/* <InputBase
+                            <TextField
+                                {...params}
+                                // label="Asynchronous"
+                                color="secondary"
+                                placeholder="Search for restaurants…"
+                                className={classes.inputRoot}
+                                onChange={(e) => setQuery(e.target.value)}
+                                // classes={{
+                                //     root: classes.inputRoot,
+                                //     // input: classes.inputInput,
+                                // }}
+                                InputProps={{
+                                    ...params.InputProps,
+                                    endAdornment: (
+                                        <React.Fragment>
+                                            {loading ? <CircularProgress color="inherit" size={20} /> : null}
+                                            {/* {params.InputProps.endAdornment} */}
+                                        </React.Fragment>
+                                    ),
+                                }}
+                            />
+
+                            {/* <InputBase
                             placeholder="Search…"
                             classes={{
                                 root: classes.inputRoot,
@@ -203,36 +233,58 @@ const AsyncSearch: React.FC<Props> = ({ classes, city }) => {
                             }}
                             inputProps={{ 'aria-label': 'search' }}
                         /> */}
-                </div>
+                        </div>
 
-            )}
-            renderOption={(option) => {
-                // const matches = option.structured_formatting.main_text_matched_substrings;
-                // const parts = parse(
-                //     option.structured_formatting.main_text,
-                //     matches.map((match: any) => [match.offset, match.offset + match.length]),
-                // );
+                    )}
+                    renderOption={(option) => {
+                        // const matches = option.structured_formatting.main_text_matched_substrings;
+                        // const parts = parse(
+                        //     option.structured_formatting.main_text,
+                        //     matches.map((match: any) => [match.offset, match.offset + match.length]),
+                        // );
 
-                return (
-                    <Grid container alignItems="center">
-                        <Grid item>
-                            <MaterialIconAsync icon="LocationOnIcon" />
-                            {/* <LocationOnIcon className={classes.icon} /> */}
-                        </Grid>
-                        <Grid item xs>
-                            {/* {option.map((part, index) => ( */}
-                            <span key={option.id} style={{ fontWeight: 400 }}>
-                                {option.name}
-                            </span>
-                            {/* ))} */}
-                            <Typography variant="body2" color="textSecondary">
-                                {option.location.formattedAddress[0]}
-                            </Typography>
-                        </Grid>
-                    </Grid>
-                );
-            }}
-        />
-    );
+                        return (
+                            <Grid container alignItems="center">
+                                <Grid item>
+                                    <MaterialIconAsync icon="LocationOnIcon" />
+                                    {/* <LocationOnIcon className={classes.icon} /> */}
+                                </Grid>
+                                <Grid item xs>
+                                    {/* {option.map((part, index) => ( */}
+                                    <span key={option.id} style={{ fontWeight: 400 }}>
+                                        {option.name}
+                                    </span>
+                                    {/* ))} */}
+                                    <Typography variant="body2" color="textSecondary">
+                                        {option.location.formattedAddress[0]}
+                                    </Typography>
+                                </Grid>
+                            </Grid>
+                        );
+                    }}
+                />
+                    : <Typography variant="body2">select city to start looking for restaurants</Typography>}
+            </Grid>
+        </Grid>);
+    // }
+    // else {
+    //     return (
+    //         <FormControl className={classes.formControl}>
+    //             <InputLabel htmlFor="age-native-simple">City</InputLabel>
+    //             <Select
+    //                 native
+    //                 value={city}
+    //                 onChange={(e) => setCity(e.target.value)}
+    //             // inputProps={{
+    //             //     name: 'age',
+    //             // }}
+    //             >
+    //                 <option aria-label="None" value="" />
+    //                 <option value={10}>Berlin</option>
+    //                 <option value={20}>Paris</option>
+    //                 <option value={30}>Toulouse</option>
+    //             </Select>
+    //         </FormControl>)
+    // }
 }
 export default withStyles(styles)(AsyncSearch)

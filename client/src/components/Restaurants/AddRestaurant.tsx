@@ -20,7 +20,7 @@ import moment from 'moment';
 import Rating from '@material-ui/lab/Rating';
 import { PostN } from '../../@types';
 import Skeleton from '@material-ui/lab/Skeleton';
-import { InputBase, Divider, Grid, FormControlLabel, Switch, Box, TextField, Chip } from '@material-ui/core';
+import { InputBase, Divider, Grid, FormControlLabel, Switch, Box, TextField, Chip, Button } from '@material-ui/core';
 import CommentIcon from '@material-ui/icons/Comment';
 import SendIcon from '@material-ui/icons/Send';
 import ThumbUpIcon from '@material-ui/icons/ThumbUp';
@@ -166,6 +166,9 @@ const AddRestaurant: React.FC<Props> = ({ classes, match }) => {
     // const post = posts.find((post: PostN.PostI) => post._id === postId)
     const { isAuthenticated } = useContext(AuthContext)
     console.log('restaurant :', restaurant);
+    const handleSave = () => {
+
+    }
     const handleAddNewHashtags = () => {
         if (newHashtags) {
             setRestaurant(
@@ -193,7 +196,7 @@ const AddRestaurant: React.FC<Props> = ({ classes, match }) => {
                         <Grid item xs={12}>
                             <AsyncRestaurantSearch city='berlin' />
                         </Grid>
-                        <Grid item xs={12} sm={10}>
+                        <Grid item xs={12} md={10}>
 
                             <TextField
                                 inputProps={{ style: { textAlign: 'center' } }}
@@ -209,7 +212,7 @@ const AddRestaurant: React.FC<Props> = ({ classes, match }) => {
                                 variant="filled"
                             />
                         </Grid>
-                        <Grid item xs={12} sm={2} >
+                        <Grid item xs={12} md={2} >
 
                             <TextField
                                 inputProps={{ style: { textAlign: 'center' } }}
@@ -226,7 +229,7 @@ const AddRestaurant: React.FC<Props> = ({ classes, match }) => {
                             />
                         </Grid>
 
-                        <Grid item xs={12} sm={8}>
+                        <Grid item xs={12} md={8}>
 
                             <TextField
                                 inputProps={{ style: { textAlign: 'center' } }}
@@ -242,7 +245,7 @@ const AddRestaurant: React.FC<Props> = ({ classes, match }) => {
                                 variant="filled"
                             />
                         </Grid>
-                        <Grid item xs={12} sm={2}>
+                        <Grid item xs={12} md={2}>
 
                             <TextField
                                 inputProps={{ style: { textAlign: 'center' } }}
@@ -258,7 +261,7 @@ const AddRestaurant: React.FC<Props> = ({ classes, match }) => {
                                 variant="filled"
                             />
                         </Grid>
-                        <Grid item xs={12} sm={2}>
+                        <Grid item xs={12} md={2}>
 
                             <TextField
                                 inputProps={{ style: { textAlign: 'center' } }}
@@ -293,7 +296,7 @@ const AddRestaurant: React.FC<Props> = ({ classes, match }) => {
                     /> */}
                     <Grid container spacing={2} className={classes.article}>
 
-                        <Grid item xs={6}>
+                        <Grid item xs={12} md={6}>
                             <InputBase
                                 className={classes.input}
                                 placeholder='Add Hashtags separated by ","'
@@ -306,11 +309,17 @@ const AddRestaurant: React.FC<Props> = ({ classes, match }) => {
                                 <MaterialIconAsync icon="Add" />
                             </IconButton>
                         </Grid>
-                        <Grid item xs={6}>
+                        <Grid item xs={12} md={6}>
 
                             {restaurant.hashtags &&
                                 < Hashtags hashtags={restaurant.hashtags} />}
                         </Grid>
+                    </Grid>
+                    <Grid item xs={12} >
+
+                        <Button onClick={handleSave} color="primary">
+                            Save
+          </Button>
                     </Grid>
                     {/* <div className={classes.rating}>
                         <Rating name="half-rating" readOnly defaultValue={post.rating} precision={0.5} />
