@@ -1,8 +1,11 @@
 import { find, filter } from "lodash";
 import { restaurants } from "../restaurant/resolvers";
-import { PostN } from "../../@types";
-import { UserN } from "../../@types";
-
+import { PostN, UserN, RestaurantN } from "../../@types";
+import PostModel from "../../models/Post";
+import RestaurantModel from "../../models/Restaurant";
+import { ApolloError } from "apollo-server";
+import { ObjectID } from "bson";
+import mongoose from "mongoose";
 export const posts: PostN.PostsT = [
   {
     _id: "1",
@@ -236,10 +239,168 @@ export const posts: PostN.PostsT = [
     rating: 5
   }
 ];
-
 export const resolvers = {
   Query: {
-    posts: (): PostN.PostsT => posts,
-    post: (_: any, _id: string): PostN.PostI | undefined => find(posts, _id)
+    posts: async () => {
+      try {
+        return await PostModel.find();
+      } catch (err) {
+        console.error("posts error", err);
+        throw new ApolloError("Error retrieving all posts", "400");
+      }
+    },
+    post: async (
+      parent: PostN.PostI,
+      { id }: { id: string | number | ObjectID }
+    ) => {
+      try {
+        return await PostModel.findById(id);
+      } catch (err) {
+        console.error("restaurants error", err);
+        throw new ApolloError("Error retrieving one restaurant", "400");
+      }
+    }
+  },
+  Mutation: {
+    addPost: async (parent: PostN.PostI, args: PostN.PostI) => {
+      try {
+        const { input } = JSON.parse(JSON.stringify(args));
+        const {
+          date,
+          restaurant,
+          mainPicture,
+          pictures,
+          author,
+          likes,
+          title,
+          postSections,
+          hashtags,
+          comments,
+          published,
+          archived,
+          rating
+        } = input;
+        //  RESTAURANT DEF  //
+        const { name, description, location, images } = restaurant;
+        const { geometry, district, city, country } = location;
+        const { type, coordinates } = geometry;
+        //  POSTSECTIONS DEF  //
+        // const postSectionsLoop = () => {
+        //   const postSectionArray = postSections.map((postSection) =>
+
+        //       postSection
+
+        //   )
+        // }
+
+        // const { index, header, body, img, sideImg } = postSections;
+        // COMMENTS DEF //
+        // const { dateC, user, bodyC, likedBy } = comments;
+        // comments.id = new mongoose.Types.ObjectId();
+        //send allert that post with same title and author (+restaurant?) exists already
+        const existingPost = await PostModel.findOne({
+          author,
+          title
+        });
+        const existingRestaurant = await RestaurantModel.findOne({
+          name,
+          location
+        });
+        //check if user exists
+        // console.log(existingPost);
+        if (existingPost)
+          throw new ApolloError(
+            "Post with same title already existing for this author in DB",
+            "409"
+          );
+        if (existingRestaurant) {
+          const newPost: PostN.PostSchemaData = new PostModel({
+            date: new Date(),
+            // restaurant,
+            mainPicture,
+            pictures,
+            author,
+            likes: 0,
+            title,
+            postSections,
+            hashtags,
+            comments: [],
+            published,
+            archived,
+            rating: 0
+          });
+
+          const savedPost = await newPost.save();
+          // const populatedPost = savedPost
+          //   .populate({
+          //     path: "restaurant",
+          //     model: "restaurant",
+          //     populate: {
+          //       restaurant
+          //     }
+          //   })
+          //   .execPopulate();
+          // console.log("populatedPost", populatedPost);
+          // const savedPopulatedPost = await populatedPost.save();
+
+          // return savedPopulatedPost;
+        } else {
+          addRestaurant(
+            name,
+            location,
+            description,
+            geometry,
+            coordinates,
+            district,
+            city,
+            country,
+            images
+          );
+        }
+      } catch (err) {
+        console.log(err);
+        throw new ApolloError("Couldn't save entry in DB", "500");
+      }
+    }
   }
+};
+
+// const addRestaurant = async(restaurant: RestaurantN.RestaurantI) => {
+//  const newRestaurant: RestaurantN.RestaurantSchemaData = new RestaurantModel({
+//   restaurant
+//  });
+//  await newRestaurant.save();
+//  return newRestaurant;
+// }
+const addRestaurant = async (
+  name,
+  location,
+  description,
+  geometry,
+  coordinates,
+  district,
+  city,
+  country,
+  images
+) => {
+  const newRestaurant: RestaurantN.RestaurantSchemaData = new RestaurantModel({
+    name,
+    location,
+    description,
+    geometry,
+    coordinates,
+    district,
+    city,
+    country,
+    images
+  });
+  await newRestaurant.save();
+  return newRestaurant;
+};
+const addPost = async (post: PostN.PostI) => {
+  const newPost: PostN.PostSchemaData = new PostModel({
+    post
+  });
+  await newPost.save();
+  return newPost;
 };

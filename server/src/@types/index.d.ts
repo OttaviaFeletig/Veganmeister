@@ -2,7 +2,7 @@ import { ObjectID } from "bson";
 import { Document } from "mongoose";
 export namespace RestaurantN {
   interface RestaurantI {
-    id: string | number | ObjectID;
+    // id: string | number | ObjectID;
     name: string;
     location: LocationI;
     description: string;
@@ -15,21 +15,21 @@ export namespace RestaurantN {
     city: string;
     country: string;
   }
-  interface RestaurantSchemaData extends Document {
-    id: string | number | ObjectID;
-    name: string;
-    location: LocationI;
-    description: string;
-    images: Array<string>;
+  interface RestaurantSchemaData extends Document, RestaurantI {
+    // id: string | number | ObjectID;
+    // name: string;
+    // location: LocationI;
+    // description: string;
+    // images: Array<string>;
   }
 }
 export namespace PostN {
   interface PostI {
-    _id: string | number | ObjectID;
+    // _id: string | number | ObjectID;
     date: Date;
     restaurant: RestaurantN.RestaurantI;
     mainPicture: string;
-    images: Array<string>;
+    pictures: Array<string>;
     author: UserN.UserI;
     likes: number;
     title: string;
@@ -50,7 +50,7 @@ export namespace PostN {
   }
   type PostsT = Array<PostI>;
   interface CommentI {
-    _id: string | number | ObjectID;
+    id: string | number | ObjectID;
     user: UserN.UserI;
     date: Date;
     body: string;
@@ -58,6 +58,7 @@ export namespace PostN {
     likedBy: UserN.UsersT;
   }
   type CommentsT = Array<CommentI>;
+  interface PostSchemaData extends Document, PostI {}
 }
 export namespace UserN {
   interface UserI {
