@@ -8,7 +8,7 @@ const PostSections: Schema = new Schema({
   header: { type: String, required: true },
   body: { type: String, required: true },
   img: { type: String, required: true },
-  sideImg: { type: Boolean, required: true }
+  sideImg: { type: Boolean, required: true },
 });
 const Comments: Schema = new Schema({
   id: { type: ObjectID, required: true },
@@ -16,13 +16,13 @@ const Comments: Schema = new Schema({
   user: { type: String, required: true }, // user model definition
   bodyC: { type: String, required: true },
   likes: { type: Number, required: true },
-  likedBy: { type: [String], required: true }
+  likedBy: { type: [String], required: true },
 });
 const PostSchema: Schema = new Schema({
   date: { type: Date, required: true },
   restaurant: { type: ObjectID, ref: "restaurant" },
   mainPicture: { type: String, required: true },
-  images: { type: [String], required: true },
+  pictures: { type: [String], required: true },
   author: { type: String, required: true }, // user model definition
   likes: { type: Number, required: true },
   title: { type: String, required: true },
@@ -31,11 +31,8 @@ const PostSchema: Schema = new Schema({
   comments: { type: [Comments] }, //comments def
   published: { type: Boolean, required: true },
   archived: { type: Boolean, required: true },
-  rating: { type: Number, required: true }
+  rating: { type: Number, required: true },
 });
 
-const PostModel: Model<PostN.PostSchemaData> = mongoose.model(
-  "post",
-  PostSchema
-);
+const PostModel: PostN.PostModelT = mongoose.model("post", PostSchema);
 export default PostModel;

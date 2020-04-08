@@ -1,5 +1,5 @@
 import { ObjectID } from "bson";
-import { Document } from "mongoose";
+import { Document, Model } from "mongoose";
 export namespace RestaurantN {
   interface RestaurantI {
     // id: string | number | ObjectID;
@@ -59,6 +59,7 @@ export namespace PostN {
   }
   type CommentsT = Array<CommentI>;
   interface PostSchemaData extends Document, PostI {}
+  type PostModelT = Model<PostSchemaData>;
 }
 export namespace UserN {
   interface UserI {
@@ -85,20 +86,20 @@ export namespace UserN {
     VeganApprentice = "Vegan Apprentice",
     VeganStudent = "Vegan Student",
     VeganCurious = "Vegan Curious",
-    VeganVirgin = "Vegan Virgin"
+    VeganVirgin = "Vegan Virgin",
   }
   enum RankPoints {
     VeganMeister = 100,
     VeganApprentice = 70,
     VeganStudent = 40,
     VeganCurious = 10,
-    VeganVirgin = 0
+    VeganVirgin = 0,
   }
   enum RankLogo {
     VeganMeister = "",
     VeganApprentice = "",
     VeganStudent = "",
     VeganCurious = "",
-    VeganVirgin = ""
+    VeganVirgin = "",
   }
 }

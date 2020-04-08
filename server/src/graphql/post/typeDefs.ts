@@ -14,7 +14,7 @@ export default gql`
     title: String!
     postSections: [PostSection!]!
     hashtags: [String!]!
-    comments: [Comment!]
+    comments: [Comment]
     published: Boolean!
     archived: Boolean!
     rating: Int!
