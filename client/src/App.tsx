@@ -1,5 +1,6 @@
 import React, { useContext, useEffect } from 'react';
-import { BrowserRouter as Router, Route } from "react-router-dom";
+import { BrowserRouter as Router, Route, BrowserRouter } from "react-router-dom";
+import { Switch } from 'react-router'
 import Container from '@material-ui/core/Container';
 import Typography from '@material-ui/core/Typography';
 import Box from '@material-ui/core/Box';
@@ -24,6 +25,7 @@ import RestaurantsContextProvider from './context/RestaurantsContext';
 import RestaurantList from './components/Restaurants/RestaurantList';
 import RestaurantDetails from './components/Restaurants/RestaurantDetails';
 import AddRestaurant from './components/Restaurants/AddRestaurant';
+import Page404 from './components/Elements/GraphicElmts/Page404';
 
 
 
@@ -37,8 +39,10 @@ const RenderWebsite: React.FC = (props) => {
 
   return (
     <MuiThemeProvider theme={theme}>
-      <Router>
+      <BrowserRouter>
+
         <NavBar />
+
         <Container disableGutters maxWidth="lg" style={{ marginTop: theme.spacing(10), height: '100%' }}>
           <Route exact path="/" component={Landing} />
           <PostsContextProvider>
@@ -46,13 +50,19 @@ const RenderWebsite: React.FC = (props) => {
             <Route exact path="/posts/:postId" component={PostDetails} />
           </PostsContextProvider>
           <RestaurantsContextProvider>
-            <Route exact path="/restaurants" component={RestaurantList} />
-            <Route exact path="/restaurants/:restaurantId" component={RestaurantDetails} />
-            <Route exact path="/addRestaurant" component={AddRestaurant} />
+            <Switch>
+              <Route exact path="/restaurants" component={RestaurantList} />
+              <Route exact path="/restaurants/:restaurantId" component={RestaurantDetails} />
+              <Route exact path="/addRestaurant" component={AddRestaurant} />
+              {/* <Route component={Page404} /> */}
+            </Switch>
           </RestaurantsContextProvider>
-          <Footer />
+
+
         </Container>
-      </Router>
+        <Footer />
+
+      </BrowserRouter>
     </MuiThemeProvider>)
 }
 

@@ -23,7 +23,11 @@ interface PostsContextI {
 }
 interface RestaurantsContextI {
     restaurants: RestaurantN.RestaurantsT;
-    newRestaurant: RestaurantN.RestaurantI;
     getAllRestaurants(): void;
-    handleSetNewRestaurant(name: string, hashtags: string[], location: RestaurantN.LocationI): void;
+    newRestaurant: RestaurantN.RestaurantI;
+    handleSetNewRestaurant(newRestaurant: RestaurantN.RestaurantI): void;
+    addRestaurant(): void;
+    sort: string;
+    handleSort(sort: string): void;
+
 }

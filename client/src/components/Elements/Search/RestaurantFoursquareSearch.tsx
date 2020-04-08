@@ -1,5 +1,5 @@
-// *https://www.registers.service.gov.uk/registers/country/use-the-api*
 import fetch from 'cross-fetch';
+import clsx from 'clsx';
 import React, { useState, useContext } from 'react';
 import TextField from '@material-ui/core/TextField';
 import Autocomplete from '@material-ui/lab/Autocomplete';
@@ -18,13 +18,13 @@ interface VenueType {
     hasPerk: boolean;
 }
 
-function sleep(delay = 0) {
-    return new Promise((resolve) => {
-        setTimeout(resolve, delay);
-    });
-}
 const styles = (theme: Theme) => createStyles({
 
+    flexCentered: {
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center'
+    },
     search: {
         position: 'relative',
         display: 'flex',
@@ -36,33 +36,18 @@ const styles = (theme: Theme) => createStyles({
         marginRight: theme.spacing(2),
         marginLeft: theme.spacing(2),
         width: '100%',
-        // [theme.breakpoints.up('sm')]: {
-        //     marginLeft: theme.spacing(3),
-        //     width: 'auto',
-        // },
+
     },
-    searchIcon: {
-        // padding: theme.spacing(0, 2),
-        // height: '100%',
-        // position: 'absolute',
-        // pointerEvents: 'none',
-        // display: 'flex',
-        // alignItems: 'center',
-        // justifyContent: 'center',
+    autoComplete: {
+        width: '100%',
+        margin: theme.spacing(1),
     },
     root: {
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
         backgroundColor: fade(theme.palette.secondary.main, 0.1),
-        // paddingLeft: theme.spacing(3),
-        // paddingRight: theme.spacing(3),
-        // width: '100%',
+        margin: 0,
+        width: '100%',
     },
     inputInput: {
-        // padding: theme.spacing(1, 1, 1, 0),
-        // vertical padding + font size from searchIcon
-        // paddingLeft: `calc(1em + ${theme.spacing(4)}px)`,
         transition: theme.transitions.create('width'),
         width: '100%',
         [theme.breakpoints.up('md')]: {
@@ -74,9 +59,8 @@ const styles = (theme: Theme) => createStyles({
 
 interface Props extends WithStyles<typeof styles> {
     classes: any,
-    city: string,
 }
-const AsyncSearch: React.FC<Props> = ({ classes }) => {
+const RestaurantFoursquareSearch: React.FC<Props> = ({ classes }) => {
     const [open, setOpen] = useState(false);
     const [city, setCity] = useState<string | unknown>('');
     const [options, setOptions] = useState<VenueType[]>([]);
@@ -84,7 +68,7 @@ const AsyncSearch: React.FC<Props> = ({ classes }) => {
     const [query, setQuery] = useState<string>('');
     const [loading, setLoading] = useState<boolean>(false);
     // const loading = open && options.length === 0;
-    const { handleSetNewRestaurant } = useContext(RestaurantsContext)
+    const { newRestaurant, handleSetNewRestaurant } = useContext(RestaurantsContext)
 
 
     React.useEffect(() => {
@@ -96,29 +80,22 @@ const AsyncSearch: React.FC<Props> = ({ classes }) => {
 
         (async () => {
             const { REACT_APP_foursquare_client_secret, REACT_APP_foursquare_client_id } = process.env
-            var myHeaders = new Headers();
-            myHeaders.append("Accept-Language", "English");
+            setLoading(true);
 
-            var requestOptions = {
+            const myHeaders = new Headers();
+            myHeaders.append("Accept-Language", "English");
+            const requestOptions = {
                 method: 'GET',
                 headers: myHeaders,
             };
-
-            // fetch("https://api.foursquare.com/v2/venues/search?client_id=ZEWDZSLE4RGSMDB2ZFY1JZVYCYCU3DEEDFIBWWNCZAUZJFT1&client_secret=5M4UO4S14G2TEDQLF0JYZU3PSLUYYMRA4QVTZPDWJ321WSO4&v=20200406&near=berlin&intent=browse&radius=10000&query=Akkawy&limit=10", requestOptions)
-            //     .then(response => response.text())
-            //     .then(result => console.log(result))
-            //     .catch(error => console.log('error', error));
-            setLoading(true);
-            const response = await fetch(`https://api.foursquare.com/v2/venues/search?client_id=${REACT_APP_foursquare_client_id}&client_secret=${REACT_APP_foursquare_client_secret}&v=20200406&near=${city}&intent=browse&radius=10000&query=${query}&limit=10`, requestOptions);
-
-
+            const response = await
+                fetch(`https://api.foursquare.com/v2/venues/search?client_id=${REACT_APP_foursquare_client_id}&client_secret=${REACT_APP_foursquare_client_secret}&v=20200406&near=${city}&intent=browse&radius=10000&query=${query}&limit=10`, requestOptions);
             const result = await response.json();
             const venues = result.response.venues
             console.log('places :', venues);
             setLoading(false);
             if (active) {
                 setOptions(venues)
-                // setOptions(venues.map((venue: VenueType) => venue.name) as VenueType[]);
             }
         })();
 
@@ -132,7 +109,6 @@ const AsyncSearch: React.FC<Props> = ({ classes }) => {
             setOptions([]);
             setQuery('')
             setSelectedVenue(undefined)
-
         }
     }, [open]);
 
@@ -142,27 +118,34 @@ const AsyncSearch: React.FC<Props> = ({ classes }) => {
         const hashtags = option.categories.map((category: { name: string; }) => category.name.split(" / "))
 
         const locationObj: RestaurantN.LocationI = {
+            ...newRestaurant.location,
             geometry: {
                 type: 'Point',
                 coordinates: [option.location.lat, option.location.lng]
             },
-            district: '',
             city: option.location.city,
             country: option.location.country,
             address: option.location.address
         }
-        handleSetNewRestaurant(option.name, hashtags, locationObj)
-        setOpen(false);
+        const restaurant = {
+            ...newRestaurant,
+            name: option.name,
+            location: locationObj,
+            hashtags,
+        }
+        handleSetNewRestaurant(restaurant)
         setOptions([]);
         return option.name === value.name
 
     }
     // if (city) {
     return (
-        <Grid container spacing={2} className={classes.root}>
-
-            <Grid item xs={12} md={1}>
-                <FormControl className={classes.formControl}>
+        <Grid container spacing={2} className={clsx(classes.root, classes.flexCentered)}>
+            <Grid item xs={12} >
+                <Typography variant="body2">autofill search</Typography>
+            </Grid>
+            <Grid item xs={12} md={1} className={classes.flexCentered}>
+                <FormControl >
                     <InputLabel htmlFor="age-native-simple">City</InputLabel>
                     <Select
                         native
@@ -179,11 +162,11 @@ const AsyncSearch: React.FC<Props> = ({ classes }) => {
                     </Select>
                 </FormControl>
             </Grid>
-            <Grid item xs={12} md={11}>
+            <Grid item xs={12} md={10} className={clsx(classes.flexCentered, classes.autoComplete)}>
                 {city ? <Autocomplete
                     id="global-search"
-                    className={classes.root}
-
+                    // className={classes.root}
+                    style={{ width: '100%' }}
                     open={open}
                     onOpen={() => {
                         setOpen(true);
@@ -287,4 +270,4 @@ const AsyncSearch: React.FC<Props> = ({ classes }) => {
     //         </FormControl>)
     // }
 }
-export default withStyles(styles)(AsyncSearch)
+export default withStyles(styles)(RestaurantFoursquareSearch)

@@ -45,21 +45,29 @@ let initTheme = createMuiTheme({
         }
     },
 
-    // overrides: {
-    //     MuiInputLabel: { // Name of the component ⚛️ / style sheet
-    //         root: { // Name of the rule
-    //             color: color.secondary,
-    //             "&$focused": { // increase the specificity for the pseudo class
-    //                 color: color.secondary
-    //             }
-    //         },
-    //         focused: {
-    //             "&$focused": {
-    //                 color: color.primary
-    //             }
-    //         }
-    //     }
-    // },
+    overrides: {
+
+        // MuiGrid: {
+        //     root: {
+        //         display: 'flex',
+        //         justifyContent: 'center',
+        //         alignItems: 'center'
+        //     }
+        // }
+        //     MuiInputLabel: { // Name of the component ⚛️ / style sheet
+        //         root: { // Name of the rule
+        //             color: color.secondary,
+        //             "&$focused": { // increase the specificity for the pseudo class
+        //                 color: color.secondary
+        //             }
+        //         },
+        //         focused: {
+        //             "&$focused": {
+        //                 color: color.primary
+        //             }
+        //         }
+        //     }
+    },
     direction: 'rtl'
     // overrides: {
 

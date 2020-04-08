@@ -20,6 +20,7 @@ import Rating from '@material-ui/lab/Rating';
 import { RestaurantN } from '../../@types';
 import Skeleton from '@material-ui/lab/Skeleton';
 import { Grid, Divider, Box } from '@material-ui/core';
+import Ratings from '../Elements/GraphicElmts/Ratings';
 moment().format();
 
 const styles = (theme: Theme) => createStyles({
@@ -244,9 +245,8 @@ const RestaurantItem: React.FC<Props> = ({ classes, restaurant, loading }) => {
                                 subheader={moment(post.date).fromNow()}
                             /> */}
 
-                            <div className={classes.rating}>
-                                <Rating name="half-rating" readOnly defaultValue={restaurant.rating} precision={0.5} />
-                            </div>
+                            <Ratings rating={restaurant.globalRating} />
+
                             <div>
                                 <IconButton aria-label="share">
                                     <ShareIcon />

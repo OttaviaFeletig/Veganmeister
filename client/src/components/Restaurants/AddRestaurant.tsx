@@ -18,7 +18,7 @@ import ExpandLessIcon from '@material-ui/icons/ExpandLess';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
 import moment from 'moment';
 import Rating from '@material-ui/lab/Rating';
-import { PostN } from '../../@types';
+import { PostN, RestaurantN } from '../../@types';
 import Skeleton from '@material-ui/lab/Skeleton';
 import { InputBase, Divider, Grid, FormControlLabel, Switch, Box, TextField, Chip, Button } from '@material-ui/core';
 import CommentIcon from '@material-ui/icons/Comment';
@@ -35,25 +35,13 @@ import BackButton from '../Elements/GraphicElmts/BackButton';
 import { Link } from 'react-router-dom';
 import { AuthContext } from '../../context/AuthContext';
 import ImgDropzone from '../Elements/GraphicElmts/ImgDropzone'
-import AsyncRestaurantSearch from '../Elements/Search/AsyncRestaurantSearch';
+import RestaurantFoursquareSearch from '../Elements/Search/RestaurantFoursquareSearch';
 import Hashtags from '../Elements/GraphicElmts/Hashtags';
 import MaterialIconAsync from '../Elements/GraphicElmts/MaterialIconAsync';
 
 moment().format();
 
 const styles = (theme: Theme) => createStyles({
-
-    root: {
-        // maxWidth: 345,
-    },
-    commentsCard: {
-        marginTop: theme.spacing(2)
-    },
-    media: {
-        height: 200,
-        objectFit: 'cover',
-        textAlign: 'center'
-    },
     action: {
         display: 'flex',
         justifyContent: 'space-between',
@@ -65,15 +53,10 @@ const styles = (theme: Theme) => createStyles({
     avatarIMG: {
         opacity: 0.6
     },
-    expand: {
-        // transform: 'rotate(0deg)',
-        marginRight: 0,
-        transition: theme.transitions.create('transform', {
-            duration: theme.transitions.duration.shortest,
-        }),
-    },
-    expandOpen: {
-        // transform: 'rotate(180deg)',
+    actionGrid: {
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
     },
     rating: {
         display: 'flex',
@@ -102,6 +85,9 @@ const styles = (theme: Theme) => createStyles({
         //     marginLeft: theme.spacing(3),
         //     // width: 'auto',
         // },
+    },
+    inHash: {
+        display: 'flex',
     },
     commentIcon: {
         color: fade(theme.palette.common.black, 0.5),
@@ -144,38 +130,42 @@ const styles = (theme: Theme) => createStyles({
         padding: theme.spacing(2),
         backgroundColor: fade(theme.palette.common.black, 0.05),
     },
-    iconButton: {
-
-    }
+    button: {
+        width: 150,
+        margin: theme.spacing(1),
+        color: theme.palette.common.white,
+    },
 
 
 })
 
 interface Props extends WithStyles<typeof styles> {
     classes: any,
-    match: any,
+    history: any,
 }
-const AddRestaurant: React.FC<Props> = ({ classes, match }) => {
-    const { newRestaurant } = useContext(RestaurantsContext)
-    const [restaurant, setRestaurant] = useState(newRestaurant)
+const AddRestaurant: React.FC<Props> = ({ classes, history }) => {
+
+    const { newRestaurant, handleSetNewRestaurant, addRestaurant } = useContext(RestaurantsContext)
     const [newHashtags, setNewHashtags] = useState('')
 
-    useEffect(() => {
-        setRestaurant(newRestaurant)
-    }, [newRestaurant])
-    // const post = posts.find((post: PostN.PostI) => post._id === postId)
     const { isAuthenticated } = useContext(AuthContext)
-    console.log('restaurant :', restaurant);
+    console.log('restaurant :', newRestaurant);
     const handleSave = () => {
 
+        Object.keys(newRestaurant).forEach(key => {
+            if (!newRestaurant[key]) alert(`fill up ${key}`)
+        })
+
+        //TODO check if complete
+        addRestaurant()
+        history.push('/restaurants')
     }
     const handleAddNewHashtags = () => {
         if (newHashtags) {
-            setRestaurant(
-                {
-                    ...restaurant,
-                    hashtags: [...restaurant.hashtags, ...newHashtags.split(",")]
-                })
+            handleSetNewRestaurant({
+                ...newRestaurant,
+                hashtags: [...newRestaurant.hashtags, ...newHashtags.split(",")]
+            })
             setNewHashtags('')
         }
     }
@@ -193,9 +183,8 @@ const AddRestaurant: React.FC<Props> = ({ classes, match }) => {
 
                     <Grid container spacing={2} className={classes.article}>
 
-                        <Grid item xs={12}>
-                            <AsyncRestaurantSearch city='berlin' />
-                        </Grid>
+                        <RestaurantFoursquareSearch />
+
                         <Grid item xs={12} md={10}>
 
                             <TextField
@@ -204,10 +193,10 @@ const AddRestaurant: React.FC<Props> = ({ classes, match }) => {
                                 color="secondary"
                                 id="filled-required"
                                 label={`restaurant name`}
-                                value={restaurant ? restaurant.name : ''}
+                                value={newRestaurant.name}
                                 // defaultValue={newRestaurant ? newRestaurant.name : ''}
                                 className={classes.responsiveField}
-                                onChange={(e) => setRestaurant({ ...restaurant, name: e.target.value })}
+                                onChange={(e) => handleSetNewRestaurant({ ...newRestaurant, name: e.target.value })}
                                 margin="normal"
                                 variant="filled"
                             />
@@ -220,10 +209,10 @@ const AddRestaurant: React.FC<Props> = ({ classes, match }) => {
                                 color="secondary"
                                 id="filled-required"
                                 label={`city`}
-                                value={restaurant ? restaurant.location.city : ''}
+                                value={newRestaurant.location.city}
                                 // defaultValue={newRestaurant ? newRestaurant.name : ''}
                                 className={classes.responsiveField}
-                                onChange={(e) => setRestaurant({ ...restaurant, location: { ...restaurant.location, city: e.target.value } })}
+                                onChange={(e) => handleSetNewRestaurant({ ...newRestaurant, location: { ...newRestaurant.location, city: e.target.value } })}
                                 margin="normal"
                                 variant="filled"
                             />
@@ -237,10 +226,10 @@ const AddRestaurant: React.FC<Props> = ({ classes, match }) => {
                                 color="secondary"
                                 id="filled-required"
                                 label={`address`}
-                                value={restaurant ? restaurant.location.address : ''}
+                                value={newRestaurant.location.address}
                                 // defaultValue={newRestaurant ? newRestaurant.name : ''}
                                 className={classes.responsiveField}
-                                onChange={(e) => setRestaurant({ ...restaurant, location: { ...restaurant.location, address: e.target.value } })}
+                                onChange={(e) => handleSetNewRestaurant({ ...newRestaurant, location: { ...newRestaurant.location, address: e.target.value } })}
                                 margin="normal"
                                 variant="filled"
                             />
@@ -253,10 +242,10 @@ const AddRestaurant: React.FC<Props> = ({ classes, match }) => {
                                 color="secondary"
                                 id="filled-required"
                                 label={`district`}
-                                value={restaurant ? restaurant.location.district : ''}
+                                value={newRestaurant.location.district}
                                 // defaultValue={newRestaurant ? newRestaurant.name : ''}
                                 className={classes.responsiveField}
-                                onChange={(e) => setRestaurant({ ...restaurant, location: { ...restaurant.location, district: e.target.value } })}
+                                onChange={(e) => handleSetNewRestaurant({ ...newRestaurant, location: { ...newRestaurant.location, district: e.target.value } })}
                                 margin="normal"
                                 variant="filled"
                             />
@@ -269,10 +258,27 @@ const AddRestaurant: React.FC<Props> = ({ classes, match }) => {
                                 color="secondary"
                                 id="filled-required"
                                 label={`country`}
-                                value={restaurant ? restaurant.location.country : ''}
+                                value={newRestaurant.location.country}
                                 // defaultValue={newRestaurant ? newRestaurant.name : ''}
                                 className={classes.responsiveField}
-                                onChange={(e) => setRestaurant({ ...restaurant, location: { ...restaurant.location, country: e.target.value } })}
+                                onChange={(e) => handleSetNewRestaurant({ ...newRestaurant, location: { ...newRestaurant.location, country: e.target.value } })}
+                                margin="normal"
+                                variant="filled"
+                            />
+                        </Grid>
+                        <Grid item xs={12} >
+
+                            <TextField
+                                inputProps={{ style: { textAlign: 'center' } }}
+                                // InputLabelProps={{ style: { marginLeft: '50px' } }}
+                                color="secondary"
+                                id="filled-required"
+                                label={`description`}
+                                value={newRestaurant.description}
+                                multiline
+                                rows="5"
+                                className={classes.responsiveField}
+                                onChange={(e) => handleSetNewRestaurant({ ...newRestaurant, description: e.target.value })}
                                 margin="normal"
                                 variant="filled"
                             />
@@ -294,32 +300,66 @@ const AddRestaurant: React.FC<Props> = ({ classes, match }) => {
                         margin="normal"
                         variant="filled"
                     /> */}
-                    <Grid container spacing={2} className={classes.article}>
+                    <Grid container spacing={2} className={classes.actionGrid}>
 
-                        <Grid item xs={12} md={6}>
-                            <InputBase
+                        <Grid item xs={12} md={4} className={classes.inHash}>
+                            <TextField
+                                inputProps={{ style: { textAlign: 'center' } }}
+                                // InputLabelProps={{ style: { marginLeft: '50px' } }}
+                                color="secondary"
+                                id="filled-required"
+                                placeholder='Add Hashtags separated by ","'
+                                value={newHashtags}
+                                // defaultValue={newRestaurant ? newRestaurant.name : ''}
+                                className={classes.responsiveField}
+                                onChange={(e) => setNewHashtags(e.target.value)}
+                                margin="normal"
+                                variant="filled"
+                            />
+                            {/* <InputBase
                                 className={classes.input}
                                 placeholder='Add Hashtags separated by ","'
                                 inputProps={{ 'aria-label': 'search google maps' }}
                                 value={newHashtags}
                                 onChange={(e) => setNewHashtags(e.target.value)}
-                            />
-                            <IconButton onClick={handleAddNewHashtags}
-                                className={classes.iconButton} aria-label="hashtags">
-                                <MaterialIconAsync icon="Add" />
-                            </IconButton>
+                            /> */}
+                            <Grid item xs={2} className={classes.inHash}>
+
+                                <IconButton onClick={handleAddNewHashtags}
+                                    className={classes.iconButton} aria-label="hashtags">
+                                    <MaterialIconAsync icon="Add" />
+                                </IconButton>
+                            </Grid>
                         </Grid>
                         <Grid item xs={12} md={6}>
 
-                            {restaurant.hashtags &&
-                                < Hashtags hashtags={restaurant.hashtags} />}
-                        </Grid>
-                    </Grid>
-                    <Grid item xs={12} >
 
-                        <Button onClick={handleSave} color="primary">
-                            Save
-          </Button>
+                            < Hashtags hashtags={newRestaurant.hashtags} />
+                        </Grid>
+
+                        <Grid item xs={12} className={classes.actionGrid} >
+                            <Button
+                                variant="contained"
+                                color="secondary"
+                                size="large"
+                                className={classes.button}
+                                startIcon={<MaterialIconAsync icon="Clear" />}
+                                onClick={() => history.push('/restaurants')}
+                            >
+                                Cancel
+                          </Button>
+                            <Button
+                                variant="contained"
+                                color="secondary"
+                                size="large"
+                                className={classes.button}
+                                startIcon={<MaterialIconAsync icon="SaveIcon" />}
+                                onClick={handleSave}
+                            >
+                                Save
+                          </Button>
+
+                        </Grid>
                     </Grid>
                     {/* <div className={classes.rating}>
                         <Rating name="half-rating" readOnly defaultValue={post.rating} precision={0.5} />

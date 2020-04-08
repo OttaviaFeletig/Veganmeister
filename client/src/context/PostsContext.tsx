@@ -52,6 +52,7 @@ const PostsContextProvider = (props: { children: React.ReactNode; }) => {
             case 'dateDown': setPosts(posts.sort((a, b) => a.date !== b.date ? b.date < a.date ? -1 : 1 : 0))
                 break;
             case 'dateUp': setPosts(posts.sort((a, b) => a.date !== b.date ? a.date < b.date ? -1 : 1 : 0))
+                break;
         }
         console.log('posts', posts)
     }
