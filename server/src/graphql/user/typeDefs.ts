@@ -9,12 +9,30 @@ export default gql`
     email: String!
     password: String!
     avatar: String!
-    posts: [Post!]!
+    posts: [Post!]
     rank: Rank!
     isAdmin: Boolean!
   }
 
   type Rank {
+    name: RankNamesType
+    points: RankPointsType
+    logo: RankLogosType
+  }
+
+  input UserInput {
+    id: ID
+    username: String!
+    name: String!
+    surname: String!
+    email: String!
+    password: String!
+    avatar: String!
+    rank: RankInput!
+    isAdmin: Boolean!
+  }
+
+  input RankInput {
     name: RankNamesType
     points: RankPointsType
     logo: RankLogosType
@@ -43,6 +61,6 @@ export default gql`
   }
   extend type Query {
     users: [User!]!
-    user(_id: ID!): User!
+    user(id: ID!): User!
   }
 `;

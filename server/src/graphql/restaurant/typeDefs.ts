@@ -22,6 +22,7 @@ export default gql`
   }
 
   input RestaurantInput {
+    id: ID
     name: String!
     description: String!
     location: LocationInput!

@@ -2,6 +2,7 @@ import { find, filter } from "lodash";
 import { ApolloError } from "apollo-server";
 import { RestaurantN } from "../../@types";
 import RestaurantModel from "../../models/Restaurant";
+import { ObjectID } from "bson";
 export const restaurants: RestaurantN.RestaurantsT = [
   {
     _id: "1",
@@ -53,7 +54,7 @@ export const resolvers = {
     },
     restaurant: async (
       parent: RestaurantN.RestaurantI,
-      { id }: { id: RestaurantN.RestaurantI["id"] }
+      { id }: { id: string | number | ObjectID }
     ) => {
       try {
         return await RestaurantModel.findById(id);
@@ -77,7 +78,6 @@ export const resolvers = {
           name,
           location
         });
-        console.log(existingRestaurant);
         if (existingRestaurant)
           throw new ApolloError("Restaurant already existing in DB", "409");
         const newRestaurant: RestaurantN.RestaurantSchemaData = new RestaurantModel(
@@ -96,7 +96,6 @@ export const resolvers = {
             images
           }
         );
-
         await newRestaurant.save();
         return newRestaurant;
       } catch (err) {

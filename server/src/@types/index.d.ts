@@ -1,8 +1,8 @@
 import { ObjectID } from "bson";
-import { Document } from "mongoose";
+import { Document, Model } from "mongoose";
 export namespace RestaurantN {
   interface RestaurantI {
-    id: string | number | ObjectID;
+    // id: string | number | ObjectID;
     name: string;
     location: LocationI;
     description: string;
@@ -15,21 +15,21 @@ export namespace RestaurantN {
     city: string;
     country: string;
   }
-  interface RestaurantSchemaData extends Document {
-    id: string | number | ObjectID;
-    name: string;
-    location: LocationI;
-    description: string;
-    images: Array<string>;
+  interface RestaurantSchemaData extends Document, RestaurantI {
+    // id: string | number | ObjectID;
+    // name: string;
+    // location: LocationI;
+    // description: string;
+    // images: Array<string>;
   }
 }
 export namespace PostN {
   interface PostI {
-    _id: string | number | ObjectID;
+    // _id: string | number | ObjectID;
     date: Date;
     restaurant: RestaurantN.RestaurantI;
     mainPicture: string;
-    images: Array<string>;
+    pictures: Array<string>;
     author: UserN.UserI;
     likes: number;
     title: string;
@@ -50,7 +50,7 @@ export namespace PostN {
   }
   type PostsT = Array<PostI>;
   interface CommentI {
-    _id: string | number | ObjectID;
+    id: string | number | ObjectID;
     user: UserN.UserI;
     date: Date;
     body: string;
@@ -58,6 +58,8 @@ export namespace PostN {
     likedBy: UserN.UsersT;
   }
   type CommentsT = Array<CommentI>;
+  interface PostSchemaData extends Document, PostI {}
+  type PostModelT = Model<PostSchemaData>;
 }
 export namespace UserN {
   interface UserI {
@@ -84,20 +86,20 @@ export namespace UserN {
     VeganApprentice = "Vegan Apprentice",
     VeganStudent = "Vegan Student",
     VeganCurious = "Vegan Curious",
-    VeganVirgin = "Vegan Virgin"
+    VeganVirgin = "Vegan Virgin",
   }
   enum RankPoints {
     VeganMeister = 100,
     VeganApprentice = 70,
     VeganStudent = 40,
     VeganCurious = 10,
-    VeganVirgin = 0
+    VeganVirgin = 0,
   }
   enum RankLogo {
     VeganMeister = "",
     VeganApprentice = "",
     VeganStudent = "",
     VeganCurious = "",
-    VeganVirgin = ""
+    VeganVirgin = "",
   }
 }
