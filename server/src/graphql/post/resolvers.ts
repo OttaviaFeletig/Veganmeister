@@ -5,7 +5,8 @@ import PostModel from "../../models/Post";
 import RestaurantModel from "../../models/Restaurant";
 import { ApolloError } from "apollo-server";
 import { ObjectID } from "bson";
-import mongoose from "mongoose";
+import { addPost } from "./mutations";
+import { addRestaurant } from "../restaurant/mutations";
 export const posts: PostN.PostsT = [
   {
     _id: "1",
@@ -305,7 +306,8 @@ export const resolvers = {
             "409"
           );
         if (existingRestaurant) {
-          const { id } = restaurant;
+          const { id } = existingRestaurant;
+          console.log(typeof id);
           const newPost = await addPost(
             id,
             mainPicture,
@@ -317,24 +319,6 @@ export const resolvers = {
             published,
             archived
           );
-          // const newPost = new PostModel({
-          //   date: new Date(),
-          //   restaurant: id,
-          //   mainPicture,
-          //   pictures,
-          //   author,
-          //   likes: 0,
-          //   title,
-          //   postSections,
-          //   hashtags,
-          //   comments: [],
-          //   published,
-          //   archived,
-          //   rating: 0,
-          // });
-
-          // const savedPost = await newPost.save();
-          // return savedPost;
           return newPost;
         } else {
           const newRestaurant = await addRestaurant(
@@ -371,72 +355,4 @@ export const resolvers = {
       }
     },
   },
-};
-
-// const addRestaurant = async(restaurant: RestaurantN.RestaurantI) => {
-//  const newRestaurant: RestaurantN.RestaurantSchemaData = new RestaurantModel({
-//   restaurant
-//  });
-//  await newRestaurant.save();
-//  return newRestaurant;
-// }
-const addRestaurant = async (
-  name,
-  location,
-  description,
-  geometry,
-  type,
-  coordinates,
-  district,
-  city,
-  country,
-  images
-) => {
-  const newRestaurant: RestaurantN.RestaurantSchemaData = new RestaurantModel({
-    name,
-    description,
-    location: {
-      geometry: {
-        type,
-        coordinates,
-      },
-      district,
-      city,
-      country,
-    },
-    images,
-  });
-  await newRestaurant.save();
-  console.log("newRestaurant", newRestaurant.id);
-  return newRestaurant;
-};
-const addPost = async (
-  id,
-  mainPicture,
-  pictures,
-  author,
-  title,
-  postSections,
-  hashtags,
-  published,
-  archived
-) => {
-  const newPost = new PostModel({
-    date: new Date(),
-    restaurant: id,
-    mainPicture,
-    pictures,
-    author,
-    likes: 0,
-    title,
-    postSections,
-    hashtags,
-    comments: [],
-    published,
-    archived,
-    rating: 0,
-  });
-
-  const savedPost = await newPost.save();
-  return savedPost;
 };
