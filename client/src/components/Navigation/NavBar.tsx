@@ -1,7 +1,7 @@
 import React from 'react';
 import { fade, makeStyles, Theme, createStyles, WithStyles, withStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
-import { Grid, Button, useScrollTrigger, Zoom, Fab } from '@material-ui/core';
+import { Grid, Button, useScrollTrigger, Zoom, Fab, Box } from '@material-ui/core';
 import Toolbar from '@material-ui/core/Toolbar';
 import IconButton from '@material-ui/core/IconButton';
 import Typography from '@material-ui/core/Typography';
@@ -93,6 +93,7 @@ const styles = (theme: Theme) => createStyles({
         justifyContent: 'center'
     },
     title: {
+        color: theme.palette.common.black,
         display: 'none',
         [theme.breakpoints.up('sm')]: {
             display: 'block',
@@ -264,16 +265,17 @@ const NavBar: React.FC<Props> = (props) => {
         <div className={classes.grow}>
             <AppBar position="sticky" className={classes.appBar} >
                 <Toolbar id="back-to-top-anchor">
-                    <div className={classes.logo}>
-                        <Link
+                    <Box component={Link} to='/' style={{ textDecoration: 'none' }} className={classes.logo}>
+                        {/* <Link
                             to='/'
-                        > <Logo height={50} />
-                        </Link>
+                        > */}
+                        <Logo height={50} color="secondary" />
+                        {/* </Link> */}
                         {/* <img src={logo} height={50} alt="" /> */}
-                        <Typography component={Link} to='/' style={{ textDecoration: 'none' }} color="inherit" className={classes.title} variant="h6" noWrap>
+                        <Typography color="inherit" className={classes.title} variant="h6" noWrap>
                             {dataSite.siteName}
                         </Typography>
-                    </div>
+                    </Box>
                     {dataSite.navItems.map(item =>
                         <Button key={item.title} component={Link} to={item.to} className={classes.button} color="inherit">{item.title}</Button>)}
 

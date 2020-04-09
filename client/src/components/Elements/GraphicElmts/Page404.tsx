@@ -12,9 +12,8 @@ import Grid from '@material-ui/core/Grid';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import { WithStyles, Theme, createStyles, withStyles } from '@material-ui/core/styles';
-import Logo from '../Elements/GraphicElmts/Logo'
+import Logo from './Logo'
 // import SvgIcon from '@material-ui/core/SvgIcon';
-import dataSite from '../../assets/data/siteData.json'
 import { ReactComponent as ReactLogo } from '../../assets/logo/noun_Deer.svg';
 import { Card, CardContent, CardMedia, Slide } from '@material-ui/core';
 
@@ -85,7 +84,7 @@ interface Props extends WithStyles<typeof styles> {
 
 }
 
-const Landing: React.FC<Props> = ({ classes }) => {
+const Page404: React.FC<Props> = ({ classes }) => {
     return (
         <Grid container component="main" className={classes.root}>
             <CssBaseline />
@@ -101,7 +100,7 @@ const Landing: React.FC<Props> = ({ classes }) => {
             <Grid item xs={12} sm={12} md={6} component={Paper} elevation={6} square>
                 <div className={classes.paper}>
 
-                    {dataSite.navItems.map((card, i: number) =>
+                    {/* {dataSite.navItems.map((card, i: number) =>
                         <Slide in
                             direction="left"
                             // style={{ transformOrigin: '8 0 0' }}
@@ -125,13 +124,13 @@ const Landing: React.FC<Props> = ({ classes }) => {
                                     title="posts"
                                 />
                             </Card>
-                        </Slide>)}
+                        </Slide>)} */}
 
-                    <Avatar className={classes.avatar}>
+                    {/* <Avatar className={classes.avatar}>
                         <LockOutlinedIcon />
-                    </Avatar>
+                    </Avatar> */}
                     <Typography component="h1" variant="h5">
-                        Sign in
+                        Page not found
                     </Typography>
                 </div>
             </Grid>
@@ -139,4 +138,4 @@ const Landing: React.FC<Props> = ({ classes }) => {
     );
 }
 
-export default withStyles(styles)(Landing)
+export default withStyles(styles)(Page404)

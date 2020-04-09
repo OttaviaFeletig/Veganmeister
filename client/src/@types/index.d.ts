@@ -49,7 +49,10 @@ export namespace RestaurantN {
         images: Array<string>;
         likes: number;
         likedBy: UserN.UsersT;
-        rating: number;
+        globalRating: number;
+        reviews: ReviewsT;
+        addedOn: Date;
+        addedBy: UserN.UserI;
     }
 
     interface LocationI {
@@ -59,8 +62,23 @@ export namespace RestaurantN {
         country: string;
         address: string;
     }
+    interface ReviewI {
+        category: ReviewCategories;
+        rating: number;
+        reviwedBy: UserN.UsersT;
+        date: Date;
+        mainPicture: string;
+    }
+    enum ReviewCategories {
+        VeganVariety = "Vegan Variety",
+        Cleanliness = "Cleanliness",
+        Value = "Value",
+        Service = "Service",
+    }
 
-    type RestaurantT = Array<RestaurantI>
+    type ReviewsT = Array<Review>
+
+    type RestaurantsT = Array<RestaurantI>
 }
 export namespace UserN {
     interface UserI {
@@ -68,7 +86,6 @@ export namespace UserN {
         name: string;
         surname: string;
         email: string;
-        // password: string;
         avatar: string;
         posts: Array<PostI>;
         rank?: RankI;

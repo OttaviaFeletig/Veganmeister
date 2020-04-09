@@ -17,10 +17,10 @@ import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import ExpandLessIcon from '@material-ui/icons/ExpandLess';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
 import moment from 'moment';
-import Rating from '@material-ui/lab/Rating';
+import Rating, { IconContainerProps } from '@material-ui/lab/Rating';
 import { RestaurantN } from '../../@types';
 import Skeleton from '@material-ui/lab/Skeleton';
-import { InputBase, Divider, GridList, GridListTile } from '@material-ui/core';
+import { InputBase, Divider, GridList, GridListTile, Button, Grid, Box } from '@material-ui/core';
 import CommentIcon from '@material-ui/icons/Comment';
 import SendIcon from '@material-ui/icons/Send';
 import ThumbUpIcon from '@material-ui/icons/ThumbUp';
@@ -34,6 +34,9 @@ import Grow from '@material-ui/core/Grow';
 import BackButton from '../Elements/GraphicElmts/BackButton';
 import { Link } from 'react-router-dom';
 import ImgDialog from '../Elements/GraphicElmts/ImgDialog';
+import MaterialIconAsync from '../Elements/GraphicElmts/MaterialIconAsync';
+import Logo from '../Elements/GraphicElmts/Logo';
+import Ratings from '../Elements/GraphicElmts/Ratings';
 
 
 moment().format();
@@ -71,13 +74,6 @@ const styles = (theme: Theme) => createStyles({
     },
     expandOpen: {
         // transform: 'rotate(180deg)',
-    },
-    rating: {
-        display: 'flex',
-        // flexDirection: 'column',
-        // '& > * + *': {
-        //     marginTop: theme.spacing(1),
-        // },
     },
     comments: {
         position: 'relative',
@@ -144,11 +140,9 @@ const styles = (theme: Theme) => createStyles({
         justifyContent: 'center',
         // height: 450,
     },
-    divider: {
-        // height: 28,
-        // margin: 4,
-    },
+
 })
+
 
 interface Props extends WithStyles<typeof styles> {
     classes: any,
@@ -158,8 +152,12 @@ const PostDetails: React.FC<Props> = ({ classes, match }) => {
     const loading = false;
     const { restaurantId } = match.params;
     const { restaurants } = useContext(RestaurantsContext)
+    const [value, setValue] = React.useState<number | null>(2);
     const restaurant = restaurants.find((restaurant: RestaurantN.RestaurantI) => restaurant._id === restaurantId)
     console.log('restaurant', restaurant)
+
+
+
 
     const handleImgClick = (img: string) => {
         console.log('img', img)
@@ -201,9 +199,10 @@ const PostDetails: React.FC<Props> = ({ classes, match }) => {
                     <Skeleton animation="wave" variant="rect" className={classes.media} />
                 ) : (
                         <CardMedia
+                            component="image"
                             className={classes.media}
                             image={restaurant.mainPicture}
-                            title={restaurant.name}
+                        // title={restaurant.name}
                         />
                     )}
                 <CardContent>
@@ -213,15 +212,22 @@ const PostDetails: React.FC<Props> = ({ classes, match }) => {
                             <Skeleton animation="wave" height={15} width="80%" />
                         </React.Fragment>
                     ) : (
-                            <React.Fragment>
-                                <Link to={`/restaurants/${restaurant._id}`} style={{ textDecoration: 'none' }}>
+                            <Grid container spacing={2} >
+                                <Grid item xs={12} md={6} >
                                     <Typography variant="h4" color="secondary" component="p">
                                         {restaurant.name}
                                     </Typography>
-                                </Link>
-                                <Typography variant="body1" color="textSecondary" component="p">
-                                    {restaurant.description}
-                                </Typography>
+                                </Grid>
+                                <Grid item xs={12} md={6} >
+                                    <Typography variant="h6" color="secondary" component="p">
+                                        {restaurant.address}
+                                    </Typography>
+                                </Grid>
+                                <Grid item xs={12} >
+                                    <Typography variant="body1" color="textSecondary" component="p">
+                                        {restaurant.description}
+                                    </Typography>
+                                </Grid>
                                 {/* <PostSections post={post} />
                                 <Typography variant="body2" color="textSecondary" component="p">
                                     {post.body}
@@ -234,13 +240,11 @@ const PostDetails: React.FC<Props> = ({ classes, match }) => {
                                         </GridListTile>
                                     ))}
                                 </GridList>
-                            </React.Fragment>
+                            </Grid>
                         )}
                 </CardContent>
                 <CardActions className={classes.action} disableSpacing>
-                    <div className={classes.rating}>
-                        <Rating name="half-rating" readOnly defaultValue={restaurant.rating} precision={0.5} />
-                    </div>
+                    <Ratings rating={restaurant.rating} />
                     <div>
                         <IconButton aria-label="share">
                             <ShareIcon />
@@ -251,6 +255,16 @@ const PostDetails: React.FC<Props> = ({ classes, match }) => {
                         </IconButton>
                     </div>
 
+                    <Button
+                        variant="contained"
+                        color="secondary"
+                        size="large"
+                        className={classes.button}
+                        startIcon={<MaterialIconAsync icon="RateReview" />}
+                    // onClick={() => history.push('/restaurants')}
+                    >
+                        Review
+                          </Button>
 
                 </CardActions>
             </Card>
