@@ -25,9 +25,7 @@ import CommentIcon from '@material-ui/icons/Comment';
 import SendIcon from '@material-ui/icons/Send';
 import ThumbUpIcon from '@material-ui/icons/ThumbUp';
 import { RestaurantsContext } from '../../context/RestaurantsContext';
-import JoditEditor from "jodit-react";
 import DoneIcon from '@material-ui/icons/Done'
-import { EditorState } from 'draft-js'
 import Grow from '@material-ui/core/Grow';
 // import PostSections from './PostSections';
 // import PostComments from './PostComments';
