@@ -20,7 +20,8 @@ import { Card, CardContent, CardMedia, Slide } from '@material-ui/core';
 
 const styles = (theme: Theme) => createStyles({
     root: {
-        height: '100%',
+
+        // height: '100%',
     },
     image: {
         display: 'flex',
