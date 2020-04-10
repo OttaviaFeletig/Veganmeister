@@ -1,17 +1,21 @@
 import PostModel from "../../models/Post";
+import { PostN, UserN, RestaurantN } from "../../@types";
+import { ObjectID } from "bson";
+import { ApolloError } from "apollo-server";
 
-export const addPost = async (
-  id,
-  mainPicture,
-  pictures,
-  author,
-  title,
-  postSections,
-  hashtags,
-  published,
-  archived
-) => {
+export const addPost = async (id: ObjectID, input: PostN.PostI) => {
   console.log(id);
+  const {
+    mainPicture,
+    pictures,
+    author,
+    title,
+    postSections,
+    hashtags,
+    published,
+    archived,
+  } = input;
+  //   if (published !== archived) {
   const newPost = new PostModel({
     date: new Date(),
     restaurant: id,
@@ -35,4 +39,10 @@ export const addPost = async (
     })
     .execPopulate();
   return populatedPost;
+  //   } else {
+  //     return new ApolloError(
+  //       "archived and published cannot have the same value",
+  //       "409"
+  //     );
+  //   }
 };

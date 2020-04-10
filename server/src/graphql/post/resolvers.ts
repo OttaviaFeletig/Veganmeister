@@ -1,4 +1,3 @@
-import { find, filter } from "lodash";
 import { restaurants } from "../restaurant/resolvers";
 import { PostN, UserN, RestaurantN } from "../../@types";
 import PostModel from "../../models/Post";
@@ -272,24 +271,8 @@ export const resolvers = {
     addPost: async (parent: PostN.PostI, args: PostN.PostI) => {
       try {
         const { input } = JSON.parse(JSON.stringify(args));
-        const {
-          // date,
-          restaurant,
-          mainPicture,
-          pictures,
-          author,
-          // likes,
-          title,
-          postSections,
-          hashtags,
-          // comments,
-          published,
-          archived,
-          // rating,
-        } = input;
-        const { name, description, location, images } = restaurant;
-        const { geometry, district, city, country } = location;
-        const { type, coordinates } = geometry;
+        const { author, title, restaurant, published, archived } = input;
+        const { name, location } = restaurant;
         const existingPost = await PostModel.findOne({
           author,
           title,
@@ -301,57 +284,32 @@ export const resolvers = {
         //check if user exists
 
         if (existingPost)
-          throw new ApolloError(
+          return new ApolloError(
             "Post with same title already existing for this author in DB",
             "409"
           );
         if (existingRestaurant) {
           const { id } = existingRestaurant;
           console.log(typeof id);
-          const newPost = await addPost(
-            id,
-            mainPicture,
-            pictures,
-            author,
-            title,
-            postSections,
-            hashtags,
-            published,
-            archived
-          );
-          return newPost;
+          if (published !== archived) {
+            const newPost = await addPost(id, input);
+            return newPost;
+          } else {
+            return new ApolloError(
+              "archived and published cannot have the same value",
+              "409"
+            );
+          }
         } else {
-          const newRestaurant = await addRestaurant(
-            name,
-            location,
-            description,
-            geometry,
-            type,
-            coordinates,
-            district,
-            city,
-            country,
-            images
-          );
-
+          const newRestaurant = await addRestaurant(restaurant);
           const { id } = newRestaurant;
           console.log("id", id);
-          const newPost = await addPost(
-            id,
-            mainPicture,
-            pictures,
-            author,
-            title,
-            postSections,
-            hashtags,
-            published,
-            archived
-          );
+          const newPost = await addPost(id, input);
           return newPost;
         }
       } catch (err) {
         console.log(err);
-        throw new ApolloError("Couldn't save entry in DB", "500");
+        return new ApolloError("Couldn't save entry in DB", "500");
       }
     },
   },
