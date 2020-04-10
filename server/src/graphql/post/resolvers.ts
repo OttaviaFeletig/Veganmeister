@@ -1,11 +1,11 @@
-import { find, filter } from "lodash";
 import { restaurants } from "../restaurant/resolvers";
 import { PostN, UserN, RestaurantN } from "../../@types";
 import PostModel from "../../models/Post";
 import RestaurantModel from "../../models/Restaurant";
 import { ApolloError } from "apollo-server";
 import { ObjectID } from "bson";
-import mongoose from "mongoose";
+import { addPost } from "./mutations";
+import { addRestaurant } from "../restaurant/mutations";
 export const posts: PostN.PostsT = [
   {
     _id: "1",
@@ -271,24 +271,8 @@ export const resolvers = {
     addPost: async (parent: PostN.PostI, args: PostN.PostI) => {
       try {
         const { input } = JSON.parse(JSON.stringify(args));
-        const {
-          // date,
-          restaurant,
-          mainPicture,
-          pictures,
-          author,
-          // likes,
-          title,
-          postSections,
-          hashtags,
-          // comments,
-          published,
-          archived,
-          // rating,
-        } = input;
-        const { name, description, location, images } = restaurant;
-        const { geometry, district, city, country } = location;
-        const { type, coordinates } = geometry;
+        const { author, title, restaurant, published, archived } = input;
+        const { name, location } = restaurant;
         const existingPost = await PostModel.findOne({
           author,
           title,
@@ -300,143 +284,33 @@ export const resolvers = {
         //check if user exists
 
         if (existingPost)
-          throw new ApolloError(
+          return new ApolloError(
             "Post with same title already existing for this author in DB",
             "409"
           );
         if (existingRestaurant) {
-          const { id } = restaurant;
-          const newPost = await addPost(
-            id,
-            mainPicture,
-            pictures,
-            author,
-            title,
-            postSections,
-            hashtags,
-            published,
-            archived
-          );
-          // const newPost = new PostModel({
-          //   date: new Date(),
-          //   restaurant: id,
-          //   mainPicture,
-          //   pictures,
-          //   author,
-          //   likes: 0,
-          //   title,
-          //   postSections,
-          //   hashtags,
-          //   comments: [],
-          //   published,
-          //   archived,
-          //   rating: 0,
-          // });
-
-          // const savedPost = await newPost.save();
-          // return savedPost;
-          return newPost;
+          const { id } = existingRestaurant;
+          console.log(typeof id);
+          if (published !== archived) {
+            const newPost = await addPost(id, input);
+            return newPost;
+          } else {
+            return new ApolloError(
+              "archived and published cannot have the same value",
+              "409"
+            );
+          }
         } else {
-          const newRestaurant = await addRestaurant(
-            name,
-            location,
-            description,
-            geometry,
-            type,
-            coordinates,
-            district,
-            city,
-            country,
-            images
-          );
-
+          const newRestaurant = await addRestaurant(restaurant);
           const { id } = newRestaurant;
           console.log("id", id);
-          const newPost = await addPost(
-            id,
-            mainPicture,
-            pictures,
-            author,
-            title,
-            postSections,
-            hashtags,
-            published,
-            archived
-          );
+          const newPost = await addPost(id, input);
           return newPost;
         }
       } catch (err) {
         console.log(err);
-        throw new ApolloError("Couldn't save entry in DB", "500");
+        return new ApolloError("Couldn't save entry in DB", "500");
       }
     },
   },
-};
-
-// const addRestaurant = async(restaurant: RestaurantN.RestaurantI) => {
-//  const newRestaurant: RestaurantN.RestaurantSchemaData = new RestaurantModel({
-//   restaurant
-//  });
-//  await newRestaurant.save();
-//  return newRestaurant;
-// }
-const addRestaurant = async (
-  name,
-  location,
-  description,
-  geometry,
-  type,
-  coordinates,
-  district,
-  city,
-  country,
-  images
-) => {
-  const newRestaurant: RestaurantN.RestaurantSchemaData = new RestaurantModel({
-    name,
-    description,
-    location: {
-      geometry: {
-        type,
-        coordinates,
-      },
-      district,
-      city,
-      country,
-    },
-    images,
-  });
-  await newRestaurant.save();
-  console.log("newRestaurant", newRestaurant.id);
-  return newRestaurant;
-};
-const addPost = async (
-  id,
-  mainPicture,
-  pictures,
-  author,
-  title,
-  postSections,
-  hashtags,
-  published,
-  archived
-) => {
-  const newPost = new PostModel({
-    date: new Date(),
-    restaurant: id,
-    mainPicture,
-    pictures,
-    author,
-    likes: 0,
-    title,
-    postSections,
-    hashtags,
-    comments: [],
-    published,
-    archived,
-    rating: 0,
-  });
-
-  const savedPost = await newPost.save();
-  return savedPost;
 };

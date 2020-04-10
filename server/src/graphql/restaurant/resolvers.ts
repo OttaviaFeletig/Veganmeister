@@ -1,4 +1,3 @@
-import { find, filter } from "lodash";
 import { ApolloError } from "apollo-server";
 import { RestaurantN } from "../../@types";
 import RestaurantModel from "../../models/Restaurant";
@@ -11,10 +10,10 @@ export const restaurants: RestaurantN.RestaurantsT = [
       geometry: { type: "Point", coordinates: [45, 9] }, // [logitude, latitude]
       district: "Neukolln",
       city: "Berlin",
-      country: "Germany"
+      country: "Germany",
     },
     description: "description1",
-    images: ["img1", "img1", "img1"]
+    images: ["img1", "img1", "img1"],
   },
   {
     _id: "2",
@@ -23,10 +22,10 @@ export const restaurants: RestaurantN.RestaurantsT = [
       geometry: { type: "Point", coordinates: [45, 9] }, // [logitude, latitude]
       district: "Neukolln",
       city: "Berlin",
-      country: "Germany"
+      country: "Germany",
     },
     description: "description2",
-    images: ["img2", "img2", "img2"]
+    images: ["img2", "img2", "img2"],
   },
   {
     _id: "3",
@@ -35,11 +34,11 @@ export const restaurants: RestaurantN.RestaurantsT = [
       geometry: { type: "Point", coordinates: [45, 9] }, // [logitude, latitude]
       district: "Neukolln",
       city: "Berlin",
-      country: "Germany"
+      country: "Germany",
     },
     description: "description3",
-    images: ["img3", "img3", "img3"]
-  }
+    images: ["img3", "img3", "img3"],
+  },
 ];
 
 export const resolvers = {
@@ -62,7 +61,7 @@ export const resolvers = {
         console.error("restaurants error", err);
         throw new ApolloError("Error retrieving one restaurant", "400");
       }
-    }
+    },
   },
   Mutation: {
     addRestaurant: async (
@@ -76,10 +75,10 @@ export const resolvers = {
         const { type, coordinates } = geometry;
         const existingRestaurant = await RestaurantModel.findOne({
           name,
-          location
+          location,
         });
         if (existingRestaurant)
-          throw new ApolloError("Restaurant already existing in DB", "409");
+          return new ApolloError("Restaurant already existing in DB", "409");
         const newRestaurant: RestaurantN.RestaurantSchemaData = new RestaurantModel(
           {
             name,
@@ -87,20 +86,20 @@ export const resolvers = {
             location: {
               geometry: {
                 type,
-                coordinates
+                coordinates,
               },
               district,
               city,
-              country
+              country,
             },
-            images
+            images,
           }
         );
         await newRestaurant.save();
         return newRestaurant;
       } catch (err) {
-        throw new ApolloError("Couldn't save entry in DB", "500");
+        return new ApolloError("Couldn't save entry in DB", "500");
       }
-    }
-  }
+    },
+  },
 };
