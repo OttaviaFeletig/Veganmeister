@@ -2,9 +2,11 @@ import { gql } from "apollo-server";
 import Restaurant from "./restaurant/typeDefs";
 import Post from "./post/typeDefs";
 import User from "./user/typeDefs";
+import PictureUpload from "./pictureUpload/typeDefs";
 import { resolvers as restaurantResolvers } from "./restaurant/resolvers";
 import { resolvers as postResolvers } from "./post/resolvers";
 import { resolvers as userResolvers } from "./user/resolvers";
+import { resolvers as uploadResolvers } from "./pictureUpload/pictureUpload";
 import { scalarTypesResolverMap } from "./scalarTypes/resolvers";
 import { enumTypesResolverMap } from "./enumTypes/resolvers";
 import { merge } from "lodash";
@@ -22,13 +24,13 @@ const Query = gql`
   }
 `;
 // const scalarResolvers = { Coordinates };
-const typeDefs = [Restaurant, Post, User, Query];
+const typeDefs = [Restaurant, Post, User, PictureUpload, Query];
 const resolvers = merge(
   restaurantResolvers,
   postResolvers,
   userResolvers,
+  uploadResolvers,
   scalarTypesResolverMap,
   enumTypesResolverMap
-  // scalarResolvers
 );
 export const schema = makeExecutableSchema({ typeDefs, resolvers });
