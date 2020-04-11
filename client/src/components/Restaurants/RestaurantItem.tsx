@@ -1,36 +1,22 @@
 import React from 'react';
 import { fade, Theme, createStyles, WithStyles, withStyles } from '@material-ui/core/styles';
-import clsx from 'clsx';
 import Card from '@material-ui/core/Card';
-import CardHeader from '@material-ui/core/CardHeader';
 import CardMedia from '@material-ui/core/CardMedia';
 import CardContent from '@material-ui/core/CardContent';
 import CardActions from '@material-ui/core/CardActions';
-import Collapse from '@material-ui/core/Collapse';
-import Avatar from '@material-ui/core/Avatar';
 import IconButton from '@material-ui/core/IconButton';
 import Typography from '@material-ui/core/Typography';
-import { red } from '@material-ui/core/colors';
 import FavoriteIcon from '@material-ui/icons/Favorite';
 import ShareIcon from '@material-ui/icons/Share';
-import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import { Link } from 'react-router-dom'
 import moment from 'moment';
-import Rating from '@material-ui/lab/Rating';
 import { RestaurantN } from '../../@types';
 import Skeleton from '@material-ui/lab/Skeleton';
-import { Grid, Divider, Box } from '@material-ui/core';
+import { Grid, Divider } from '@material-ui/core';
 import Ratings from '../Elements/GraphicElmts/Ratings';
 moment().format();
 
 const styles = (theme: Theme) => createStyles({
-
-    root: {
-        // maxWidth: 345,
-    },
-    card: {
-        // height: 600
-    },
     media: {
         height: 0,
         paddingTop: '56.25%', // 16:9
@@ -140,57 +126,12 @@ interface Props extends WithStyles<typeof styles> {
 }
 
 const RestaurantItem: React.FC<Props> = ({ classes, restaurant, loading }) => {
-    const [expanded, setExpanded] = React.useState(false);
-
-    const handleExpandClick = () => {
-        setExpanded(!expanded);
-    };
-    console.log('restaurant', restaurant)
     return (
         <Card className={classes.card}>
-            {/* <CardHeader
-                avatar={
-                    loading ? (
-                        <Skeleton animation="wave" variant="circle" width={40} height={40} />
-                    ) : (
-                            <Avatar
-                                classes={{ img: classes.avatarIMG }}
-                                className={classes.avatar}
-                                alt={"user avatar"}
-                                src={post.author.avatar}
-                            />
-                        )
-                }
-                action={
-                    loading ? null : (
-                        <IconButton aria-label="settings">
-                            <MoreVertIcon />
-                        </IconButton>
-                    )
-                }
-                title={
-                    loading ? (
-                        <Skeleton animation="wave" height={10} width="80%" style={{ marginBottom: 6 }} />
-                    ) : (<React.Fragment > {post.author.username}</React.Fragment>)
-                }
-                subheader={loading ? <Skeleton animation="wave" height={10} width="40%" /> : '5 hours ago'}
-            /> */}
             {loading ? (
                 <Skeleton animation="wave" variant="rect" className={classes.media} />
             ) : (
                     <React.Fragment>
-                        {/* <div className={classes.overlay}>
-
-                            <IconButton aria-label="add to favorites">
-                                <FavoriteIcon />
-                            </IconButton>
-                            <IconButton aria-label="share">
-                                <ShareIcon />
-                            </IconButton>
-                            <div className={classes.rating}>
-                                <Rating name="half-rating" readOnly defaultValue={post.rating} precision={0.5} />
-                            </div>
-                        </div> */}
                         <CardMedia
                             component={Link} to={`/restaurants/${restaurant._id}`} style={{ textDecoration: 'none' }}
                             className={classes.media}
@@ -231,20 +172,6 @@ const RestaurantItem: React.FC<Props> = ({ classes, restaurant, loading }) => {
 
                     : (
                         <React.Fragment >
-                            {/* <CardHeader
-                                avatar={
-                                    <Avatar
-                                        classes={{ img: classes.avatarIMG }}
-                                        className={classes.avatar}
-                                        alt={"user avatar"}
-                                        src={post.author.avatar}
-                                    />
-                                }
-
-                                title={<React.Fragment > {post.author.username}</React.Fragment>}
-                                subheader={moment(post.date).fromNow()}
-                            /> */}
-
                             <Ratings rating={restaurant.globalRating} />
 
                             <div>
@@ -259,64 +186,8 @@ const RestaurantItem: React.FC<Props> = ({ classes, restaurant, loading }) => {
 
                         </React.Fragment>)
                 }
-
             </CardActions>
         </Card >
-        // <Card className={classes.root}>
-        //     <CardHeader
-        //         avatar={
-        //             <Avatar aria-label="recipe" className={classes.avatar}>
-        //                 R
-        //   </Avatar>
-        //         }
-        //         action={
-        //             <IconButton aria-label="settings">
-        //                 <MoreVertIcon />
-        //             </IconButton>
-        //         }
-        //         title={post.restaurant.name}
-        //         subheader={moment(post.date).fromNow()}
-        //     />
-        //     <CardMedia
-        //         className={classes.media}
-        //         image={post.mainPicture}
-        //         title={post.title}
-        //     />
-        //     <CardContent>
-        //         <Typography variant="body2" color="textSecondary" component="p">
-        //             {post.body}
-        //         </Typography>
-        //     </CardContent>
-        //     <CardActions disableSpacing>
-        //         <IconButton aria-label="add to favorites">
-        //             <FavoriteIcon />
-        //         </IconButton>
-        //         <IconButton aria-label="share">
-        //             <ShareIcon />
-        //         </IconButton>
-        //         <div className={classes.rating}>
-        //             <Rating name="half-rating" defaultValue={2.5} precision={0.5} />
-        //             {/* <Rating name="half-rating-read" defaultValue={2.5} precision={0.5} readOnly /> */}
-        //         </div>
-        //         <IconButton
-        //             className={clsx(classes.expand, {
-        //                 [classes.expandOpen]: expanded,
-        //             })}
-        //             onClick={handleExpandClick}
-        //             aria-expanded={expanded}
-        //             aria-label="show more"
-        //         >
-
-        //             <ExpandMoreIcon />
-        //         </IconButton>
-        //     </CardActions>
-        //     <Collapse in={expanded} timeout="auto" unmountOnExit>
-        //         <CardContent>
-        //             <Typography >Comments to come:</Typography>
-
-        //         </CardContent>
-        //     </Collapse>
-        // </Card>
     );
 }
 

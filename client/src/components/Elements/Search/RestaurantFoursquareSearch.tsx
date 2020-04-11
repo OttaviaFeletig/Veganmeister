@@ -57,10 +57,7 @@ const styles = (theme: Theme) => createStyles({
 
 })
 
-interface Props extends WithStyles<typeof styles> {
-    classes: any,
-}
-const RestaurantFoursquareSearch: React.FC<Props> = ({ classes }) => {
+const RestaurantFoursquareSearch: React.FC<WithStyles<typeof styles>> = ({ classes }) => {
     const [open, setOpen] = useState(false);
     const [city, setCity] = useState<string | unknown>('');
     const [options, setOptions] = useState<VenueType[]>([]);
@@ -182,7 +179,7 @@ const RestaurantFoursquareSearch: React.FC<Props> = ({ classes }) => {
                     loading={loading}
                     renderInput={(params) => (
                         <div className={classes.search}>
-                            <div className={classes.searchIcon}>
+                            <div>
                                 <MaterialIconAsync icon="SearchIcon" />
                             </div>
 
@@ -191,12 +188,7 @@ const RestaurantFoursquareSearch: React.FC<Props> = ({ classes }) => {
                                 // label="Asynchronous"
                                 color="secondary"
                                 placeholder="Search for restaurants…"
-                                className={classes.inputRoot}
                                 onChange={(e) => setQuery(e.target.value)}
-                                // classes={{
-                                //     root: classes.inputRoot,
-                                //     // input: classes.inputInput,
-                                // }}
                                 InputProps={{
                                     ...params.InputProps,
                                     endAdornment: (

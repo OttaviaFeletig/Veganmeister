@@ -1,7 +1,6 @@
 import React from 'react'
 import Typography from '@material-ui/core/Typography';
 import Link from '@material-ui/core/Link';
-import Container from '@material-ui/core/Container';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import { createStyles, Theme } from '@material-ui/core';
 import { WithStyles, withStyles } from '@material-ui/styles';
@@ -19,15 +18,7 @@ const styles = (theme: Theme) => createStyles({
     }
 });
 
-interface Props extends WithStyles<typeof styles> {
-    classes: {
-        footer: string,
-        text: string,
-    },
-}
-
-
-const Footer: React.FC<Props> = ({ classes }) => {
+const Footer: React.FC<WithStyles<typeof styles>> = ({ classes }) => {
     return (
 
         <footer
@@ -43,7 +34,6 @@ const Footer: React.FC<Props> = ({ classes }) => {
                 {new Date().getFullYear()}
                 {'.'}
             </Typography>
-
         </footer>
     )
 }

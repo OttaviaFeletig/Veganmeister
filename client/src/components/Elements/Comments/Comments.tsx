@@ -6,10 +6,6 @@ import MaterialIconAsync from "../GraphicElmts/MaterialIconAsync"
 
 
 const styles = (theme: Theme) => createStyles({
-
-    root: {
-        // maxWidth: 345,
-    },
     commentsCard: {
         marginTop: theme.spacing(2)
     },
@@ -30,21 +26,15 @@ const styles = (theme: Theme) => createStyles({
         opacity: 0.6
     },
     expand: {
-        // transform: 'rotate(0deg)',
         marginRight: 0,
         transition: theme.transitions.create('transform', {
             duration: theme.transitions.duration.shortest,
         }),
     },
     expandOpen: {
-        // transform: 'rotate(180deg)',
     },
     rating: {
         display: 'flex',
-        // flexDirection: 'column',
-        // '& > * + *': {
-        //     marginTop: theme.spacing(1),
-        // },
     },
     comments: {
         position: 'relative',
@@ -55,18 +45,12 @@ const styles = (theme: Theme) => createStyles({
         '&:hover': {
             backgroundColor: fade(theme.palette.common.black, 0.1),
         },
-        // marginRight: theme.spacing(2),
         paddingLeft: theme.spacing(2),
-        // marginLeft: 0,
         width: '100%',
-        // [theme.breakpoints.up('sm')]: {
-        //     marginLeft: theme.spacing(3),
-        //     // width: 'auto',
-        // },
+
     },
     commentIcon: {
         color: fade(theme.palette.common.black, 0.5),
-        // padding: theme.spacing(0, 2),
         height: '100%',
         position: 'absolute',
         pointerEvents: 'none',
@@ -77,7 +61,6 @@ const styles = (theme: Theme) => createStyles({
     commentsContainer: {
         display: 'flex',
         alignItems: 'center',
-        // marginTop: theme.spacing(1)
 
     },
     commentBody: {
@@ -112,7 +95,6 @@ const styles = (theme: Theme) => createStyles({
     },
 })
 interface PropsRenderComments extends WithStyles<typeof styles> {
-    classes: any,
     comments: PostN.CommentsT,
 }
 
@@ -145,8 +127,6 @@ const Comments: React.FC<PropsRenderComments> = ({ comments, classes }) => {
                     <MaterialIconAsync icon="ThumbUpIcon" />
                     <Typography variant="body2"> {comment.likes} likes</Typography>
                 </IconButton>
-
-                {/* <Divider variant="middle" /> */}
             </div>
         )
         )}

@@ -1,22 +1,14 @@
-import React, { useContext, useState, useCallback } from 'react'
-import { Theme, createStyles, Typography, CardMedia, Grid, Tooltip, Fab, Button, Menu, MenuItem, FormControlLabel, Switch, TextField, Divider, Slide, Paper, fade, Box, DialogTitle, DialogContent, DialogContentText, DialogActions } from '@material-ui/core';
+import React, { useContext, useState } from 'react'
+import { Theme, createStyles, Typography, CardMedia, Grid, Tooltip, Fab, Button, TextField, Slide, fade, Box, DialogTitle, DialogContent, DialogContentText, DialogActions } from '@material-ui/core';
 import { WithStyles, withStyles } from '@material-ui/styles';
-import EditIcon from '@material-ui/icons/Edit';
 import AddCircleOutlineIcon from '@material-ui/icons/AddCircleSharp';
-import { AuthContext } from '../../context/AuthContext';
-import PostSectionAddEdit from './PostSectionAddEdit';
-import SaveIcon from '@material-ui/icons/Save';
-import CancelIcon from '@material-ui/icons/Cancel';
-import DeleteIcon from '@material-ui/icons/Delete';
+// import { AuthContext } from '../../context/AuthContext';
 import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@material-ui/icons/KeyboardArrowUp';
 import red from '@material-ui/core/colors/red';
 import { PostN } from '../../@types';
-import MUIRichTextEditor from 'mui-rte'
 import Dialog from '@material-ui/core/Dialog';
 import clsx from 'clsx';
-import { useDropzone } from 'react-dropzone'
-import RootRef from '@material-ui/core/RootRef'
 import MaterialIconAsync from '../Elements/GraphicElmts/MaterialIconAsync';
 import { PostsContext } from '../../context/PostsContext';
 import ToggleButton from '@material-ui/lab/ToggleButton';
@@ -191,59 +183,13 @@ const styles = (theme: Theme) => createStyles({
     }
 
 });
-// const ImgDropzone = ({ styleClass }) => {
-//     const onDrop = useCallback(acceptedFiles => {
-//         // Do something with the files
-//         console.log('acceptedFiles :', acceptedFiles);
-//     }, [])
-//     const { getRootProps, getInputProps } = useDropzone({ onDrop })
-//     const { ref, ...rootProps } = getRootProps()
-//     return (
-//         <RootRef rootRef={ref} >
-//             <Paper
-//                 className={styleClass}
-//                 {...rootProps}>
-//                 <Fab color="primary" size="large" aria-label="image input">
-//                     <MaterialIconAsync icon="AddPhotoAlternate" />
-//                 </Fab>
-//                 <React.Fragment>
-//                     <input {...getInputProps()} />
-//                     <p>Drag 'n' drop some files here, or click to select files</p>
-//                 </React.Fragment>
-//             </Paper>
-//         </RootRef >)
-// }
+
 interface Props extends WithStyles<typeof styles> {
-    classes: any,
-    // {
-    //     article: string,
-    //     text: string,
-    //     title: string,
-    //     sideImg: string,
-    //     gridImg: string,
-    //     absoluteL: string,
-    //     absoluteR: string,
-    //     addIcon: string,
-    //     tabTitle: string,
-    //     button: string,
-    //     buttonDel: string,
-    //     absoluteRTitle: string,
-    // },
     post: PostN.PostI,
 }
 
 const PostSections: React.FC<Props> = ({ classes, post }) => {
-    const [addMode, toggleAddMode] = React.useState(false);
-    // const [editMode, toggleEditMode] = React.useState(false);
-    console.log('post.postSections', post.postSections)
-    // const { addEditDeleteArticle,
-    //     article,
-    //     setArticle,
-    //     changeArticleOrder,
-    //     editMode,
-    //     toggleEditMode,
-
-    // } = useContext(ContentContext)
+    const [, toggleAddMode] = React.useState(false);
 
     const emptySection: PostN.PostSectionI = {
         index: post.postSections.length + 1,
@@ -252,33 +198,21 @@ const PostSections: React.FC<Props> = ({ classes, post }) => {
         img: '',
         sideImg: false
     }
-    const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+    const [, setAnchorEl] = React.useState<null | HTMLElement>(null);
 
-    const { isAuthenticated } = useContext(AuthContext)
-    const { changeSectionOrder, changeSplit, textChange, editMode, toggleEditMode } = useContext(PostsContext)
+    const { changeSectionOrder, changeSplit, textChange, editMode } = useContext(PostsContext)
 
-    const [postSection, setPostSection] = useState(emptySection)
+    const [, setPostSection] = useState(emptySection)
     const [openDialog, setOpenDialog] = React.useState(false);
 
-    const handleClickOpen = () => {
-        setOpenDialog(true);
-    };
 
     const handleClose = () => {
         setOpenDialog(false);
     };
 
-    const onEditClick = (postSection: PostN.PostSectionI) => {
-        setPostSection(postSection)
-        toggleAddMode(true)
-    }
     const onAddClick = () => {
         setPostSection(emptySection)
         toggleAddMode(true)
-    }
-    const onEditCancel = () => {
-        // setArticle(emptyArticle)
-        toggleAddMode(false)
     }
     const onClickDelete = (post: PostN.PostI, postSection: PostN.PostSectionI) => {
         // addEditDeleteArticle(tab, article, 'delete')
@@ -286,13 +220,9 @@ const PostSections: React.FC<Props> = ({ classes, post }) => {
         // setPostSection()
         setOpenDialog(true);
 
-        setPostSection(emptySection)
+        // setPostSection(emptySection)
 
         toggleAddMode(false)
-    }
-    const handleTextChange = (postSection: PostN.PostSectionI, action: string) => {
-        // addEditDeleteArticle(tab, article, 'edit')
-
     }
 
     const handleMoveUp = (post: PostN.PostI, postSection: PostN.PostSectionI) => {
@@ -450,7 +380,6 @@ const PostSections: React.FC<Props> = ({ classes, post }) => {
                                             {editMode ?
                                                 <React.Fragment>
                                                     <TextField
-
                                                         inputProps={{ style: { textAlign: 'center' } }}
                                                         InputLabelProps={{ style: { marginLeft: '50px' } }}
                                                         onChange={(e) => textChange(post, section, e.target.value, true)}
@@ -575,13 +504,7 @@ const PostSections: React.FC<Props> = ({ classes, post }) => {
                                                         rows="20"
                                                         defaultValue={section.body}
                                                         className={classes.text}
-
-                                                    // margin="normal"
-                                                    // variant="filled"
                                                     />
-                                                    {/* <Typography className={classes.text} variant="body1" color="textSecondary">
-                                                        {section.body}
-                                                    </Typography> */}
                                                 </Box>}
                                         </Grid>
                                     </Grid>

@@ -1,33 +1,22 @@
-import React, { useContext, useRef, useState } from 'react';
+import React, { useContext } from 'react';
 import { fade, Theme, createStyles, WithStyles, withStyles } from '@material-ui/core/styles';
-import clsx from 'clsx';
 import Card from '@material-ui/core/Card';
 import CardHeader from '@material-ui/core/CardHeader';
 import CardMedia from '@material-ui/core/CardMedia';
 import CardContent from '@material-ui/core/CardContent';
 import CardActions from '@material-ui/core/CardActions';
-import Collapse from '@material-ui/core/Collapse';
 import Avatar from '@material-ui/core/Avatar';
 import IconButton from '@material-ui/core/IconButton';
 import Typography from '@material-ui/core/Typography';
-import { red } from '@material-ui/core/colors';
 import FavoriteIcon from '@material-ui/icons/Favorite';
 import ShareIcon from '@material-ui/icons/Share';
-import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-import ExpandLessIcon from '@material-ui/icons/ExpandLess';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
 import moment from 'moment';
 import Rating from '@material-ui/lab/Rating';
 import { PostN } from '../../@types';
 import Skeleton from '@material-ui/lab/Skeleton';
-import { InputBase, Divider, Grid, FormControlLabel, Switch, Box } from '@material-ui/core';
-import CommentIcon from '@material-ui/icons/Comment';
-import SendIcon from '@material-ui/icons/Send';
-import ThumbUpIcon from '@material-ui/icons/ThumbUp';
+import { FormControlLabel, Switch } from '@material-ui/core';
 import { PostsContext } from '../../context/PostsContext';
-import JoditEditor from "jodit-react";
-import DoneIcon from '@material-ui/icons/Done'
-import { EditorState } from 'draft-js'
 import Grow from '@material-ui/core/Grow';
 import PostSections from './PostSections';
 import PostComments from './PostComments';
@@ -63,7 +52,6 @@ const styles = (theme: Theme) => createStyles({
         opacity: 0.6
     },
     expand: {
-        // transform: 'rotate(0deg)',
         marginRight: 0,
         transition: theme.transitions.create('transform', {
             duration: theme.transitions.duration.shortest,
@@ -74,13 +62,9 @@ const styles = (theme: Theme) => createStyles({
     },
     rating: {
         display: 'flex',
-        // flexDirection: 'column',
-        // '& > * + *': {
-        //     marginTop: theme.spacing(1),
-        // },
+
     },
     content: {
-        // marginBottom: theme.spacing(4)
     },
     comments: {
         position: 'relative',
@@ -91,18 +75,13 @@ const styles = (theme: Theme) => createStyles({
         '&:hover': {
             backgroundColor: fade(theme.palette.common.black, 0.1),
         },
-        // marginRight: theme.spacing(2),
         paddingLeft: theme.spacing(2),
         // marginLeft: 0,
         width: '100%',
-        // [theme.breakpoints.up('sm')]: {
-        //     marginLeft: theme.spacing(3),
-        //     // width: 'auto',
-        // },
+
     },
     commentIcon: {
         color: fade(theme.palette.common.black, 0.5),
-        // padding: theme.spacing(0, 2),
         height: '100%',
         position: 'absolute',
         pointerEvents: 'none',
@@ -113,8 +92,6 @@ const styles = (theme: Theme) => createStyles({
     commentsContainer: {
         display: 'flex',
         alignItems: 'center',
-        // marginTop: theme.spacing(1)
-
     },
     commentBody: {
         width: '100%',
@@ -131,25 +108,15 @@ const styles = (theme: Theme) => createStyles({
     },
     inputInput: {
         padding: theme.spacing(1, 1, 1, 0),
-        // vertical padding + font size from searchIcon
         paddingLeft: `calc(1em + ${theme.spacing(5)}px)`,
         transition: theme.transitions.create('width'),
         width: '100%',
-        // [theme.breakpoints.up('md')]: {
-        //     width: '20ch',
-        // },
     },
     iconButton: {
-        // padding: 10,
-    },
-    divider: {
-        // height: 28,
-        // margin: 4,
     },
 })
 
 interface Props extends WithStyles<typeof styles> {
-    classes: any,
     match: any,
 }
 const AddPost: React.FC<Props> = ({ classes, match }) => {
@@ -162,7 +129,7 @@ const AddPost: React.FC<Props> = ({ classes, match }) => {
     return (
         <React.Fragment>
             <BackButton to="/posts" text="Back to Posts" />
-            <Card className={classes.card}>
+            <Card>
                 <CardHeader
                     avatar={
                         loading ? (

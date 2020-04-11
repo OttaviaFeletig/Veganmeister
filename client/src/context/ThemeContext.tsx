@@ -1,5 +1,5 @@
-import React, { useState, createContext, useContext } from 'react'
-import { createMuiTheme, responsiveFontSizes } from "@material-ui/core/styles";
+import React, { useState, createContext } from 'react'
+import { createMuiTheme } from "@material-ui/core/styles";
 import { ThemeContextI } from '.';
 // import { contentMaster } from '../content'
 // import { ContentContext } from './ContentContext';
@@ -108,7 +108,7 @@ export const ThemeContext = createContext<ThemeContextI>({
 });
 
 const ThemeContextProvider = (props: { children: React.ReactNode; }) => {
-    const [theme, setTheme] = useState(initTheme)
+    const [theme] = useState(initTheme)
     // const { setColorsContent } = useContext(ContentContext)
 
     const setColors = () => {

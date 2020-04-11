@@ -1,23 +1,11 @@
 import React, { useContext } from 'react'
-import { Toolbar, IconButton, Typography, Menu, MenuItem, Badge, AppBar, InputBase, Avatar } from '@material-ui/core'
+import { IconButton, Menu, MenuItem, Avatar } from '@material-ui/core'
 import { AuthContext } from '../../context/AuthContext';
 import AccountCircle from '@material-ui/icons/AccountCircle';
-import SearchIcon from '@material-ui/icons/Search';
-import MoreIcon from '@material-ui/icons/MoreVert';
-import MenuIcon from '@material-ui/icons/Menu';
 import { createStyles, Theme, fade } from '@material-ui/core/styles';
 import { WithStyles, withStyles } from '@material-ui/styles';
-import MailIcon from '@material-ui/icons/Mail';
-import NotificationsIcon from '@material-ui/icons/Notifications';
 
-interface Props extends WithStyles<typeof styles> {
-    classes: any
-    // {
-    //     root: string,
-    //     menuButton: string,
-    //     title: string
-    // }
-}
+
 const styles = (theme: Theme) => createStyles({
     root: {
         alignSelf: 'center',
@@ -85,7 +73,7 @@ const styles = (theme: Theme) => createStyles({
 
 
 
-const AuthToolbar: React.FC<Props> = ({ classes }) => {
+const AuthToolbar: React.FC<WithStyles<typeof styles>> = ({ classes }) => {
     const { logIn, isAuthenticated, user } = useContext(AuthContext)
     const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
 

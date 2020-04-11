@@ -1,6 +1,5 @@
 import React, { useContext, useState } from 'react';
-import { makeStyles, createStyles, Theme, WithStyles, withStyles } from '@material-ui/core/styles';
-import Paper from '@material-ui/core/Paper';
+import { createStyles, Theme, WithStyles, withStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 import RestaurantItem from './RestaurantItem';
 import { RestaurantsContext } from '../../context/RestaurantsContext';
@@ -47,20 +46,11 @@ const styles = (theme: Theme) => createStyles({
     }
 });
 
-interface Props extends WithStyles<typeof styles> {
-    classes: {
-        root: string,
-        paper: string,
-        container: string,
-        addIcon: string,
-        bottomAdd: string
-    },
-}
 
 
-const RestaurantList: React.FC<Props> = ({ classes }) => {
+const RestaurantList: React.FC<WithStyles<typeof styles>> = ({ classes }) => {
     const { restaurants, sort, handleSort } = useContext(RestaurantsContext)
-    const [cardDisplay, setCardDisplay] = useState(true)
+    const [, setCardDisplay] = useState(true)
 
     const toggleDisplay = () => {
         setCardDisplay((prev) => !prev)

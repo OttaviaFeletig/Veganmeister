@@ -1,4 +1,3 @@
-// *https://www.registers.service.gov.uk/registers/country/use-the-api*
 import fetch from 'cross-fetch';
 import React from 'react';
 import TextField from '@material-ui/core/TextField';
@@ -140,14 +139,6 @@ const AsyncSearch: React.FC<Props> = ({ classes }) => {
                             ),
                         }}
                     />
-                    {/* <InputBase
-                            placeholder="Search…"
-                            classes={{
-                                root: classes.inputRoot,
-                                input: classes.inputInput,
-                            }}
-                            inputProps={{ 'aria-label': 'search' }}
-                        /> */}
                 </div>
 
             )}

@@ -1,14 +1,5 @@
 import React from 'react';
-import { withStyles, Theme, createStyles } from '@material-ui/core/styles';
-import StarBorderIcon from '@material-ui/icons/StarBorder';
-import FavoriteIcon from '@material-ui/icons/Favorite';
-import SentimentVeryDissatisfiedIcon from '@material-ui/icons/SentimentVeryDissatisfied';
-import SentimentDissatisfiedIcon from '@material-ui/icons/SentimentDissatisfied';
-import SentimentSatisfiedIcon from '@material-ui/icons/SentimentSatisfied';
-import SentimentSatisfiedAltIcon from '@material-ui/icons/SentimentSatisfiedAltOutlined';
-import SentimentVerySatisfiedIcon from '@material-ui/icons/SentimentVerySatisfied';
-import Typography from '@material-ui/core/Typography';
-import Box from '@material-ui/core/Box';
+import { withStyles, Theme, createStyles, WithStyles } from '@material-ui/core/styles';
 import Logo from './Logo';
 import Rating, { IconContainerProps } from '@material-ui/lab/Rating';
 
@@ -36,11 +27,7 @@ const customIcons: { [index: string]: { icon: React.ReactElement; label: string 
         label: 'Very Satisfied',
     },
 };
-const IconContainer = (props: IconContainerProps) => {
-    const { value, ...other } = props;
-    return <span {...other}>{customIcons[value].icon}</span>;
-}
-const styles = (theme: Theme) => createStyles({
+const styles = () => createStyles({
     rating: {
         // flexDirection: 'row-reverse',
         alignItems: 'center',
@@ -49,13 +36,10 @@ const styles = (theme: Theme) => createStyles({
         // }
     },
 })
-interface Props {
-    classes: any,
+interface Props extends WithStyles<typeof styles> {
     rating: number,
 }
-const Ratings: React.FC<Props> = ({ classes, rating }) => {
-    const customIcons: { [index: string]: { icon: React.ReactElement; label: string } } = {
-    }
+const Ratings: React.FC<Props> = ({ classes }) => {
     return (
         // <Box borderColor="transparent">
         <Rating
