@@ -1,6 +1,5 @@
 import React from 'react';
 import { withStyles, Theme, createStyles } from '@material-ui/core/styles';
-import Rating, { IconContainerProps } from '@material-ui/lab/Rating';
 import StarBorderIcon from '@material-ui/icons/StarBorder';
 import FavoriteIcon from '@material-ui/icons/Favorite';
 import SentimentVeryDissatisfiedIcon from '@material-ui/icons/SentimentVeryDissatisfied';
@@ -11,6 +10,7 @@ import SentimentVerySatisfiedIcon from '@material-ui/icons/SentimentVerySatisfie
 import Typography from '@material-ui/core/Typography';
 import Box from '@material-ui/core/Box';
 import Logo from './Logo';
+import Rating, { IconContainerProps } from '@material-ui/lab/Rating';
 
 
 
@@ -62,9 +62,9 @@ const Ratings: React.FC<Props> = ({ classes, rating }) => {
             className={classes.rating}
             name="customized-icons"
             defaultValue={1}
-            onChangeActive={(event, newHover) => {
-                console.log(newHover);
-            }}
+            // onChangeActive={(event, newHover) => {
+            //     console.log(newHover);
+            // }}
             emptyIcon={<Logo height={40} color="#585858" />}
             icon={<Logo height={50} color="secondary" />}
         />
