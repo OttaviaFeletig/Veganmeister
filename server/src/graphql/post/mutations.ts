@@ -15,7 +15,6 @@ export const addPost = async (id: ObjectID, input: PostN.PostI) => {
     published,
     archived,
   } = input;
-  //   if (published !== archived) {
   const newPost = new PostModel({
     date: new Date(),
     restaurant: id,
@@ -39,10 +38,4 @@ export const addPost = async (id: ObjectID, input: PostN.PostI) => {
     })
     .execPopulate();
   return populatedPost;
-  //   } else {
-  //     return new ApolloError(
-  //       "archived and published cannot have the same value",
-  //       "409"
-  //     );
-  //   }
 };

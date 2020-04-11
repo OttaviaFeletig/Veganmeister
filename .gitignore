@@ -28,3 +28,4 @@ yarn-error.log*
 client/src/assets/data/config.ts
 /server/yarn.lock
 .env
+/client/.env
