@@ -1,13 +1,8 @@
 import React from 'react';
 import Avatar from '@material-ui/core/Avatar';
-import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
-import TextField from '@material-ui/core/TextField';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Checkbox from '@material-ui/core/Checkbox';
 import { Link } from 'react-router-dom';
 import Paper from '@material-ui/core/Paper';
-import Box from '@material-ui/core/Box';
 import Grid from '@material-ui/core/Grid';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
@@ -15,7 +10,6 @@ import { WithStyles, Theme, createStyles, withStyles } from '@material-ui/core/s
 import Logo from '../Elements/GraphicElmts/Logo'
 // import SvgIcon from '@material-ui/core/SvgIcon';
 import dataSite from '../../assets/data/siteData.json'
-import { ReactComponent as ReactLogo } from '../../assets/logo/noun_Deer.svg';
 import { Card, CardContent, CardMedia, Slide } from '@material-ui/core';
 
 const styles = (theme: Theme) => createStyles({
@@ -69,24 +63,17 @@ const styles = (theme: Theme) => createStyles({
         display: 'flex',
         flexDirection: 'column',
     },
-    content: {
-        // flex: '1 0 auto',
-    },
+
     cover: {
         width: '200px',
-
-        // height: '100%',
     },
 });
 
 
 
-interface Props extends WithStyles<typeof styles> {
-    classes: any,
 
-}
 
-const Landing: React.FC<Props> = ({ classes }) => {
+const Landing: React.FC<WithStyles<typeof styles>> = ({ classes }) => {
     return (
         <Grid container component="main" className={classes.root}>
             <CssBaseline />

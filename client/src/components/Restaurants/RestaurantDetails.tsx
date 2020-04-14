@@ -1,49 +1,29 @@
-import React, { useContext, useRef, useState } from 'react';
+import React, { useContext } from 'react';
 import { fade, Theme, createStyles, WithStyles, withStyles } from '@material-ui/core/styles';
-import clsx from 'clsx';
 import Card from '@material-ui/core/Card';
-import CardHeader from '@material-ui/core/CardHeader';
 import CardMedia from '@material-ui/core/CardMedia';
 import CardContent from '@material-ui/core/CardContent';
 import CardActions from '@material-ui/core/CardActions';
-import Collapse from '@material-ui/core/Collapse';
-import Avatar from '@material-ui/core/Avatar';
 import IconButton from '@material-ui/core/IconButton';
 import Typography from '@material-ui/core/Typography';
-import { red } from '@material-ui/core/colors';
 import FavoriteIcon from '@material-ui/icons/Favorite';
 import ShareIcon from '@material-ui/icons/Share';
-import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-import ExpandLessIcon from '@material-ui/icons/ExpandLess';
-import MoreVertIcon from '@material-ui/icons/MoreVert';
 import moment from 'moment';
-import Rating, { IconContainerProps } from '@material-ui/lab/Rating';
 import { RestaurantN } from '../../@types';
 import Skeleton from '@material-ui/lab/Skeleton';
-import { InputBase, Divider, GridList, GridListTile, Button, Grid, Box } from '@material-ui/core';
-import CommentIcon from '@material-ui/icons/Comment';
-import SendIcon from '@material-ui/icons/Send';
-import ThumbUpIcon from '@material-ui/icons/ThumbUp';
+import { GridList, GridListTile, Button, Grid } from '@material-ui/core';
 import { RestaurantsContext } from '../../context/RestaurantsContext';
-import DoneIcon from '@material-ui/icons/Done'
-import Grow from '@material-ui/core/Grow';
-// import PostSections from './PostSections';
-// import PostComments from './PostComments';
 import BackButton from '../Elements/GraphicElmts/BackButton';
-import { Link } from 'react-router-dom';
 import ImgDialog from '../Elements/GraphicElmts/ImgDialog';
 import MaterialIconAsync from '../Elements/GraphicElmts/MaterialIconAsync';
-import Logo from '../Elements/GraphicElmts/Logo';
 import Ratings from '../Elements/GraphicElmts/Ratings';
+import { match } from 'react-router-dom';
 
 
 moment().format();
 
 const styles = (theme: Theme) => createStyles({
 
-    root: {
-        // maxWidth: 345,
-    },
     commentsCard: {
         marginTop: theme.spacing(2)
     },
@@ -141,16 +121,14 @@ const styles = (theme: Theme) => createStyles({
 
 })
 
-
+type TParams = { restaurantId: string };
 interface Props extends WithStyles<typeof styles> {
-    classes: any,
-    match: any,
+    match: match<TParams>,
 }
 const PostDetails: React.FC<Props> = ({ classes, match }) => {
     const loading = false;
     const { restaurantId } = match.params;
     const { restaurants } = useContext(RestaurantsContext)
-    const [value, setValue] = React.useState<number | null>(2);
     const restaurant = restaurants.find((restaurant: RestaurantN.RestaurantI) => restaurant._id === restaurantId)
     console.log('restaurant', restaurant)
 
@@ -164,35 +142,8 @@ const PostDetails: React.FC<Props> = ({ classes, match }) => {
     return (
         <React.Fragment>
             <BackButton to="/restaurants" text="Back to Restaurants" />
-            <Card className={classes.card}>
-                {/* <CardHeader
-                    avatar={
-                        loading ? (
-                            <Skeleton animation="wave" variant="circle" width={40} height={40} />
-                        ) : (
-                                <Avatar
-                                    // component={classes.avatar}
-                                    classes={{ img: classes.avatarIMG }}
-                                    className={classes.avatar}
-                                    alt={"user avatar"}
-                                    src={post.author.avatar}
-                                />
-                            )
-                    }
-                    action={
-                        loading ? null : (
-                            <IconButton aria-label="settings">
-                                <MoreVertIcon />
-                            </IconButton>
-                        )
-                    }
-                    title={
-                        loading ? (
-                            <Skeleton animation="wave" height={10} width="80%" style={{ marginBottom: 6 }} />
-                        ) : (<React.Fragment > {post.author.username}</React.Fragment>)
-                    }
-                    subheader={loading ? <Skeleton animation="wave" height={10} width="40%" /> : '5 hours ago'}
-                /> */}
+            <Card >
+
                 {loading ? (
                     <Skeleton animation="wave" variant="rect" className={classes.media} />
                 ) : (
@@ -257,7 +208,6 @@ const PostDetails: React.FC<Props> = ({ classes, match }) => {
                         variant="contained"
                         color="secondary"
                         size="large"
-                        className={classes.button}
                         startIcon={<MaterialIconAsync icon="RateReview" />}
                     // onClick={() => history.push('/restaurants')}
                     >

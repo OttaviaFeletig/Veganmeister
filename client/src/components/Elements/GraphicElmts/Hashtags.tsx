@@ -1,8 +1,6 @@
 import React from 'react';
-import { createStyles, makeStyles, Theme, WithStyles, withStyles } from '@material-ui/core/styles';
+import { createStyles, Theme, WithStyles, withStyles } from '@material-ui/core/styles';
 import Chip from '@material-ui/core/Chip';
-import Paper from '@material-ui/core/Paper';
-import TagFacesIcon from '@material-ui/icons/TagFaces';
 
 
 
@@ -20,26 +18,18 @@ const styles = (theme: Theme) => createStyles({
 })
 
 interface Props extends WithStyles<typeof styles> {
-    classes: any,
     hashtags: string[]
 }
 
 const Hashtags: React.FC<Props> = ({ classes, hashtags }) => {
 
 
-    const handleDelete = (tag: string) => () => {
-        // setChipData((chips) => chips.filter((chip) => chip.key !== chipToDelete.key));
-    };
 
     return (
         // <Paper className={classes.root}>
         <React.Fragment>
             {hashtags.map((tag) => {
-                // let icon;
 
-                // if (data.label === 'React') {
-                //     icon = <TagFacesIcon />;
-                // }
 
                 return (
                     <Chip

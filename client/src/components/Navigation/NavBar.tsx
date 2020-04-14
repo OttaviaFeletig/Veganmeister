@@ -1,21 +1,17 @@
 import React from 'react';
 import { fade, makeStyles, Theme, createStyles, WithStyles, withStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
-import { Grid, Button, useScrollTrigger, Zoom, Fab, Box } from '@material-ui/core';
+import { Button, useScrollTrigger, Zoom, Fab, Box } from '@material-ui/core';
 import Toolbar from '@material-ui/core/Toolbar';
 import IconButton from '@material-ui/core/IconButton';
 import Typography from '@material-ui/core/Typography';
-import InputBase from '@material-ui/core/InputBase';
 import Badge from '@material-ui/core/Badge';
 import MenuItem from '@material-ui/core/MenuItem';
 import Menu from '@material-ui/core/Menu';
-import MenuIcon from '@material-ui/icons/Menu';
-import SearchIcon from '@material-ui/icons/Search';
 import AccountCircle from '@material-ui/icons/AccountCircle';
 import MailIcon from '@material-ui/icons/Mail';
 import NotificationsIcon from '@material-ui/icons/Notifications';
 import MoreIcon from '@material-ui/icons/MoreVert';
-import logo from '../assets/logo/logoNoBG.png'
 import Logo from '../Elements/GraphicElmts/Logo';
 import dataSite from '../../assets/data/siteData.json';
 import { Link } from 'react-router-dom'
@@ -25,10 +21,6 @@ import AsyncSearch from '../Elements/Search/AsyncSearch'
 
 const mainWindow = window;
 interface ScrollTopProps {
-    /**
-     * Injected by the documentation to work in an iframe.
-     * You won't need it on your project.
-     */
     window?: () => Window;
     children: React.ReactElement;
 }
