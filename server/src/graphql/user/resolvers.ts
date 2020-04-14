@@ -10,7 +10,7 @@ export const resolvers = {
     users: async () => {
       try {
         const users = await UserModel.find().populate({
-          path: "post",
+          path: "posts",
           populate: { path: "post", model: "post" },
         });
         return users;
@@ -25,7 +25,7 @@ export const resolvers = {
     ) => {
       try {
         return await UserModel.findById(id).populate({
-          path: "post",
+          path: "posts",
           populate: { path: "post", model: "post" },
         });
       } catch (err) {
