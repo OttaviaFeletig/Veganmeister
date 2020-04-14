@@ -15,13 +15,7 @@ export namespace RestaurantN {
     city: string;
     country: string;
   }
-  interface RestaurantSchemaData extends Document, RestaurantI {
-    // id: string | number | ObjectID;
-    // name: string;
-    // location: LocationI;
-    // description: string;
-    // images: Array<string>;
-  }
+  interface RestaurantSchemaData extends Document, RestaurantI {}
 }
 export namespace PostN {
   interface PostI {
@@ -30,7 +24,7 @@ export namespace PostN {
     restaurant: RestaurantN.RestaurantI;
     mainPicture: string;
     pictures: Array<string>;
-    author: UserN.UserI;
+    author: UserN.UserI | string | number | ObjectID;
     likes: number;
     title: string;
     postSections: PostSectionsT;
@@ -59,7 +53,7 @@ export namespace PostN {
   }
   type CommentsT = Array<CommentI>;
   interface PostSchemaData extends Document, PostI {}
-  type PostModelT = Model<PostSchemaData>;
+  // type PostModelT = Model<PostSchemaData>;
 }
 export namespace UserN {
   interface UserI {
@@ -70,7 +64,7 @@ export namespace UserN {
     email: string;
     password: string;
     avatar: string;
-    posts: PostN.PostsT;
+    posts: UserN.UsersT | Array<string | number | ObjectID>;
     rank: RankI;
     isAdmin: boolean;
     isLoggedIn: boolean;
@@ -104,5 +98,5 @@ export namespace UserN {
     VeganVirgin = "",
   }
   interface UserSchemaData extends Document, UserI {}
-  type UserModelT = Model<UserSchemaData>;
+  // type UserModelT = Model<UserSchemaData>;
 }

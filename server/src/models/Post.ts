@@ -34,5 +34,8 @@ const PostSchema: Schema = new Schema({
   rating: { type: Number, required: true },
 });
 
-const PostModel: PostN.PostModelT = mongoose.model("post", PostSchema);
+const PostModel: Model<PostN.PostSchemaData> = mongoose.model(
+  "post",
+  PostSchema
+);
 export default PostModel;

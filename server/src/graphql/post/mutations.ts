@@ -39,9 +39,7 @@ export const addPost = async (
         rating: 0,
       });
       const savedPost = await newPost.save();
-
       currentUser.posts.push(savedPost.id);
-
       await currentUser.save();
       const populatedPost = await savedPost
         .populate([
