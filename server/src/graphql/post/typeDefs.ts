@@ -21,7 +21,7 @@ export default gql`
   }
 
   type PostSection {
-    index: Int!
+    indexSection: Int!
     header: String!
     body: String!
     img: String!
@@ -43,7 +43,7 @@ export default gql`
     restaurant: RestaurantInput!
     mainPicture: String!
     pictures: [String!]!
-    author: String #UserInput!
+    author: UserInput!
     likes: Int
     title: String!
     postSections: [PostSectionInput!]!
@@ -55,7 +55,7 @@ export default gql`
   }
 
   input PostSectionInput {
-    index: Int!
+    indexSection: Int!
     header: String!
     body: String!
     img: String!
@@ -65,7 +65,7 @@ export default gql`
   input CommentInput {
     id: ID!
     dateC: Date!
-    user: String #UserInput!
+    user: UserInput!
     bodyC: String!
     likes: Int!
     likedBy: [UserInput!]!

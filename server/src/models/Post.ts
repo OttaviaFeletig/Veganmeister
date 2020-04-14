@@ -3,13 +3,13 @@ import { PostN } from "../@types";
 import RestaurantModel from "./Restaurant";
 import { ObjectID } from "bson";
 
-const PostSections: Schema = new Schema({
-  index: { type: Number, required: true },
+const PostSections = {
+  indexSection: { type: Number, required: true },
   header: { type: String, required: true },
   body: { type: String, required: true },
   img: { type: String, required: true },
   sideImg: { type: Boolean, required: true },
-});
+};
 const Comments: Schema = new Schema({
   id: { type: ObjectID, required: true },
   dateC: { type: Date, required: true },
@@ -23,7 +23,7 @@ const PostSchema: Schema = new Schema({
   restaurant: { type: ObjectID, ref: "restaurant" },
   mainPicture: { type: String, required: true },
   pictures: { type: [String], required: true },
-  author: { type: String, required: true }, // user model definition
+  author: { type: ObjectID, ref: "user" }, // user model definition
   likes: { type: Number, required: true },
   title: { type: String, required: true },
   postSections: { type: [PostSections], required: true }, //post sections def

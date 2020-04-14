@@ -3,24 +3,30 @@ import { PostN, UserN, RestaurantN } from "../../@types";
 import { ObjectID } from "bson";
 import { ApolloError } from "apollo-server";
 
-export const addPost = async (id: ObjectID, input: PostN.PostI) => {
-  console.log(id);
+export const addPost = async (
+  restaurantId: ObjectID,
+  input: PostN.PostI,
+  authorId: ObjectID
+) => {
+  console.log(restaurantId);
+
   const {
     mainPicture,
     pictures,
-    author,
+    // author,
     title,
     postSections,
     hashtags,
     published,
     archived,
   } = input;
+  // const authorId = author.id;
   const newPost = new PostModel({
     date: new Date(),
-    restaurant: id,
+    restaurant: restaurantId,
     mainPicture,
     pictures,
-    author,
+    author: authorId,
     likes: 0,
     title,
     postSections,
@@ -31,11 +37,17 @@ export const addPost = async (id: ObjectID, input: PostN.PostI) => {
     rating: 0,
   });
   const savedPost = await newPost.save();
-  const populatedPost = await savedPost
+  //edit user posts array in user collection
+  const populatedRestaurantPost = await savedPost
     .populate({
       path: "restaurant",
       populate: { path: "restaurant", model: "restaurant" },
     })
     .execPopulate();
-  return populatedPost;
+  const populatedUserPost = await populatedRestaurantPost
+    .populate({
+      path: "user",
+    })
+    .execPopulate();
+  return populatedUserPost;
 };

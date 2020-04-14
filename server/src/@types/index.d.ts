@@ -42,7 +42,7 @@ export namespace PostN {
   }
   type PostSectionsT = Array<PostSectionI>;
   interface PostSectionI {
-    index: number;
+    indexSection: number;
     header: string;
     body: string;
     img: string;
@@ -63,7 +63,7 @@ export namespace PostN {
 }
 export namespace UserN {
   interface UserI {
-    _id: string | number | ObjectID;
+    // _id: string | number | ObjectID;
     username: string;
     name: string;
     surname: string;
@@ -72,7 +72,8 @@ export namespace UserN {
     avatar: string;
     posts?: PostN.PostsT;
     rank: RankI;
-    isAdmin: Boolean;
+    isAdmin: boolean;
+    isLoggedIn: boolean;
   }
   type UsersT = Array<UserI>;
   interface RankI {
@@ -102,4 +103,5 @@ export namespace UserN {
     VeganCurious = "",
     VeganVirgin = "",
   }
+  interface UserSchemaData extends Document, UserI {}
 }

@@ -2,6 +2,7 @@ import { restaurants } from "../restaurant/resolvers";
 import { PostN, UserN, RestaurantN } from "../../@types";
 import PostModel from "../../models/Post";
 import RestaurantModel from "../../models/Restaurant";
+import UserModel from "../../models/User";
 import { ApolloError } from "apollo-server";
 import { ObjectID } from "bson";
 import { addPost } from "./mutations";
@@ -273,8 +274,12 @@ export const resolvers = {
         const { input } = JSON.parse(JSON.stringify(args));
         const { author, title, restaurant, published, archived } = input;
         const { name, location } = restaurant;
+        const authorEmail = author.email;
+        const existingUser = await UserModel.findOne({ email: authorEmail });
+        if (!existingUser) return new ApolloError("User not found", "400");
+        const authorId = existingUser.id;
         const existingPost = await PostModel.findOne({
-          author,
+          authorId,
           title,
         });
         const existingRestaurant = await RestaurantModel.findOne({
@@ -289,10 +294,14 @@ export const resolvers = {
             "409"
           );
         if (existingRestaurant) {
-          const { id } = existingRestaurant;
-          console.log(typeof id);
+          const existingRestaurantId = existingRestaurant.id;
+          console.log(typeof existingRestaurantId);
           if (published !== archived) {
-            const newPost = await addPost(id, input);
+            const newPost = await addPost(
+              existingRestaurantId,
+              input,
+              authorId
+            );
             return newPost;
           } else {
             return new ApolloError(
@@ -302,9 +311,9 @@ export const resolvers = {
           }
         } else {
           const newRestaurant = await addRestaurant(restaurant);
-          const { id } = newRestaurant;
-          console.log("id", id);
-          const newPost = await addPost(id, input);
+          const newRestaurantId = newRestaurant.id;
+          console.log("id", newRestaurantId);
+          const newPost = await addPost(newRestaurantId, input, authorId);
           return newPost;
         }
       } catch (err) {
