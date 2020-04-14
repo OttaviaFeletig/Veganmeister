@@ -48,7 +48,7 @@ export namespace PostN {
     img: string;
     sideImg: boolean;
   }
-  type PostsT = Array<PostI>;
+  type PostsT = Array<PostI> | [];
   interface CommentI {
     id: string | number | ObjectID;
     user: UserN.UserI;
@@ -70,7 +70,7 @@ export namespace UserN {
     email: string;
     password: string;
     avatar: string;
-    posts?: PostN.PostsT;
+    posts: PostN.PostsT;
     rank: RankI;
     isAdmin: boolean;
     isLoggedIn: boolean;
@@ -104,4 +104,5 @@ export namespace UserN {
     VeganVirgin = "",
   }
   interface UserSchemaData extends Document, UserI {}
+  type UserModelT = Model<UserSchemaData>;
 }

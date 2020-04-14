@@ -15,7 +15,7 @@ const UserSchema: Schema = new Schema({
   email: { type: String, required: true },
   password: { type: String, required: true },
   avatar: { type: String, required: true },
-  posts: { type: [{ type: ObjectID, ref: "post" }] },
+  posts: [{ type: ObjectID, ref: "post" }],
   isAdmin: { type: Boolean, required: true },
   // rank: { type: RankSchema, required: true },
   rank: {
