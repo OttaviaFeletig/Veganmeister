@@ -28,21 +28,21 @@ const ImgDropzone: React.FC<Props> = ({ classes }) => {
     const [selectedImage, setSelectedImage] = useState<any>();
     // handleImageUpload could be inside a context so you don't have to repeat it here and in the sign up component
     const handleImageUpload = async () => {
-        if (!selectedImage) {
-            alert("Select an image to upload");
-        } else {
-            const formData = new FormData();
-            formData.append("image", selectedImage, selectedImage.name);
-            try {
-                const res = await axios.post(
-                    `${process.env.BackendUrl}upload/`,
-                    formData
-                );
-                console.log(res.data.file.location);
-            } catch (err) {
-                console.log(err);
-            }
-        }
+        // if (!selectedImage) {
+        //     alert("Select an image to upload");
+        // } else {
+        //     const formData = new FormData();
+        //     formData.append("image", selectedImage, selectedImage.name);
+        //     try {
+        //         const res = await axios.post(
+        //             `${process.env.BackendUrl}upload/`,
+        //             formData
+        //         );
+        //         console.log(res.data.file.location);
+        //     } catch (err) {
+        //         console.log(err);
+        //     }
+        // }
     };
 
     const onDrop = useCallback(acceptedFiles => {

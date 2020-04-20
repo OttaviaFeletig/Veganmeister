@@ -8,6 +8,7 @@ import { Theme, createStyles, fade, WithStyles, withStyles, Grid, Typography, Fo
 import MaterialIconAsync from '../GraphicElmts/MaterialIconAsync';
 import { RestaurantsContext } from '../../../context/RestaurantsContext';
 import { RestaurantN } from '../../../@types';
+import dataSite from '../../../assets/data/siteData.json'
 
 interface VenueType {
     id: string;
@@ -153,9 +154,7 @@ const RestaurantFoursquareSearch: React.FC<WithStyles<typeof styles>> = ({ class
                     // }}
                     >
                         <option aria-label="None" value="" />
-                        <option value='berlin'>Berlin</option>
-                        <option value='paris'>Paris</option>
-                        <option value='toulouse'>Toulouse</option>
+                        {dataSite.cities.map(city => <option key={city} value='berlin'>{city}</option>)}
                     </Select>
                 </FormControl>
             </Grid>

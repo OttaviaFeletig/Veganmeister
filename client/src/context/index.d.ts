@@ -19,7 +19,11 @@ interface PostsContextI {
     changeSectionOrder(post: PostN.PostI, section: PostN.PostSectionI, action: string): void;
     sort: string;
     editMode: boolean;
-    toggleEditMode(editMode: boolean): void
+    toggleEditMode(editMode: boolean): void;
+    newPost(restaurant: RestaurantN.RestaurantI, author: UserN.UserI, title: string): void
+    newPostSection(post: PostN.PostI): void;
+    delPostSection(post: PostN.PostI, section: PostN.PostSectionI): void
+
 }
 interface RestaurantsContextI {
     restaurants: RestaurantN.RestaurantsT;

@@ -50,7 +50,7 @@ export namespace RestaurantN {
         likes: number;
         likedBy: UserN.UsersT;
         globalRating: number;
-        reviews: ReviewsT;
+        reviews?: ReviewsT;
         addedOn: Date;
         addedBy: UserN.UserI;
     }

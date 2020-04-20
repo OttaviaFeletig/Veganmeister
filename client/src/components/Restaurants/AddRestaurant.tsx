@@ -164,7 +164,6 @@ const AddRestaurant: React.FC<Props> = ({ classes, history }) => {
                                 inputProps={{ style: { textAlign: 'center' } }}
                                 // InputLabelProps={{ style: { marginLeft: '50px' } }}
                                 color="secondary"
-                                id="filled-required"
                                 label={`restaurant name`}
                                 value={newRestaurant.name}
                                 // defaultValue={newRestaurant ? newRestaurant.name : ''}
@@ -180,7 +179,6 @@ const AddRestaurant: React.FC<Props> = ({ classes, history }) => {
                                 inputProps={{ style: { textAlign: 'center' } }}
                                 // InputLabelProps={{ style: { marginLeft: '50px' } }}
                                 color="secondary"
-                                id="filled-required"
                                 label={`city`}
                                 value={newRestaurant.location.city}
                                 // defaultValue={newRestaurant ? newRestaurant.name : ''}
@@ -197,7 +195,6 @@ const AddRestaurant: React.FC<Props> = ({ classes, history }) => {
                                 inputProps={{ style: { textAlign: 'center' } }}
                                 // InputLabelProps={{ style: { marginLeft: '50px' } }}
                                 color="secondary"
-                                id="filled-required"
                                 label={`address`}
                                 value={newRestaurant.location.address}
                                 // defaultValue={newRestaurant ? newRestaurant.name : ''}
@@ -213,7 +210,6 @@ const AddRestaurant: React.FC<Props> = ({ classes, history }) => {
                                 inputProps={{ style: { textAlign: 'center' } }}
                                 // InputLabelProps={{ style: { marginLeft: '50px' } }}
                                 color="secondary"
-                                id="filled-required"
                                 label={`district`}
                                 value={newRestaurant.location.district}
                                 // defaultValue={newRestaurant ? newRestaurant.name : ''}
@@ -229,7 +225,6 @@ const AddRestaurant: React.FC<Props> = ({ classes, history }) => {
                                 inputProps={{ style: { textAlign: 'center' } }}
                                 // InputLabelProps={{ style: { marginLeft: '50px' } }}
                                 color="secondary"
-                                id="filled-required"
                                 label={`country`}
                                 value={newRestaurant.location.country}
                                 // defaultValue={newRestaurant ? newRestaurant.name : ''}
@@ -245,7 +240,6 @@ const AddRestaurant: React.FC<Props> = ({ classes, history }) => {
                                 inputProps={{ style: { textAlign: 'center' } }}
                                 // InputLabelProps={{ style: { marginLeft: '50px' } }}
                                 color="secondary"
-                                id="filled-required"
                                 label={`description`}
                                 value={newRestaurant.description}
                                 multiline
@@ -267,7 +261,6 @@ const AddRestaurant: React.FC<Props> = ({ classes, history }) => {
                                 inputProps={{ style: { textAlign: 'center' } }}
                                 // InputLabelProps={{ style: { marginLeft: '50px' } }}
                                 color="secondary"
-                                id="filled-required"
                                 placeholder='Add Hashtags separated by ","'
                                 value={newHashtags}
                                 // defaultValue={newRestaurant ? newRestaurant.name : ''}

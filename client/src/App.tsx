@@ -9,8 +9,6 @@ import Icon from '@material-ui/core/Icon';
 import { makeStyles } from '@material-ui/styles';
 import logoSVG from './assets/logo/noun_Deer_53375.svg'
 import logoPNG from './assets/logo/noun_Deer_53375.png'
-// import SvgIcon from '@material-ui/core/SvgIcon';
-import BottomNav from './components/Navigation/BottomNav'
 import { Theme, createStyles, MuiThemeProvider } from '@material-ui/core/styles';
 import { ThemeContext } from './context/ThemeContext';
 import Landing from './components/Landing/Landing';
@@ -26,6 +24,7 @@ import RestaurantList from './components/Restaurants/RestaurantList';
 import RestaurantDetails from './components/Restaurants/RestaurantDetails';
 import AddRestaurant from './components/Restaurants/AddRestaurant';
 import Page404 from './components/Elements/GraphicElmts/Page404';
+import AddPost from './components/Posts/AddPost';
 
 
 
@@ -45,22 +44,26 @@ const RenderWebsite: React.FC = (props) => {
 
         <Container disableGutters maxWidth="lg" style={{ marginTop: theme.spacing(10), height: '100%' }}>
           <Route exact path="/" component={Landing} />
-          <PostsContextProvider>
-            <Route exact path="/posts" component={PostList} />
-            <Route exact path="/posts/:postId" component={PostDetails} />
-          </PostsContextProvider>
           <RestaurantsContextProvider>
-            <Switch>
-              <Route exact path="/restaurants" component={RestaurantList} />
-              <Route exact path="/restaurants/:restaurantId" component={RestaurantDetails} />
-              <Route exact path="/addRestaurant" component={AddRestaurant} />
-              {/* <Route component={Page404} /> */}
-            </Switch>
+            <PostsContextProvider>
+              <Switch>
+                <Route exact path="/posts" component={PostList} />
+                <Route exact path="/posts/:postId" component={PostDetails} />
+                <Route exact path="/addPost" component={AddPost} />
+
+
+
+                <Route exact path="/restaurants" component={RestaurantList} />
+                <Route exact path="/restaurants/:restaurantId" component={RestaurantDetails} />
+                <Route exact path="/addRestaurant" component={AddRestaurant} />
+                {/* <Route component={Page404} /> */}
+              </Switch>
+            </PostsContextProvider>
           </RestaurantsContextProvider>
 
 
         </Container>
-        <Footer />
+        {/* <Footer /> */}
 
       </BrowserRouter>
     </MuiThemeProvider>)

@@ -11,6 +11,7 @@ import SelectGMap from '../Elements/Search/SelectGMap'
 import { Toolbar, IconButton, Badge, Fab, Typography } from '@material-ui/core';
 import MaterialIconAsync from '../Elements/GraphicElmts/MaterialIconAsync';
 import Filters from '../Elements/Search/Filters';
+import { Link } from 'react-router-dom';
 
 
 
@@ -101,6 +102,8 @@ const Posts: React.FC<Props> = ({ classes }) => {
 
                     <Grid className={classes.bottomAdd} item xs={12}>
                         <Fab
+                            component={Link}
+                            to="./addPost"
                             size="large"
                             aria-label="image input"
                             // onClick={() => onAddClick()}

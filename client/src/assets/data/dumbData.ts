@@ -17,7 +17,8 @@ const dumbLocation: RestaurantN.LocationI = {
     },
     district: 'Kreuzberg',
     city: 'Berlin',
-    country: 'Germany'
+    country: 'Germany',
+    address: 'some formatted address',
 }
 const dumbRestaurant: RestaurantN.RestaurantI = {
     _id: '1',
@@ -28,7 +29,10 @@ const dumbRestaurant: RestaurantN.RestaurantI = {
     mainPicture: "https://source.unsplash.com/user/loukass23",
     likes: 2,
     likedBy: [initUser],
-    rating: 1.5,
+    globalRating: 1.5,
+    addedBy: initUser,
+    addedOn: new Date(2019, 11, 24, 10)
+
 }
 const dumbRestaurant2: RestaurantN.RestaurantI = {
     _id: '2',
@@ -39,7 +43,9 @@ const dumbRestaurant2: RestaurantN.RestaurantI = {
     mainPicture: "https://source.unsplash.com/user/loukass23",
     likes: 35,
     likedBy: [initUser],
-    rating: 5,
+    globalRating: 5,
+    addedBy: initUser,
+    addedOn: new Date(2019, 11, 24, 10)
 }
 
 const initComments: PostN.CommentsT = [{
@@ -117,6 +123,6 @@ export const initPosts: PostN.PostsT = [
     }
 ]
 
-export const initRestaurants: RestaurantN.RestaurantT = [
+export const initRestaurants: RestaurantN.RestaurantsT = [
     dumbRestaurant, dumbRestaurant2
 ]

@@ -189,48 +189,35 @@ interface Props extends WithStyles<typeof styles> {
 }
 
 const PostSections: React.FC<Props> = ({ classes, post }) => {
-    const [, toggleAddMode] = React.useState(false);
-
-    const emptySection: PostN.PostSectionI = {
-        index: post.postSections.length + 1,
-        body: '',
-        header: '',
-        img: '',
-        sideImg: false
-    }
-    const [, setAnchorEl] = React.useState<null | HTMLElement>(null);
-
-    const { changeSectionOrder, changeSplit, textChange, editMode } = useContext(PostsContext)
-
-    const [, setPostSection] = useState(emptySection)
-    const [openDialog, setOpenDialog] = React.useState(false);
+    const [, setAnchorEl] = useState<null | HTMLElement>(null);
+    const { changeSectionOrder, changeSplit, textChange, editMode, newPostSection, delPostSection } = useContext(PostsContext)
+    const [openDialog, setOpenDialog] = useState(false);
+    const [postSection, setPostSection] = useState<PostN.PostSectionI | null>(null)
 
 
     const handleClose = () => {
+        delPostSection(post, postSection)
+        setPostSection(null)
+        setOpenDialog(false);
+    };
+    const handleCancel = () => {
+        setPostSection(null)
         setOpenDialog(false);
     };
 
     const onAddClick = () => {
-        setPostSection(emptySection)
-        toggleAddMode(true)
+        newPostSection(post)
     }
-    const onClickDelete = (post: PostN.PostI, postSection: PostN.PostSectionI) => {
-        // addEditDeleteArticle(tab, article, 'delete')
-        console.log('post :', post);
-        // setPostSection()
+    const onClickDelete = (postSection: PostN.PostSectionI) => () => {
+        setPostSection(postSection)
         setOpenDialog(true);
-
-        // setPostSection(emptySection)
-
-        toggleAddMode(false)
     }
 
-    const handleMoveUp = (post: PostN.PostI, postSection: PostN.PostSectionI) => {
+    const handleMoveUp = (postSection: PostN.PostSectionI) => () => {
         setAnchorEl(null);
-
         changeSectionOrder(post, postSection, 'moveUp')
     };
-    const handleMoveDown = (post: PostN.PostI, postSection: PostN.PostSectionI) => {
+    const handleMoveDown = (postSection: PostN.PostSectionI) => () => {
         console.log('postSection', postSection)
         setAnchorEl(null);
         changeSectionOrder(post, postSection, 'moveDown')
@@ -241,7 +228,8 @@ const PostSections: React.FC<Props> = ({ classes, post }) => {
     const renderEditMenu = (post: PostN.PostI, postSection: PostN.PostSectionI, i: number, length: number) => (<React.Fragment>
         <div className={classes.absoluteL} >
             {i > 0 && <Tooltip
-                onClick={() => handleMoveUp(post, postSection)} title="moveUp" aria-label="moveDown">
+                onClick={handleMoveUp(postSection)}
+                title="moveUp" aria-label="moveDown">
                 <Fab size="small" color="primary"
                 // className={classes.absoluteL} 
                 >
@@ -250,7 +238,8 @@ const PostSections: React.FC<Props> = ({ classes, post }) => {
             </Tooltip>}
 
             {i < length - 1 && <Tooltip
-                onClick={() => handleMoveDown(post, postSection)} title="moveDown" aria-label="move down">
+                onClick={handleMoveDown(postSection)}
+                title="moveDown" aria-label="move down">
                 <Fab size="small" color="primary"
                 // className={classes.absoluteL}
                 >
@@ -276,7 +265,7 @@ const PostSections: React.FC<Props> = ({ classes, post }) => {
         </div>
         <div className={classes.absoluteR} >
             <Tooltip
-                onClick={() => onClickDelete(post, postSection)}
+                onClick={onClickDelete(postSection)}
                 title="delete" aria-label="delete">
                 <Fab size="small" color="primary"
                     className={classes.buttonDel}
@@ -288,7 +277,7 @@ const PostSections: React.FC<Props> = ({ classes, post }) => {
         </div>
         {postSection.img && <div className={classes.absoluteBL} >
             <Tooltip
-                onClick={() => onClickDelete(post, postSection)}
+                onClick={onClickDelete(postSection)}
                 title="delete" aria-label="delete">
                 <Fab size="medium" color="primary"
                     className={classes.buttonDel}
@@ -316,7 +305,7 @@ const PostSections: React.FC<Props> = ({ classes, post }) => {
           </DialogContentText>
             </DialogContent>
             <DialogActions>
-                <Button onClick={() => setOpenDialog(false)} color="secondary">
+                <Button onClick={handleCancel} color="secondary">
                     Cancel
           </Button>
                 <Button
@@ -348,7 +337,7 @@ const PostSections: React.FC<Props> = ({ classes, post }) => {
             </Grid> */}
             {post.postSections
                 .map((section: PostN.PostSectionI, i: number) =>
-                    (<React.Fragment>
+                    (<React.Fragment key={section.index}>
                         {
                             section.sideImg ?
                                 <Slide in
@@ -384,7 +373,6 @@ const PostSections: React.FC<Props> = ({ classes, post }) => {
                                                         InputLabelProps={{ style: { marginLeft: '50px' } }}
                                                         onChange={(e) => textChange(post, section, e.target.value, true)}
                                                         color="secondary"
-                                                        id="filled-required"
                                                         label={`Section ${section.index} Header`}
                                                         defaultValue={section.header}
                                                         className={classes.responsiveFieldSide}
@@ -400,7 +388,6 @@ const PostSections: React.FC<Props> = ({ classes, post }) => {
                                                             console.log('e.target :', e.target.value);
                                                             textChange(post, section, e.target.value, false)
                                                         }}
-                                                        id="filled-multiline-static"
                                                         label={`Section ${section.index} Text`}
                                                         multiline
                                                         rows="20"
@@ -417,7 +404,6 @@ const PostSections: React.FC<Props> = ({ classes, post }) => {
                                                     <TextField
                                                         inputProps={{ style: { textAlign: 'center' } }}
                                                         disabled
-                                                        id="filled-multiline-static"
                                                         // label={`Section ${section.index} Text`}
                                                         multiline
                                                         rows="20"
@@ -468,7 +454,6 @@ const PostSections: React.FC<Props> = ({ classes, post }) => {
                                                         inputProps={{ style: { textAlign: 'center' } }}
                                                         InputLabelProps={{ style: { marginLeft: '50px' } }}
                                                         color="secondary"
-                                                        id="filled-required"
                                                         label={`Section ${section.index} Header`}
                                                         defaultValue={section.header}
                                                         className={classes.responsiveFieldSide}
@@ -481,7 +466,6 @@ const PostSections: React.FC<Props> = ({ classes, post }) => {
                                                         InputLabelProps={{ style: { marginLeft: '50px' } }}
                                                         color="secondary"
                                                         onChange={(e) => textChange(post, section, e.target.value, false)}
-                                                        id="filled-multiline-static"
                                                         label={`Section ${section.index} Text`}
                                                         multiline
                                                         rows="20"
@@ -498,7 +482,6 @@ const PostSections: React.FC<Props> = ({ classes, post }) => {
                                                     <TextField
                                                         inputProps={{ style: { textAlign: 'center' } }}
                                                         disabled
-                                                        id="filled-multiline-static"
                                                         // label={`Section ${section.index} Text`}
                                                         multiline
                                                         rows="20"
@@ -516,7 +499,7 @@ const PostSections: React.FC<Props> = ({ classes, post }) => {
                 {editMode &&
                     <Grid style={{ justifyItems: 'flex-start' }} item xs={2}>
                         <AddCircleOutlineIcon
-                            onClick={() => onAddClick()}
+                            onClick={onAddClick}
                             className={classes.addIcon}
                             fontSize="large"
                             color="secondary" />
