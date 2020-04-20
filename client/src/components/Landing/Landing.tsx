@@ -97,7 +97,7 @@ const Landing: React.FC<WithStyles<typeof styles>> = ({ classes }) => {
                         >
                             <Card className={classes.card} component={Link} to={card.to} style={{ textDecoration: 'none' }}>
                                 <div className={classes.details}>
-                                    <CardContent className={classes.content}>
+                                    <CardContent>
                                         <Typography component="h5" variant="h5">
                                             {card.title}
                                         </Typography>
