@@ -11,7 +11,6 @@ const s3 = new aws.S3({
   secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
   region: process.env.AWS_DEFAULT_REGION,
 });
-console.log("process.env", process.env.S3_BUCKET_NAME);
 const upload = multer({
   storage: multerS3({
     s3,
@@ -19,8 +18,6 @@ const upload = multer({
     contentType: multerS3.AUTO_CONTENT_TYPE,
     acl: "public-read",
     metadata: (req: any, file: any, cb: any) => {
-      console.log("file", file);
-      // console.log("req", req);
       cb(null, { fieldName: file.fieldname });
     },
     key: (req: any, file: any, cb: any) => {
@@ -28,7 +25,6 @@ const upload = multer({
     },
   }),
 });
-require("dotenv").config();
 mongoose
   .connect(process.env.MONGO_DB_CONNECTION_STRING, {
     useNewUrlParser: true,
@@ -40,15 +36,13 @@ mongoose
 const server = new ApolloServer({ schema });
 const app = express();
 
-// server.applyMiddleware({ app });
+server.applyMiddleware({ app });
 app.post(
   "/upload",
   upload.fields([{ name: "file" }, { name: "id" }]),
   async (req, res) => {
-    // console.log("hey");
     const request = await req;
-    console.log("request", request);
-    console.log("request.body", request.files.file);
+    res.send(request.files);
   }
 );
 app.listen({ port: 4000 }, () =>

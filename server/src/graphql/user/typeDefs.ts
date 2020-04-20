@@ -22,20 +22,21 @@ export default gql`
 
   input UserInput {
     id: ID
-    username: String!
-    name: String!
-    surname: String!
-    email: String!
-    password: String!
-    avatar: String!
-    rank: RankInput!
-    isAdmin: Boolean!
+    username: String
+    name: String
+    surname: String
+    email: String
+    password: String
+    avatar: String
+    rank: RankInput
+    isAdmin: Boolean
+    isLoggedIn: Boolean
   }
 
   input RankInput {
-    name: RankNamesType
-    points: RankPointsType
-    logo: RankLogosType
+    name: String!
+    points: Int!
+    logo: String!
   }
 
   enum RankNamesType {
@@ -61,6 +62,9 @@ export default gql`
   }
   extend type Query {
     users: [User!]!
-    user(id: ID!): User!
+    user(id: ID!): User
+  }
+  extend type Mutation {
+    addUser(input: UserInput!): User!
   }
 `;
